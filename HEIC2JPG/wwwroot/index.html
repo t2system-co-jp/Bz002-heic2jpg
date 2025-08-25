@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HEIC2JPG & MOV2MP4</title>
+    <base href="/" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/converter.css" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="HEIC2JPG" />
+    <link rel="apple-touch-icon" href="icon-192.png" />
+    <link href="HEIC2JPG.styles.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="app">
+        <svg class="loading-progress">
+            <circle r="40%" cx="50%" cy="50%" />
+            <circle r="40%" cx="50%" cy="50%" />
+        </svg>
+        <div class="loading-progress-text"></div>
+    </div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="." class="reload">Reload</a>
+        <span class="dismiss">🗙</span>
+    </div>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="lib/jszip/jszip.min.js"></script>
+    <script src="lib/libheif/libheif.js"></script>
+    <script src="https://unpkg.com/@ffmpeg/util@0.12.1/dist/umd/index.js"></script>
+    <script src="lib/ffmpeg/ffmpeg.min.js"></script>
+    <!-- 共通ユーティリティを最初に読み込み -->
+    <script src="js/commonUtils.js"></script>
+    <!-- 変換機能 -->
+    <script src="js/heicConverter.js"></script>
+    <script src="js/ffmpegConverter.js"></script>
+    
+    <!-- PWA Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('ServiceWorker登録成功: ', registration.scope);
+                    }, function(err) {
+                        console.log('ServiceWorker登録失敗: ', err);
+                    });
+            });
+        }
+    </script>
+</body>
+
+</html>

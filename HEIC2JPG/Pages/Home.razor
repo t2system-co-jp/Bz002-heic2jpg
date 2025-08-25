@@ -1,0 +1,279 @@
+@page "/"
+@using HEIC2JPG.Models
+@using HEIC2JPG.Services
+@inject IConvertService ConvertService
+@inject IJSRuntime JS
+
+<PageTitle>HEIC2JPG & MOV2MP4</PageTitle>
+
+<div class="converter-container">
+    <!-- ヘッダー -->
+    <div class="converter-header">
+        <h1>HEIC2JPG & MOV2MP4</h1>
+        <p>ローカル完結型メディア変換アプリ - データはブラウザ外へ送信されません</p>
+    </div>
+
+    <div class="converter-layout">
+        <!-- メインエリア -->
+        <div class="main-area">
+            <!-- ドロップゾーン -->
+            <div class="drop-zone @(isDragActive ? "drag-active" : "")" 
+                 @ondragover="OnDragOver" 
+                 @ondragover:preventDefault="true"
+                 @ondrop="OnDrop" 
+                 @ondrop:preventDefault="true"
+                 @ondragenter="OnDragEnter"
+                 @ondragleave="OnDragLeave"
+                 @onclick="SelectFiles">
+                <div class="drop-content">
+                    <div class="drop-icon">📁</div>
+                    <h3>ファイルをドロップまたは選択</h3>
+                    <p>HEIC画像・MOV動画をここにドロップしてください</p>
+                    <button type="button" class="btn-select">ファイルを選択</button>
+                    <small>最大100ファイル、2GB/ファイル</small>
+                </div>
+            </div>
+
+            <!-- 隠しファイル入力 -->
+            <InputFile @ref="fileInput" 
+                      OnChange="OnFilesSelected" 
+                      multiple 
+                      accept=".heic,.mov"
+                      style="display: none;" />
+
+            <!-- ファイルキュー -->
+            @if (files.Any())
+            {
+                <div class="file-queue">
+                    <div class="queue-header">
+                        <h3>変換キュー (@files.Count ファイル)</h3>
+                        <div class="queue-controls">
+                            <button class="btn btn-primary" @onclick="StartConversion" disabled="@isProcessing">
+                                ▶️ 開始
+                            </button>
+                            <button class="btn btn-download-all" @onclick="DownloadAll" 
+                                   disabled="@(!files.Any(f => f.Status == ConversionStatus.Completed))">
+                                📦 一括DL
+                            </button>
+                            <button class="btn btn-clear" @onclick="ClearQueue" disabled="@isProcessing">
+                                🗑️ クリア
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ファイルリスト -->
+                    @foreach (var file in files)
+                    {
+                        <div class="file-item">
+                            <div class="file-icon">
+                                @(file.Type == FileType.HEIC ? "🖼️" : "🎬")
+                            </div>
+                            <div class="file-info">
+                                <div class="file-name" title="@file.FileName">@file.FileName</div>
+                                <div class="file-size">@FormatFileSize(file.FileSize)</div>
+                            </div>
+                            <div class="file-status status-@file.Status.ToString().ToLower()">
+                                @if (file.Status == ConversionStatus.Processing)
+                                {
+                                    <div class="progress">@file.Progress%</div>
+                                }
+                                else
+                                {
+                                    <span class="status">@GetStatusText(file.Status)</span>
+                                }
+                                @if (file.Status == ConversionStatus.Error && !string.IsNullOrEmpty(file.ErrorMessage))
+                                {
+                                    <span class="error-status" title="@file.ErrorMessage">⚠️</span>
+                                }
+                            </div>
+                            <div class="file-actions">
+                                @if (file.Status == ConversionStatus.Completed)
+                                {
+                                    <button class="btn-download" @onclick="() => DownloadFile(file)" title="ダウンロード">
+                                        💾
+                                    </button>
+                                }
+                                <button class="btn-remove" @onclick="() => RemoveFile(file)" 
+                                       disabled="@(file.Status == ConversionStatus.Processing)" title="削除">
+                                    ❌
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <!-- 設定パネル -->
+        <div class="settings-panel">
+            <h3>⚙️ 変換設定</h3>
+            
+            <div class="setting">
+                <label for="jpgQuality">JPG品質: @((settings.JpgQuality * 100).ToString("F0"))%</label>
+                <input type="range" id="jpgQuality" 
+                       @bind="settings.JpgQuality" 
+                       min="0.6" max="1.0" step="0.1" />
+            </div>
+
+            <div class="setting">
+                <label>
+                    <input type="checkbox" @bind="settings.PreserveExif" />
+                    EXIF情報を保持
+                </label>
+            </div>
+
+            <div class="setting">
+                <label for="conversionMode">変換方式</label>
+                <select id="conversionMode" @bind="settings.ConversionMode">
+                    <option value="Auto">自動</option>
+                    <option value="Fast">高速</option>
+                    <option value="Quality">高品質</option>
+                </select>
+            </div>
+
+            <div class="setting">
+                <label for="parallelCount">並列処理数: @settings.ParallelCount</label>
+                <input type="range" id="parallelCount" 
+                       @bind="settings.ParallelCount" 
+                       min="1" max="4" step="1" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private InputFile? fileInput;
+    private List<ConvertFile> files = new();
+    private ConversionSettings settings = new();
+    private bool isDragActive = false;
+    private bool isProcessing = false;
+
+    private async Task SelectFiles()
+    {
+        await JS.InvokeVoidAsync("triggerFileInput", fileInput?.Element);
+    }
+
+    private void OnFilesSelected(InputFileChangeEventArgs e)
+    {
+        foreach (var file in e.GetMultipleFiles(100))
+        {
+            var convertFile = new ConvertFile
+            {
+                Id = Guid.NewGuid(),
+                FileName = file.Name,
+                FileSize = file.Size,
+                Type = GetFileType(file.Name),
+                Status = ConversionStatus.Pending,
+                OriginalFile = file
+            };
+
+            files.Add(convertFile);
+        }
+        StateHasChanged();
+    }
+
+    private void OnDragEnter() => isDragActive = true;
+    private void OnDragLeave() => isDragActive = false;
+    private void OnDragOver() { /* preventDefault in markup */ }
+
+    private async Task OnDrop()
+    {
+        isDragActive = false;
+        // JSInteropでドロップされたファイルを処理
+        await JS.InvokeVoidAsync("handleFileDrop");
+    }
+
+    private async Task StartConversion()
+    {
+        isProcessing = true;
+        try
+        {
+            var pendingFiles = files.Where(f => f.Status == ConversionStatus.Pending).ToList();
+            await ConvertService.ConvertFilesAsync(pendingFiles, settings, OnProgressUpdate);
+        }
+        finally
+        {
+            isProcessing = false;
+            StateHasChanged();
+        }
+    }
+
+    private void OnProgressUpdate(Guid fileId, int progress)
+    {
+        var file = files.FirstOrDefault(f => f.Id == fileId);
+        if (file != null)
+        {
+            file.Progress = progress;
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task DownloadFile(ConvertFile file)
+    {
+        if (file.ConvertedData != null)
+        {
+            await JS.InvokeVoidAsync("downloadFile", file.ConvertedData, file.GetConvertedFileName());
+        }
+    }
+
+    private async Task DownloadAll()
+    {
+        var completedFiles = files.Where(f => f.Status == ConversionStatus.Completed).ToList();
+        if (completedFiles.Any())
+        {
+            await JS.InvokeVoidAsync("downloadFilesAsZip", completedFiles.Select(f => new { 
+                data = f.ConvertedData, 
+                name = f.GetConvertedFileName() 
+            }));
+        }
+    }
+
+    private void RemoveFile(ConvertFile file)
+    {
+        files.Remove(file);
+        StateHasChanged();
+    }
+
+    private void ClearQueue()
+    {
+        files.Clear();
+        StateHasChanged();
+    }
+
+    private FileType GetFileType(string fileName)
+    {
+        var extension = Path.GetExtension(fileName).ToLower();
+        return extension switch
+        {
+            ".heic" => FileType.HEIC,
+            ".mov" => FileType.MOV,
+            _ => FileType.Unknown
+        };
+    }
+
+    private string FormatFileSize(long bytes)
+    {
+        string[] sizes = { "B", "KB", "MB", "GB" };
+        double len = bytes;
+        int order = 0;
+        while (len >= 1024 && order < sizes.Length - 1)
+        {
+            order++;
+            len = len / 1024;
+        }
+        return $"{len:0.##} {sizes[order]}";
+    }
+
+    private string GetStatusText(ConversionStatus status)
+    {
+        return status switch
+        {
+            ConversionStatus.Pending => "待機中",
+            ConversionStatus.Processing => "処理中",
+            ConversionStatus.Completed => "完了",
+            ConversionStatus.Error => "エラー",
+            ConversionStatus.Cancelled => "キャンセル",
+            _ => "不明"
+        };
+    }
+}

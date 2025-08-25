@@ -1,0 +1,60 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(grep:*)",
+      "Bash(rm:*)",
+      "Bash(rg:*)",
+      "Bash(sed:*)",
+      "Bash(curl:*)",
+      "Bash(sh -c:*)",
+      "Bash(mv:*)",
+      "WebSearch",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:www.unpkg.com)",
+      "WebFetch(domain:app.unpkg.com)",
+      "WebFetch(domain:unpkg.com)",
+      "WebFetch(domain:cdn.jsdelivr.net)",
+      "WebFetch(domain:github.com)",
+      "Bash(cp:*)"
+    ],
+    "deny": []
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/mnt/c/Tools/toast64.exe --app-id 'Claude Code' --title 'Command Execution' --message 'Executing bash command...' --audio 'default' --duration 'short'"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/mnt/c/Tools/toast64.exe --app-id 'Claude Code' --title 'Notification' --message 'Claude Code has a notification for you.' --audio 'default' --duration 'long'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/mnt/c/Tools/toast64.exe --app-id 'Claude Code' --title 'Task Complete' --message 'Claude Code has finished the task.' --audio 'default' --duration 'long'"
+          }
+        ]
+      }
+    ]
+  }
+}
