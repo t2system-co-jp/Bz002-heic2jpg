@@ -1,4 +1,4 @@
-const CACHE_NAME = 'heic2jpg-v1';
+const CACHE_NAME = 'heic2jpg-v2';
 const urlsToCache = [
   '/',
   '/css/app.css',
@@ -10,8 +10,7 @@ const urlsToCache = [
   '/js/heicConverter.js',
   '/js/ffmpegConverter.js',
   '/lib/jszip/jszip.min.js',
-  '/lib/libheif/libheif.js',
-  '/lib/ffmpeg/ffmpeg.min.js'
+  '/lib/libheif/libheif.js'
 ];
 
 self.addEventListener('install', function(event) {

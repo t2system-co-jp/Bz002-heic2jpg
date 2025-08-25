@@ -72,39 +72,40 @@ window.ffmpegConverter = {
             console.log('FFmpegオブジェクト詳細:', this.ffmpeg);
             console.log('FFmpeg.loaded状態:', this.ffmpeg.loaded);
 
-            console.log('ローカルWASMファイル読み込み開始...');
-            
-            // ローカルファイルから読み込み（事前ダウンロード済み）
+            // CDNから動的ロード（最新の安定版を使用）
             try {
-                console.log('toBlobURL開始: ffmpeg-core-0.12.10.js');
-                const coreURL = await toBlobURL('/lib/ffmpeg/ffmpeg-core-0.12.10.js', 'text/javascript');
-                console.log('toBlobURL完了: ffmpeg-core-0.12.10.js', coreURL.substring(0, 50) + '...');
+                console.log('CDNからffmpeg-core読み込み開始...');
                 
-                console.log('toBlobURL開始: ffmpeg-core-0.12.10.wasm (30.7MB)');
-                const wasmURL = await toBlobURL('/lib/ffmpeg/ffmpeg-core-0.12.10.wasm', 'application/wasm');
-                console.log('toBlobURL完了: ffmpeg-core-0.12.10.wasm', wasmURL.substring(0, 50) + '...');
+                const baseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist';
+                console.log('toBlobURL開始: ffmpeg-core.js');
+                const coreURL = await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript');
+                console.log('toBlobURL完了: ffmpeg-core.js');
+                
+                console.log('toBlobURL開始: ffmpeg-core.wasm (CDNからダウンロード)');
+                const wasmURL = await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm');
+                console.log('toBlobURL完了: ffmpeg-core.wasm');
 
                 console.log('ffmpeg.load()開始...');
                 
-                // タイムアウト付きでload実行
+                // タイムアウト付きでload実行（CDNのため時間を延長）
                 const loadPromise = this.ffmpeg.load({ coreURL, wasmURL });
                 const timeoutPromise = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('ffmpeg.load()タイムアウト（60秒）')), 60000)
+                    setTimeout(() => reject(new Error('ffmpeg.load()タイムアウト（120秒）')), 120000)
                 );
                 
                 // 進捗表示
                 const progressInterval = setInterval(() => {
-                    console.log('ffmpeg.load()処理中... (WASM初期化)');
+                    console.log('ffmpeg.load()処理中... (CDNからWASMダウンロード・初期化中)');
                 }, 5000);
                 
                 try {
                     await Promise.race([loadPromise, timeoutPromise]);
-                    console.log('WASM読み込み完了');
+                    console.log('CDNからのWASM読み込み完了');
                 } finally {
                     clearInterval(progressInterval);
                 }
             } catch (loadError) {
-                console.error('ローカルファイル読み込みエラー:', loadError);
+                console.error('CDNからの読み込みエラー:', loadError);
                 throw loadError;
             }
 
