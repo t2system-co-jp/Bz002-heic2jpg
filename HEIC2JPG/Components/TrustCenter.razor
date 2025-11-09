@@ -1,0 +1,113 @@
+@using HEIC2JPG.Services
+@inject ILocalizationService Localizer
+
+<div class="trust-center-overlay" @onclick="OnOverlayClick">
+    <div class="trust-center-dialog"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="trust-center-title"
+         aria-describedby="trust-center-description"
+         @onclick:stopPropagation="true"
+         @onkeydown="HandleKeyDown">
+
+        <!-- ヘッダー -->
+        <div class="trust-center-header">
+            <h2 id="trust-center-title">@Localizer.GetString("TrustCenter.Title")</h2>
+            <button type="button"
+                    class="close-button"
+                    aria-label="@Localizer.GetString("Button.Close")"
+                    @onclick="Close">
+                ✕
+            </button>
+        </div>
+
+        <!-- ボディ -->
+        <div class="trust-center-body" id="trust-center-description">
+            <!-- 技術的裏付け -->
+            <div class="trust-center-section">
+                <h3>@Localizer.GetString("TrustCenter.TechnicalBasis")</h3>
+                <p>@Localizer.GetString("TrustCenter.TechnicalBasisContent")</p>
+                <div class="technical-details">
+                    @foreach (var line in GetTechnicalDetails())
+                    {
+                        <div>@line</div>
+                    }
+                </div>
+            </div>
+
+            <!-- 検証方法 -->
+            <div class="trust-center-section">
+                <h3>@Localizer.GetString("TrustCenter.VerificationMethod")</h3>
+                <ol class="verification-steps">
+                    @foreach (var step in GetVerificationSteps())
+                    {
+                        <li>@step</li>
+                    }
+                </ol>
+            </div>
+
+            <!-- PWAオフライン動作検証 -->
+            <div class="trust-center-section">
+                <h3>@Localizer.GetString("TrustCenter.OfflineVerification")</h3>
+                <ol class="verification-steps">
+                    @foreach (var step in GetOfflineSteps())
+                    {
+                        <li>@step</li>
+                    }
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // ダイアログ表示時にフォーカストラップを設定
+            await Task.CompletedTask;
+        }
+    }
+
+    private void Close()
+    {
+        OnClose.InvokeAsync();
+    }
+
+    private void OnOverlayClick()
+    {
+        // オーバーレイクリックで閉じる
+        Close();
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape")
+        {
+            Close();
+        }
+        await Task.CompletedTask;
+    }
+
+    private string[] GetTechnicalDetails()
+    {
+        return Localizer.GetString("TrustCenter.TechnicalDetails")
+            .Split('\n', StringSplitOptions.RemoveEmptyEntries);
+    }
+
+    private string[] GetVerificationSteps()
+    {
+        return Localizer.GetString("TrustCenter.VerificationSteps")
+            .Split('\n', StringSplitOptions.RemoveEmptyEntries);
+    }
+
+    private string[] GetOfflineSteps()
+    {
+        return Localizer.GetString("TrustCenter.OfflineSteps")
+            .Split('\n', StringSplitOptions.RemoveEmptyEntries);
+    }
+}

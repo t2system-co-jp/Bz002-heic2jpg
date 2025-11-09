@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @inject ILocalizationService Localizer
+@inject NetworkMonitorService NetworkMonitor
 @inject IJSRuntime JS
 @implements IDisposable
 
@@ -10,6 +11,7 @@
                 <h1 class="app-title">@Localizer.GetString("App.Title")</h1>
             </div>
             <div class="header-right">
+                <NetworkShield />
                 <LanguageSelector />
             </div>
         </div>
@@ -34,6 +36,9 @@
         if (firstRender && !_initialized)
         {
             _initialized = true;
+
+            // NetworkMonitorService 初期化
+            await NetworkMonitor.InitializeAsync();
 
             if (Localizer is LocalizationService service)
             {

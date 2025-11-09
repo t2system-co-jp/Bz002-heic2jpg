@@ -145,11 +145,23 @@
   </data>
 
   <!-- Network Shield -->
-  <data name="NetworkShield.LocalOnly" xml:space="preserve">
-    <value>LOCAL ONLY</value>
+  <data name="NetworkShield.Safe" xml:space="preserve">
+    <value>✓ 安全</value>
   </data>
-  <data name="NetworkShield.AriaLabel" xml:space="preserve">
-    <value>ネットワークシールド: 外部リクエスト{0}件</value>
+  <data name="NetworkShield.SafeDetail" xml:space="preserve">
+    <value>外部送信なし</value>
+  </data>
+  <data name="NetworkShield.Warning" xml:space="preserve">
+    <value>⚠ 警告</value>
+  </data>
+  <data name="NetworkShield.WarningDetail" xml:space="preserve">
+    <value>外部送信 {0}件</value>
+  </data>
+  <data name="NetworkShield.AriaLabelSafe" xml:space="preserve">
+    <value>プライバシー保護: 安全、外部送信なし</value>
+  </data>
+  <data name="NetworkShield.AriaLabelWarning" xml:space="preserve">
+    <value>プライバシー保護: 警告、外部送信{0}件</value>
   </data>
 
   <!-- Trust Center -->

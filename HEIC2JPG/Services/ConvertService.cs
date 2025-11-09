@@ -213,7 +213,7 @@ public class ConvertService : IConvertService
         // MOVファイルがある場合は並行数を1に制限（FFmpeg排他制御）
         var hasMov = files.Any(f => f.Type == Models.FileType.MOV);
         var parallelCount = hasMov ? 1 : settings.ParallelCount;
-        
+
         var semaphore = new SemaphoreSlim(parallelCount, parallelCount);
         var tasks = files.Select(async file =>
         {

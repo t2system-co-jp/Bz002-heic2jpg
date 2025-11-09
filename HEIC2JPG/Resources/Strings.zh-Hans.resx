@@ -145,11 +145,23 @@
   </data>
 
   <!-- Network Shield -->
-  <data name="NetworkShield.LocalOnly" xml:space="preserve">
-    <value>本地模式</value>
+  <data name="NetworkShield.Safe" xml:space="preserve">
+    <value>✓ 安全</value>
   </data>
-  <data name="NetworkShield.AriaLabel" xml:space="preserve">
-    <value>网络防护：{0}个外部请求</value>
+  <data name="NetworkShield.SafeDetail" xml:space="preserve">
+    <value>无上传</value>
+  </data>
+  <data name="NetworkShield.Warning" xml:space="preserve">
+    <value>⚠ 警告</value>
+  </data>
+  <data name="NetworkShield.WarningDetail" xml:space="preserve">
+    <value>{0}次上传</value>
+  </data>
+  <data name="NetworkShield.AriaLabelSafe" xml:space="preserve">
+    <value>隐私保护：安全，无上传</value>
+  </data>
+  <data name="NetworkShield.AriaLabelWarning" xml:space="preserve">
+    <value>隐私保护：警告，检测到{0}次上传</value>
   </data>
 
   <!-- Trust Center -->

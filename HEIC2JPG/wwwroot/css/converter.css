@@ -521,3 +521,202 @@
     color: #27ae60;
     font-weight: bold;
 }
+
+/* Network Shield Badge */
+.network-shield {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: #27ae60;
+    color: #ffffff;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.network-shield:hover {
+    background: #229954;
+    transform: translateY(-1px);
+}
+
+.network-shield.warning {
+    background: #e74c3c;
+}
+
+.network-shield.warning:hover {
+    background: #c0392b;
+}
+
+.network-shield:active {
+    transform: translateY(0);
+}
+
+.network-shield:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.shield-icon {
+    font-size: 0.9rem;
+}
+
+.shield-text {
+    font-size: 0.85rem;
+}
+
+/* Trust Center Dialog */
+.trust-center-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.trust-center-dialog {
+    background: white;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.trust-center-header {
+    padding: 20px 24px;
+    border-bottom: 2px solid #ecf0f1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.trust-center-header h2 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.5rem;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: #7f8c8d;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.close-button:hover {
+    background: #ecf0f1;
+    color: #2c3e50;
+}
+
+.close-button:focus {
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
+}
+
+.trust-center-body {
+    padding: 24px;
+}
+
+.trust-center-section {
+    margin-bottom: 24px;
+}
+
+.trust-center-section:last-child {
+    margin-bottom: 0;
+}
+
+.trust-center-section h3 {
+    color: #2c3e50;
+    margin: 0 0 12px;
+    font-size: 1.1rem;
+}
+
+.trust-center-section p {
+    color: #34495e;
+    line-height: 1.6;
+    margin: 0 0 12px;
+}
+
+.technical-details {
+    background: #f8f9fa;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border-left: 4px solid #27ae60;
+}
+
+.technical-details div {
+    color: #2c3e50;
+    line-height: 1.8;
+    font-size: 0.95rem;
+}
+
+.verification-steps {
+    padding-left: 24px;
+    line-height: 1.8;
+}
+
+.verification-steps li {
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.verification-steps li:last-child {
+    margin-bottom: 0;
+}
+
+/* Responsive for Trust Center */
+@media (max-width: 768px) {
+    .trust-center-dialog {
+        width: 95%;
+        max-height: 90vh;
+    }
+
+    .trust-center-header {
+        padding: 16px 20px;
+    }
+
+    .trust-center-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .trust-center-body {
+        padding: 20px;
+    }
+}

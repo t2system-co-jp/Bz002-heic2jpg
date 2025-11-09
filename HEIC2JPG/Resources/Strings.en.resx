@@ -145,11 +145,23 @@
   </data>
 
   <!-- Network Shield -->
-  <data name="NetworkShield.LocalOnly" xml:space="preserve">
-    <value>LOCAL ONLY</value>
+  <data name="NetworkShield.Safe" xml:space="preserve">
+    <value>✓ Safe</value>
   </data>
-  <data name="NetworkShield.AriaLabel" xml:space="preserve">
-    <value>Network shield: {0} external requests</value>
+  <data name="NetworkShield.SafeDetail" xml:space="preserve">
+    <value>No Upload</value>
+  </data>
+  <data name="NetworkShield.Warning" xml:space="preserve">
+    <value>⚠ Warning</value>
+  </data>
+  <data name="NetworkShield.WarningDetail" xml:space="preserve">
+    <value>{0} Uploads</value>
+  </data>
+  <data name="NetworkShield.AriaLabelSafe" xml:space="preserve">
+    <value>Privacy protection: Safe, no upload</value>
+  </data>
+  <data name="NetworkShield.AriaLabelWarning" xml:space="preserve">
+    <value>Privacy protection: Warning, {0} uploads detected</value>
   </data>
 
   <!-- Trust Center -->

@@ -1,0 +1,101 @@
+@using HEIC2JPG.Services
+@inject ILocalizationService Localizer
+@inject NetworkMonitorService NetworkMonitor
+@implements IDisposable
+
+<div class="network-shield @GetShieldClass()"
+     role="button"
+     tabindex="0"
+     aria-label="@GetAriaLabel()"
+     @onclick="OpenTrustCenter"
+     @onkeydown="HandleKeyDown">
+    <span class="shield-icon">@GetStatusIcon()</span>
+    <span class="shield-text">@GetStatusText()</span>
+</div>
+
+@if (showTrustCenter)
+{
+    <TrustCenter OnClose="CloseTrustCenter" />
+}
+
+@code {
+    private bool showTrustCenter = false;
+
+    protected override void OnInitialized()
+    {
+        // NetworkMonitorServiceのイベントを購読
+        NetworkMonitor.RequestCountChanged += OnRequestCountChanged;
+    }
+
+    private void OnRequestCountChanged(object? sender, EventArgs e)
+    {
+        // カウント変更時にUIを再描画
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void OpenTrustCenter()
+    {
+        showTrustCenter = true;
+    }
+
+    private void CloseTrustCenter()
+    {
+        showTrustCenter = false;
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" || e.Key == " ")
+        {
+            OpenTrustCenter();
+            await Task.CompletedTask;
+        }
+    }
+
+    private string GetAriaLabel()
+    {
+        if (NetworkMonitor.RequestCount == 0)
+        {
+            return Localizer.GetString("NetworkShield.AriaLabelSafe");
+        }
+        else
+        {
+            return Localizer.GetString("NetworkShield.AriaLabelWarning", NetworkMonitor.RequestCount);
+        }
+    }
+
+    private string GetShieldClass()
+    {
+        return NetworkMonitor.RequestCount > 0 ? "warning" : "";
+    }
+
+    private string GetStatusIcon()
+    {
+        if (NetworkMonitor.RequestCount == 0)
+        {
+            return Localizer.GetString("NetworkShield.Safe");
+        }
+        else
+        {
+            return Localizer.GetString("NetworkShield.Warning");
+        }
+    }
+
+    private string GetStatusText()
+    {
+        if (NetworkMonitor.RequestCount == 0)
+        {
+            return Localizer.GetString("NetworkShield.SafeDetail");
+        }
+        else
+        {
+            return Localizer.GetString("NetworkShield.WarningDetail", NetworkMonitor.RequestCount);
+        }
+    }
+
+    public void Dispose()
+    {
+        // イベントリスナーを解除してメモリリークを防止
+        NetworkMonitor.RequestCountChanged -= OnRequestCountChanged;
+    }
+}

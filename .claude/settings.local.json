@@ -22,7 +22,8 @@
       "Bash(dotnet build:*)",
       "Bash(dotnet run:*)",
       "Bash(dotnet clean:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(dotnet format:*)"
     ],
     "deny": []
   },

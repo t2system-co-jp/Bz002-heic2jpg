@@ -50,7 +50,7 @@ public class LocalizationService : ILocalizationService
 
         try
         {
-            var savedLanguage = await _jsRuntime.InvokeAsync<string?>( "localStorage.getItem", LocalStorageKey);
+            var savedLanguage = await _jsRuntime.InvokeAsync<string?>("localStorage.getItem", LocalStorageKey);
 
             if (!string.IsNullOrEmpty(savedLanguage) && IsLanguageSupported(savedLanguage))
             {
