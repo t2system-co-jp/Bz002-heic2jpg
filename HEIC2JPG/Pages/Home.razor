@@ -2,35 +2,39 @@
 @using HEIC2JPG.Models
 @using HEIC2JPG.Services
 @inject IConvertService ConvertService
+@inject ILocalizationService Localizer
 @inject IJSRuntime JS
+@implements IDisposable
 
-<PageTitle>HEIC2JPG & MOV2MP4</PageTitle>
+<PageTitle>@Localizer.GetString("App.Title")</PageTitle>
 
 <div class="converter-container">
     <!-- ヘッダー -->
     <div class="converter-header">
-        <h1>HEIC2JPG & MOV2MP4</h1>
-        <p>ローカル完結型メディア変換アプリ - データはブラウザ外へ送信されません</p>
+        <h1>@Localizer.GetString("App.Title")</h1>
+        <p>@Localizer.GetString("App.Description")</p>
     </div>
 
     <div class="converter-layout">
         <!-- メインエリア -->
         <div class="main-area">
             <!-- ドロップゾーン -->
-            <div class="drop-zone @(isDragActive ? "drag-active" : "")" 
-                 @ondragover="OnDragOver" 
+            <div class="drop-zone @(isDragActive ? "drag-active" : "")"
+                 @ondragover="OnDragOver"
                  @ondragover:preventDefault="true"
-                 @ondrop="OnDrop" 
+                 @ondrop="OnDrop"
                  @ondrop:preventDefault="true"
                  @ondragenter="OnDragEnter"
                  @ondragleave="OnDragLeave"
-                 @onclick="SelectFiles">
+                 @onclick="SelectFiles"
+                 role="button"
+                 aria-label="@Localizer.GetString("DropZone.AriaLabel")">
                 <div class="drop-content">
                     <div class="drop-icon">📁</div>
-                    <h3>ファイルをドロップまたは選択</h3>
-                    <p>HEIC画像・MOV動画をここにドロップしてください</p>
-                    <button type="button" class="btn-select">ファイルを選択</button>
-                    <small>最大100ファイル、2GB/ファイル</small>
+                    <h3>@Localizer.GetString("DropZone.Title")</h3>
+                    <p>@Localizer.GetString("DropZone.Description")</p>
+                    <button type="button" class="btn-select">@Localizer.GetString("DropZone.ButtonSelect")</button>
+                    <small>@Localizer.GetString("DropZone.FileLimits")</small>
                 </div>
             </div>
 
@@ -44,19 +48,19 @@
             <!-- ファイルキュー -->
             @if (files.Any())
             {
-                <div class="file-queue">
+                <div class="file-queue" role="region" aria-label="@Localizer.GetString("FileQueue.AriaLabel", files.Count)">
                     <div class="queue-header">
-                        <h3>変換キュー (@files.Count ファイル)</h3>
+                        <h3>@Localizer.GetString("FileQueue.Title") (@files.Count)</h3>
                         <div class="queue-controls">
                             <button class="btn btn-primary" @onclick="StartConversion" disabled="@isProcessing">
-                                ▶️ 開始
+                                ▶️ @Localizer.GetString("Button.Start")
                             </button>
-                            <button class="btn btn-download-all" @onclick="DownloadAll" 
+                            <button class="btn btn-download-all" @onclick="DownloadAll"
                                    disabled="@(!files.Any(f => f.Status == ConversionStatus.Completed))">
-                                📦 一括DL
+                                📦 @Localizer.GetString("Button.DownloadAll")
                             </button>
                             <button class="btn btn-clear" @onclick="ClearQueue" disabled="@isProcessing">
-                                🗑️ クリア
+                                🗑️ @Localizer.GetString("Button.Clear")
                             </button>
                         </div>
                     </div>
@@ -89,12 +93,12 @@
                             <div class="file-actions">
                                 @if (file.Status == ConversionStatus.Completed)
                                 {
-                                    <button class="btn-download" @onclick="() => DownloadFile(file)" title="ダウンロード">
+                                    <button class="btn-download" @onclick="() => DownloadFile(file)" title="@Localizer.GetString("Button.Download")">
                                         💾
                                     </button>
                                 }
-                                <button class="btn-remove" @onclick="() => RemoveFile(file)" 
-                                       disabled="@(file.Status == ConversionStatus.Processing)" title="削除">
+                                <button class="btn-remove" @onclick="() => RemoveFile(file)"
+                                       disabled="@(file.Status == ConversionStatus.Processing)" title="@Localizer.GetString("Button.Delete")">
                                     ❌
                                 </button>
                             </div>
@@ -106,35 +110,35 @@
 
         <!-- 設定パネル -->
         <div class="settings-panel">
-            <h3>⚙️ 変換設定</h3>
-            
+            <h3>⚙️ @Localizer.GetString("Settings.Title")</h3>
+
             <div class="setting">
-                <label for="jpgQuality">JPG品質: @((settings.JpgQuality * 100).ToString("F0"))%</label>
-                <input type="range" id="jpgQuality" 
-                       @bind="settings.JpgQuality" 
+                <label for="jpgQuality">@Localizer.GetString("Settings.JpgQuality"): @((settings.JpgQuality * 100).ToString("F0"))%</label>
+                <input type="range" id="jpgQuality"
+                       @bind="settings.JpgQuality"
                        min="0.6" max="1.0" step="0.1" />
             </div>
 
             <div class="setting">
                 <label>
                     <input type="checkbox" @bind="settings.PreserveExif" />
-                    EXIF情報を保持
+                    @Localizer.GetString("Settings.PreserveExif")
                 </label>
             </div>
 
             <div class="setting">
-                <label for="conversionMode">変換方式</label>
+                <label for="conversionMode">@Localizer.GetString("Settings.ConversionMode")</label>
                 <select id="conversionMode" @bind="settings.ConversionMode">
-                    <option value="Auto">自動</option>
-                    <option value="Fast">高速</option>
-                    <option value="Quality">高品質</option>
+                    <option value="Auto">@Localizer.GetString("Settings.ConversionMode.Auto")</option>
+                    <option value="Fast">@Localizer.GetString("Settings.ConversionMode.Fast")</option>
+                    <option value="Quality">@Localizer.GetString("Settings.ConversionMode.HighQuality")</option>
                 </select>
             </div>
 
             <div class="setting">
-                <label for="parallelCount">並列処理数: @settings.ParallelCount</label>
-                <input type="range" id="parallelCount" 
-                       @bind="settings.ParallelCount" 
+                <label for="parallelCount">@Localizer.GetString("Settings.ParallelCount"): @settings.ParallelCount</label>
+                <input type="range" id="parallelCount"
+                       @bind="settings.ParallelCount"
                        min="1" max="4" step="1" />
             </div>
         </div>
@@ -268,12 +272,30 @@
     {
         return status switch
         {
-            ConversionStatus.Pending => "待機中",
-            ConversionStatus.Processing => "処理中",
-            ConversionStatus.Completed => "完了",
-            ConversionStatus.Error => "エラー",
-            ConversionStatus.Cancelled => "キャンセル",
-            _ => "不明"
+            ConversionStatus.Pending => Localizer.GetString("Status.Pending"),
+            ConversionStatus.Processing => Localizer.GetString("Status.Processing"),
+            ConversionStatus.Completed => Localizer.GetString("Status.Completed"),
+            ConversionStatus.Error => Localizer.GetString("Status.Error"),
+            ConversionStatus.Cancelled => Localizer.GetString("Status.Cancelled"),
+            _ => Localizer.GetString("Status.Unknown")
         };
+    }
+
+    protected override void OnInitialized()
+    {
+        // 言語変更イベントを購読
+        Localizer.LanguageChanged += OnLanguageChanged;
+    }
+
+    private void OnLanguageChanged(object? sender, EventArgs e)
+    {
+        // 言語が変更されたらUI再描画
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        // イベント購読解除
+        Localizer.LanguageChanged -= OnLanguageChanged;
     }
 }

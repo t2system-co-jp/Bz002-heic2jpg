@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" msdata:Ordinal="5" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Application -->
+  <data name="App.Title" xml:space="preserve">
+    <value>HEIC2JPG &amp; MOV2MP4</value>
+  </data>
+  <data name="App.Description" xml:space="preserve">
+    <value>ローカル完結型メディア変換アプリ - データはブラウザ外へ送信されません</value>
+  </data>
+
+  <!-- Language Selector -->
+  <data name="Language.Label" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Language.Japanese" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="Language.English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Language.ChineseSimplified" xml:space="preserve">
+    <value>简体中文</value>
+  </data>
+  <data name="Language.AriaLabel" xml:space="preserve">
+    <value>言語選択</value>
+  </data>
+
+  <!-- Drop Zone -->
+  <data name="DropZone.Title" xml:space="preserve">
+    <value>ファイルをドロップまたは選択</value>
+  </data>
+  <data name="DropZone.Description" xml:space="preserve">
+    <value>HEIC画像・MOV動画をここにドロップしてください</value>
+  </data>
+  <data name="DropZone.ButtonSelect" xml:space="preserve">
+    <value>ファイルを選択</value>
+  </data>
+  <data name="DropZone.FileLimits" xml:space="preserve">
+    <value>最大100ファイル、2GB/ファイル</value>
+  </data>
+  <data name="DropZone.AriaLabel" xml:space="preserve">
+    <value>ファイル選択エリア: ここにファイルをドロップするか、クリックして選択してください</value>
+  </data>
+
+  <!-- Buttons -->
+  <data name="Button.Start" xml:space="preserve">
+    <value>開始</value>
+  </data>
+  <data name="Button.Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Button.DownloadAll" xml:space="preserve">
+    <value>一括DL</value>
+  </data>
+  <data name="Button.Clear" xml:space="preserve">
+    <value>クリア</value>
+  </data>
+  <data name="Button.Close" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
+  <data name="Button.Delete" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="Button.Download" xml:space="preserve">
+    <value>ダウンロード</value>
+  </data>
+
+  <!-- Status -->
+  <data name="Status.Pending" xml:space="preserve">
+    <value>待機中</value>
+  </data>
+  <data name="Status.Processing" xml:space="preserve">
+    <value>処理中</value>
+  </data>
+  <data name="Status.Completed" xml:space="preserve">
+    <value>完了</value>
+  </data>
+  <data name="Status.Error" xml:space="preserve">
+    <value>エラー</value>
+  </data>
+  <data name="Status.Cancelled" xml:space="preserve">
+    <value>キャンセル済み</value>
+  </data>
+  <data name="Status.Unknown" xml:space="preserve">
+    <value>不明</value>
+  </data>
+
+  <!-- Network Shield -->
+  <data name="NetworkShield.LocalOnly" xml:space="preserve">
+    <value>LOCAL ONLY</value>
+  </data>
+  <data name="NetworkShield.AriaLabel" xml:space="preserve">
+    <value>ネットワークシールド: 外部リクエスト{0}件</value>
+  </data>
+
+  <!-- Trust Center -->
+  <data name="TrustCenter.Title" xml:space="preserve">
+    <value>Trust Center</value>
+  </data>
+  <data name="TrustCenter.TechnicalBasis" xml:space="preserve">
+    <value>技術的裏付け</value>
+  </data>
+  <data name="TrustCenter.TechnicalBasisContent" xml:space="preserve">
+    <value>このアプリケーションは、すべての処理をブラウザ内で完結させます。ファイルデータが外部サーバーへ送信されることはありません。</value>
+  </data>
+  <data name="TrustCenter.TechnicalDetails" xml:space="preserve">
+    <value>• CSP（Content Security Policy）: 自己ホストリソースのみ許可
+• COOP/COEP ヘッダー: SharedArrayBuffer のローカル実行を保証
+• Service Worker: オフラインキャッシュ戦略
+• WebAssembly: クライアントサイドでの画像・動画処理</value>
+  </data>
+  <data name="TrustCenter.VerificationMethod" xml:space="preserve">
+    <value>検証方法</value>
+  </data>
+  <data name="TrustCenter.VerificationSteps" xml:space="preserve">
+    <value>1. ブラウザ DevTools を開く（F12キー）
+2. Networkタブを選択
+3. ファイルを変換
+4. 外部リクエストが0件であることを確認
+5. Applicationタブで localStorage を確認</value>
+  </data>
+  <data name="TrustCenter.OfflineVerification" xml:space="preserve">
+    <value>PWAオフライン動作検証</value>
+  </data>
+  <data name="TrustCenter.OfflineSteps" xml:space="preserve">
+    <value>1. 機内モードを有効化
+2. アプリを再読み込み
+3. 変換機能が動作することを確認</value>
+  </data>
+
+  <!-- No Upload Label -->
+  <data name="NoUpload.Label" xml:space="preserve">
+    <value>データはアップロードされません</value>
+  </data>
+  <data name="NoUpload.AriaLabel" xml:space="preserve">
+    <value>セキュリティ通知: ファイルは端末内でのみ処理されます</value>
+  </data>
+
+  <!-- Toast Messages -->
+  <data name="Toast.OfflineReady" xml:space="preserve">
+    <value>オフライン準備完了</value>
+  </data>
+  <data name="Toast.ConversionComplete" xml:space="preserve">
+    <value>変換が完了しました</value>
+  </data>
+  <data name="Toast.ConversionError" xml:space="preserve">
+    <value>変換中にエラーが発生しました</value>
+  </data>
+  <data name="Toast.FilesCleared" xml:space="preserve">
+    <value>ファイルをクリアしました</value>
+  </data>
+
+  <!-- Settings Panel -->
+  <data name="Settings.Title" xml:space="preserve">
+    <value>変換設定</value>
+  </data>
+  <data name="Settings.JpgQuality" xml:space="preserve">
+    <value>JPG品質</value>
+  </data>
+  <data name="Settings.PreserveExif" xml:space="preserve">
+    <value>EXIF情報を保持</value>
+  </data>
+  <data name="Settings.ConversionMode" xml:space="preserve">
+    <value>変換方式</value>
+  </data>
+  <data name="Settings.ConversionMode.Auto" xml:space="preserve">
+    <value>自動</value>
+  </data>
+  <data name="Settings.ConversionMode.Fast" xml:space="preserve">
+    <value>高速</value>
+  </data>
+  <data name="Settings.ConversionMode.HighQuality" xml:space="preserve">
+    <value>高品質</value>
+  </data>
+  <data name="Settings.ParallelCount" xml:space="preserve">
+    <value>並列処理数</value>
+  </data>
+
+  <!-- File Queue -->
+  <data name="FileQueue.Title" xml:space="preserve">
+    <value>変換キュー</value>
+  </data>
+  <data name="FileQueue.AriaLabel" xml:space="preserve">
+    <value>変換キュー: {0}ファイル</value>
+  </data>
+  <data name="FileQueue.Empty" xml:space="preserve">
+    <value>ファイルが選択されていません</value>
+  </data>
+
+  <!-- Error Messages -->
+  <data name="Error.FileTooLarge" xml:space="preserve">
+    <value>ファイルサイズが2GBを超えています</value>
+  </data>
+  <data name="Error.TooManyFiles" xml:space="preserve">
+    <value>ファイル数が100件を超えています</value>
+  </data>
+  <data name="Error.UnsupportedFormat" xml:space="preserve">
+    <value>サポートされていない形式です</value>
+  </data>
+  <data name="Error.ConversionFailed" xml:space="preserve">
+    <value>変換に失敗しました</value>
+  </data>
+
+  <!-- Confirmation -->
+  <data name="Confirm.ClearFiles" xml:space="preserve">
+    <value>すべてのファイルをクリアしますか？</value>
+  </data>
+  <data name="Confirm.CancelConversion" xml:space="preserve">
+    <value>変換をキャンセルしますか？</value>
+  </data>
+
+  <!-- Conversion Progress Messages -->
+  <data name="ConversionMessage.InitializationFailed.Heic" xml:space="preserve">
+    <value>HEIC変換ライブラリの初期化に失敗しました</value>
+  </data>
+  <data name="ConversionMessage.InitializationFailed.Ffmpeg" xml:space="preserve">
+    <value>FFmpeg変換ライブラリの初期化に失敗しました</value>
+  </data>
+  <data name="ConversionMessage.Starting" xml:space="preserve">
+    <value>変換開始...</value>
+  </data>
+  <data name="ConversionMessage.GeneratingJpeg" xml:space="preserve">
+    <value>JPEG生成中...</value>
+  </data>
+  <data name="ConversionMessage.GeneratingMp4" xml:space="preserve">
+    <value>MP4生成中...</value>
+  </data>
+  <data name="ConversionMessage.Completed" xml:space="preserve">
+    <value>変換完了</value>
+  </data>
+  <data name="ConversionMessage.Cancelled" xml:space="preserve">
+    <value>変換がキャンセルされました</value>
+  </data>
+  <data name="ConversionMessage.Processing" xml:space="preserve">
+    <value>変換中...</value>
+  </data>
+  <data name="ConversionMessage.Done" xml:space="preserve">
+    <value>完了</value>
+  </data>
+
+  <!-- Conversion Error Messages -->
+  <data name="ConversionError.HeicConversion" xml:space="preserve">
+    <value>HEIC変換エラー: {0}</value>
+  </data>
+  <data name="ConversionError.MovConversion" xml:space="preserve">
+    <value>MOV変換エラー: {0}</value>
+  </data>
+  <data name="ConversionError.FfmpegError" xml:space="preserve">
+    <value>FFmpeg変換処理でエラーが発生しました: {0}</value>
+  </data>
+  <data name="ConversionError.JavaScriptError" xml:space="preserve">
+    <value>JavaScript実行エラー: {0}</value>
+  </data>
+  <data name="ConversionError.ResultRetrievalFailed" xml:space="preserve">
+    <value>変換結果の取得に失敗しました: {0}</value>
+  </data>
+  <data name="ConversionError.UnsupportedFileType" xml:space="preserve">
+    <value>ファイルタイプ {0} はサポートされていません</value>
+  </data>
+  <data name="ConversionError.ConversionFailed" xml:space="preserve">
+    <value>変換に失敗しました</value>
+  </data>
+
+  <!-- JavaScript Error Messages -->
+  <data name="JSError.HeicNotInitialized" xml:space="preserve">
+    <value>libheifが初期化されていません</value>
+  </data>
+  <data name="JSError.ImageDataEmpty" xml:space="preserve">
+    <value>デコードされた画像データが空です</value>
+  </data>
+  <data name="JSError.DisplayDataFailed" xml:space="preserve">
+    <value>displayDataが取得できませんでした</value>
+  </data>
+  <data name="JSError.JpegConversionFailed" xml:space="preserve">
+    <value>JPEG変換に失敗しました</value>
+  </data>
+  <data name="JSError.FfmpegNotInitialized" xml:space="preserve">
+    <value>FFmpegが初期化されていません</value>
+  </data>
+  <data name="JSError.FfmpegTimeout" xml:space="preserve">
+    <value>ffmpeg.load()タイムアウト（120秒）</value>
+  </data>
+  <data name="JSError.ResultReadFailed" xml:space="preserve">
+    <value>変換結果の読み取りに失敗: {0}</value>
+  </data>
+
+  <!-- JavaScript Mock Messages -->
+  <data name="JSMock.HeicConversion" xml:space="preserve">
+    <value>HEIC→JPEG変換</value>
+  </data>
+  <data name="JSMock.MockImplementation" xml:space="preserve">
+    <value>（モック実装）</value>
+  </data>
+  <data name="JSMock.OriginalFile" xml:space="preserve">
+    <value>元ファイル: {0} KB</value>
+  </data>
+  <data name="JSMock.Quality" xml:space="preserve">
+    <value>品質: {0}%</value>
+  </data>
+</root>

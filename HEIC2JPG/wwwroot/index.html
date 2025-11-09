@@ -40,7 +40,9 @@
     <script src="lib/libheif/libheif.js"></script>
     <script src="https://unpkg.com/@ffmpeg/util@0.12.1/dist/umd/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js"></script>
-    <!-- 共通ユーティリティを最初に読み込み -->
+    <!-- ローカライゼーションを最初に読み込み -->
+    <script src="js/localization.js"></script>
+    <!-- 共通ユーティリティ -->
     <script src="js/commonUtils.js"></script>
     <!-- 変換機能 -->
     <script src="js/heicConverter.js"></script>
@@ -48,15 +50,19 @@
     
     <!-- PWA Service Worker -->
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
+        const shouldRegisterSw = 'serviceWorker' in navigator && !window.location.hostname.includes('localhost');
+
+        if (shouldRegisterSw) {
+            window.addEventListener('load', function () {
                 navigator.serviceWorker.register('/sw.js')
-                    .then(function(registration) {
+                    .then(function (registration) {
                         console.log('ServiceWorker登録成功: ', registration.scope);
-                    }, function(err) {
+                    }, function (err) {
                         console.log('ServiceWorker登録失敗: ', err);
                     });
             });
+        } else {
+            console.log('ServiceWorker登録をスキップしました（開発環境）');
         }
     </script>
 </body>

@@ -47,9 +47,7 @@ window.heicConverter = {
     
     async convertHeicToJpeg(heicBuffer, quality = 0.9, keepExif = true) {
         if (!this.isInitialized) {
-            const errorMsg = window.commonUtils?.formatError 
-                ? window.commonUtils.formatError('HEIC変換', new Error('libheifが初期化されていません'))
-                : 'HEIC変換エラー: libheifが初期化されていません';
+            const errorMsg = window.getLocalizedString('JSError.HeicNotInitialized');
             throw new Error(errorMsg);
         }
         
@@ -83,7 +81,7 @@ window.heicConverter = {
                 const data = decoder.decode(heicBuffer);
 
                 if (!data || data.length === 0) {
-                    return reject(new Error('デコードされた画像データが空です'));
+                    return reject(new Error(window.getLocalizedString('JSError.ImageDataEmpty')));
                 }
 
                 const image = data[0];
@@ -100,7 +98,7 @@ window.heicConverter = {
                 // image.displayの正しい使い方 (コールバック形式)
                 image.display(ctx.getImageData(0, 0, width, height), (displayData) => {
                     if (!displayData) {
-                        return reject(new Error('displayDataが取得できませんでした'));
+                        return reject(new Error(window.getLocalizedString('JSError.DisplayDataFailed')));
                     }
 
                     ctx.putImageData(displayData, 0, 0);
@@ -110,7 +108,7 @@ window.heicConverter = {
                             console.log('libheif変換完了');
                             resolve(blob);
                         } else {
-                            reject(new Error('JPEG変換に失敗しました'));
+                            reject(new Error(window.getLocalizedString('JSError.JpegConversionFailed')));
                         }
                     }, 'image/jpeg', quality);
                 });
@@ -160,13 +158,13 @@ window.heicConverter = {
             ctx.textAlign = 'center';
             ctx.shadowColor = 'rgba(0,0,0,0.5)';
             ctx.shadowBlur = 4;
-            ctx.fillText('HEIC→JPEG変換', 200, 130);
-            ctx.fillText('（モック実装）', 200, 160);
-            
+            ctx.fillText(window.getLocalizedString('JSMock.HeicConversion'), 200, 130);
+            ctx.fillText(window.getLocalizedString('JSMock.MockImplementation'), 200, 160);
+
             // ファイルサイズ情報
             ctx.font = '14px Arial';
-            ctx.fillText(`元ファイル: ${(heicBuffer.length / 1024).toFixed(1)} KB`, 200, 200);
-            ctx.fillText(`品質: ${(quality * 100).toFixed(0)}%`, 200, 220);
+            ctx.fillText(window.getLocalizedString('JSMock.OriginalFile', (heicBuffer.length / 1024).toFixed(1)), 200, 200);
+            ctx.fillText(window.getLocalizedString('JSMock.Quality', (quality * 100).toFixed(0)), 200, 220);
             
             canvas.toBlob((blob) => {
                 console.log('モック変換完了');

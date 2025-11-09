@@ -8,6 +8,8 @@
 - **MOV → MP4** 動画変換
 - **完全オフライン動作**（データはブラウザ外へ送信されません）
 - **バッチ処理対応**（最大100件、2GB/ファイル）
+- **多言語対応**（日本語・英語・中国語簡体字）
+- **プライバシー保護**（ネットワーク監視・検証可能）
 
 ## 🎯 主な機能
 
@@ -18,17 +20,21 @@
 - バッチダウンロード（Zip対応）
 - エラーハンドリング・ユーザーフィードバック
 - COOP/COEP設定（SharedArrayBuffer対応）
-- 日本語UI・アクセシビリティ対応
+- **多言語UI**（日本語・英語・中国語簡体字）
 - **PWA対応**（オフラインインストール・スタンドアロン実行）
+- **プライバシー保護UI**（Network Shield バッジ・Trust Center）
+- **アクセシビリティ対応**（キーボード操作・WCAG AA準拠）
 
 ### 🔧 技術要件
 - **フロントエンド**: Blazor WebAssembly (.NET 9)
-- **変換エンジン**: 
+- **変換エンジン**:
   - HEIC: libheif-js v1.19.8 (✅ 導入済み)
   - 動画: @ffmpeg/ffmpeg v0.12.15 (✅ 導入済み)
 - **セキュリティ**: COOP/COEP設定済み
 - **圧縮**: JSZip v3.10.1 (✅ 導入済み)
 - **PWA**: Service Worker + Web App Manifest (✅ 導入済み)
+- **多言語**: .NET リソース（.resx）ベース
+- **プライバシー**: CSP/COOP/COEP + ネットワーク監視
 
 ## 📂 プロジェクト構造
 
@@ -38,30 +44,42 @@ HEIC2JPG/
 │   └── ConvertModels.cs          # データモデル定義
 ├── Services/
 │   ├── IConvertService.cs        # 変換サービスIF
-│   └── ConvertService.cs         # 変換サービス実装
+│   ├── ConvertService.cs         # 変換サービス実装
+│   ├── ILocalizationService.cs   # 多言語サービスIF
+│   ├── LocalizationService.cs    # 多言語サービス実装
+│   └── NetworkMonitorService.cs  # ネットワーク監視サービス
+├── Resources/
+│   ├── Strings.resx              # デフォルト（日本語）リソース
+│   ├── Strings.en.resx           # 英語リソース
+│   └── Strings.zh-Hans.resx      # 中国語簡体字リソース
+├── Components/
+│   ├── NetworkShield.razor       # Network Shield バッジ
+│   ├── TrustCenter.razor         # Trust Center ダイアログ
+│   └── LanguageSelector.razor    # 言語切替メニュー
 ├── Pages/
-│   └── Home.razor               # メインUI
+│   └── Home.razor                # メインUI
 ├── Layout/
-│   └── MainLayout.razor         # レイアウト（簡素化済み）
+│   └── MainLayout.razor          # レイアウト
 └── wwwroot/
     ├── js/
-    │   ├── heicConverter.js     # HEIC変換（libheif統合）
-    │   ├── ffmpegConverter.js   # MOV変換（FFmpeg統合）
-    │   ├── zipHelper.js         # Zip生成
-    │   ├── blobHelper.js        # Blob操作
-    │   ├── fileDownload.js      # ダウンロード機能
-    │   ├── fileHelper.js        # ファイル操作ヘルパー
-    │   └── commonUtils.js       # 共通ユーティリティ
+    │   ├── heicConverter.js      # HEIC変換（libheif統合）
+    │   ├── ffmpegConverter.js    # MOV変換（FFmpeg統合）
+    │   ├── zipHelper.js          # Zip生成
+    │   ├── blobHelper.js         # Blob操作
+    │   ├── fileDownload.js       # ダウンロード機能
+    │   ├── fileHelper.js         # ファイル操作ヘルパー
+    │   ├── networkMonitor.js     # ネットワーク監視
+    │   └── commonUtils.js        # 共通ユーティリティ
     ├── css/
-    │   └── converter.css        # 専用スタイル
+    │   └── converter.css         # 専用スタイル
     ├── lib/
-    │   ├── libheif/            # libheif WASMファイル
-    │   ├── ffmpeg/             # FFmpeg WASMファイル
-    │   ├── jszip/              # JSZip ライブラリ
-    │   └── bootstrap/          # Bootstrap フレームワーク
-    ├── manifest.json           # PWA マニフェスト
-    ├── sw.js                   # Service Worker
-    └── icon-*.png              # PWA アイコン
+    │   ├── libheif/              # libheif WASMファイル
+    │   ├── ffmpeg/               # FFmpeg WASMファイル
+    │   ├── jszip/                # JSZip ライブラリ
+    │   └── bootstrap/            # Bootstrap フレームワーク
+    ├── manifest.json             # PWA マニフェスト
+    ├── sw.js                     # Service Worker
+    └── icon-*.png                # PWA アイコン
 ```
 
 ## 🚀 セットアップ・実行
@@ -124,17 +142,28 @@ wwwroot/manifest.json
 
 ## 📋 操作方法
 
-1. **ファイル追加**: ドラッグ&ドロップまたはファイル選択
-2. **設定調整**: 右側パネルで品質等を設定
-3. **変換実行**: 「▶️ 開始」ボタンをクリック
-4. **ダウンロード**: 個別DLまたは「📦 一括DL」
-5. **PWAインストール**: ブラウザのインストールプロンプトから追加
+1. **言語選択**: 右上の「🌐 Language」メニューから選択（自動検出またはlocalStorage保存）
+2. **ファイル追加**: ドラッグ&ドロップまたはファイル選択
+3. **設定調整**: 右側パネルで品質等を設定
+4. **変換実行**: 「▶️ 開始」ボタンをクリック
+5. **ダウンロード**: 個別DLまたは「📦 一括DL」
+6. **PWAインストール**: ブラウザのインストールプロンプトから追加
+7. **プライバシー確認**: 右上の「Network Shield」バッジでネットワーク通信を監視
 
-## 🛡️ セキュリティ
+## 🛡️ セキュリティ・プライバシー
 
-- **ローカル処理**: データはブラウザ外へ送信されません
+### ローカル完結の保証
+- **100%クライアントサイド処理**: ファイルデータはブラウザメモリ内でのみ処理
+- **ネットワーク監視**: 外部通信カウンタをUIに常時表示（Network Shield バッジ）
+- **検証可能**: Trust Centerで検証手順を公開
 - **COOP/COEP**: SharedArrayBuffer利用のため設定済み
 - **CSP準拠**: 自己ホストリソースのみ許可
+
+### プライバシー保護UI
+- **Network Shield バッジ**: 右上ヘッダーに「LOCAL ONLY | 0」と表示（外部リクエスト数を監視）
+- **Trust Center**: クリックで技術的裏付け・検証方法を表示
+- **No Upload ラベル**: ファイル入力UIに常時表示
+- **オフライン準備トースト**: PWA準備完了時に通知
 
 ## 📊 パフォーマンス目安
 
@@ -152,6 +181,35 @@ wwwroot/manifest.json
 - ✅ Chrome/Edge/Brave（推奨、PWA完全対応）
 - ⚠️ Safari（WASM/COEP制約により限定対応、PWA部分対応）
 - ❌ Internet Explorer（非対応）
+
+## ♿ アクセシビリティ
+
+- **キーボード操作**: すべてのUIコンポーネントは `Tab`/`Arrow`/`Enter` で操作可能
+- **コントラスト比**: WCAG AA基準準拠（バッジ・ラベル・ボタン）
+- **スクリーンリーダー対応**: ARIA属性・ラベル適切配置
+- **フォーカス管理**: フォーカスリングの明示的表示
+- **多言語フォント**: 各言語に適切なフォントファミリを指定
+
+## 🌐 多言語対応
+
+### サポート言語
+- **日本語** (`ja-JP`): デフォルト
+- **英語** (`en-US`): English
+- **中国語簡体字** (`zh-CN`): 简体中文
+
+### 言語切替
+- **自動検出**: 初回起動時に `navigator.languages` から自動判定
+- **手動切替**: 右上「🌐 Language」メニューから選択
+- **永続化**: 選択言語を `localStorage("heic2jpg.lang")` に保存
+- **反映**: 言語変更時にUIを即座に再描画（ページリロード不要）
+
+### 対象範囲
+- ヘッダー（アプリ名・メニュー・言語切替）
+- ファイル入出力（ドラッグ&ドロップ・注意書き）
+- 操作系（削除・並べ替え・回転・抽出・Undo/Redo）
+- 設定パネル（品質・EXIF・変換方式）
+- Network Shield / Trust Center
+- ダイアログ・トースト（確認・成功・エラー）
 
 ## 📄 ライセンス
 

@@ -90,7 +90,7 @@ window.ffmpegConverter = {
                 // タイムアウト付きでload実行（CDNのため時間を延長）
                 const loadPromise = this.ffmpeg.load({ coreURL, wasmURL });
                 const timeoutPromise = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('ffmpeg.load()タイムアウト（120秒）')), 120000)
+                    setTimeout(() => reject(new Error(window.getLocalizedString('JSError.FfmpegTimeout'))), 120000)
                 );
                 
                 // 進捗表示
@@ -146,9 +146,7 @@ window.ffmpegConverter = {
             console.error('FFmpeg未初期化のため自動初期化を試行');
             const initResult = await this.initialize();
             if (!initResult) {
-                const errorMsg = window.commonUtils?.formatError 
-                    ? window.commonUtils.formatError('FFmpeg変換', new Error('FFmpegが初期化されていません'))
-                    : 'FFmpeg変換エラー: FFmpegが初期化されていません';
+                const errorMsg = window.getLocalizedString('JSError.FfmpegNotInitialized');
                 throw new Error(errorMsg);
             }
         }
@@ -212,7 +210,7 @@ window.ffmpegConverter = {
             console.log('出力ファイル読み取り完了:', outputData.length, 'bytes');
         } catch (readError) {
             console.error('出力ファイル読み取りエラー:', readError);
-            throw new Error(`変換結果の読み取りに失敗: ${readError.message}`);
+            throw new Error(window.getLocalizedString('JSError.ResultReadFailed', readError.message));
         }
 
         // ファイルクリーンアップ

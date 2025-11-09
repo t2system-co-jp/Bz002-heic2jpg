@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" msdata:Ordinal="5" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Application -->
+  <data name="App.Title" xml:space="preserve">
+    <value>HEIC2JPG &amp; MOV2MP4 [ENGLISH]</value>
+  </data>
+  <data name="App.Description" xml:space="preserve">
+    <value>Local Media Converter - Your data never leaves your browser</value>
+  </data>
+
+  <!-- Language Selector -->
+  <data name="Language.Label" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Language.Japanese" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="Language.English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Language.ChineseSimplified" xml:space="preserve">
+    <value>简体中文</value>
+  </data>
+  <data name="Language.AriaLabel" xml:space="preserve">
+    <value>Language selection</value>
+  </data>
+
+  <!-- Drop Zone -->
+  <data name="DropZone.Title" xml:space="preserve">
+    <value>Drop or Select Files</value>
+  </data>
+  <data name="DropZone.Description" xml:space="preserve">
+    <value>Drop HEIC images or MOV videos here</value>
+  </data>
+  <data name="DropZone.ButtonSelect" xml:space="preserve">
+    <value>Select Files</value>
+  </data>
+  <data name="DropZone.FileLimits" xml:space="preserve">
+    <value>Max 100 files, 2GB per file</value>
+  </data>
+  <data name="DropZone.AriaLabel" xml:space="preserve">
+    <value>File selection area: Drop files here or click to select</value>
+  </data>
+
+  <!-- Buttons -->
+  <data name="Button.Start" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="Button.Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Button.DownloadAll" xml:space="preserve">
+    <value>Download All</value>
+  </data>
+  <data name="Button.Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="Button.Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Button.Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Button.Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+
+  <!-- Status -->
+  <data name="Status.Pending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="Status.Processing" xml:space="preserve">
+    <value>Processing</value>
+  </data>
+  <data name="Status.Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="Status.Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Status.Cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="Status.Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+
+  <!-- Network Shield -->
+  <data name="NetworkShield.LocalOnly" xml:space="preserve">
+    <value>LOCAL ONLY</value>
+  </data>
+  <data name="NetworkShield.AriaLabel" xml:space="preserve">
+    <value>Network shield: {0} external requests</value>
+  </data>
+
+  <!-- Trust Center -->
+  <data name="TrustCenter.Title" xml:space="preserve">
+    <value>Trust Center</value>
+  </data>
+  <data name="TrustCenter.TechnicalBasis" xml:space="preserve">
+    <value>Technical Basis</value>
+  </data>
+  <data name="TrustCenter.TechnicalBasisContent" xml:space="preserve">
+    <value>This application processes all data entirely within your browser. No file data is ever transmitted to external servers.</value>
+  </data>
+  <data name="TrustCenter.TechnicalDetails" xml:space="preserve">
+    <value>• CSP (Content Security Policy): Self-hosted resources only
+• COOP/COEP Headers: Guarantees local SharedArrayBuffer execution
+• Service Worker: Offline caching strategy
+• WebAssembly: Client-side image and video processing</value>
+  </data>
+  <data name="TrustCenter.VerificationMethod" xml:space="preserve">
+    <value>Verification Method</value>
+  </data>
+  <data name="TrustCenter.VerificationSteps" xml:space="preserve">
+    <value>1. Open browser DevTools (F12 key)
+2. Select the Network tab
+3. Convert a file
+4. Verify that there are 0 external requests
+5. Check localStorage in the Application tab</value>
+  </data>
+  <data name="TrustCenter.OfflineVerification" xml:space="preserve">
+    <value>PWA Offline Verification</value>
+  </data>
+  <data name="TrustCenter.OfflineSteps" xml:space="preserve">
+    <value>1. Enable airplane mode
+2. Reload the app
+3. Verify that conversion features work</value>
+  </data>
+
+  <!-- No Upload Label -->
+  <data name="NoUpload.Label" xml:space="preserve">
+    <value>No data uploaded</value>
+  </data>
+  <data name="NoUpload.AriaLabel" xml:space="preserve">
+    <value>Security notice: Files are processed locally on your device only</value>
+  </data>
+
+  <!-- Toast Messages -->
+  <data name="Toast.OfflineReady" xml:space="preserve">
+    <value>Offline ready</value>
+  </data>
+  <data name="Toast.ConversionComplete" xml:space="preserve">
+    <value>Conversion completed</value>
+  </data>
+  <data name="Toast.ConversionError" xml:space="preserve">
+    <value>An error occurred during conversion</value>
+  </data>
+  <data name="Toast.FilesCleared" xml:space="preserve">
+    <value>Files cleared</value>
+  </data>
+
+  <!-- Settings Panel -->
+  <data name="Settings.Title" xml:space="preserve">
+    <value>Conversion Settings</value>
+  </data>
+  <data name="Settings.JpgQuality" xml:space="preserve">
+    <value>JPG Quality</value>
+  </data>
+  <data name="Settings.PreserveExif" xml:space="preserve">
+    <value>Preserve EXIF data</value>
+  </data>
+  <data name="Settings.ConversionMode" xml:space="preserve">
+    <value>Conversion Mode</value>
+  </data>
+  <data name="Settings.ConversionMode.Auto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="Settings.ConversionMode.Fast" xml:space="preserve">
+    <value>Fast</value>
+  </data>
+  <data name="Settings.ConversionMode.HighQuality" xml:space="preserve">
+    <value>High Quality</value>
+  </data>
+  <data name="Settings.ParallelCount" xml:space="preserve">
+    <value>Parallel Processing</value>
+  </data>
+
+  <!-- File Queue -->
+  <data name="FileQueue.Title" xml:space="preserve">
+    <value>Conversion Queue</value>
+  </data>
+  <data name="FileQueue.AriaLabel" xml:space="preserve">
+    <value>Conversion queue: {0} files</value>
+  </data>
+  <data name="FileQueue.Empty" xml:space="preserve">
+    <value>No files selected</value>
+  </data>
+
+  <!-- Error Messages -->
+  <data name="Error.FileTooLarge" xml:space="preserve">
+    <value>File size exceeds 2GB</value>
+  </data>
+  <data name="Error.TooManyFiles" xml:space="preserve">
+    <value>File count exceeds 100</value>
+  </data>
+  <data name="Error.UnsupportedFormat" xml:space="preserve">
+    <value>Unsupported format</value>
+  </data>
+  <data name="Error.ConversionFailed" xml:space="preserve">
+    <value>Conversion failed</value>
+  </data>
+
+  <!-- Confirmation -->
+  <data name="Confirm.ClearFiles" xml:space="preserve">
+    <value>Clear all files?</value>
+  </data>
+  <data name="Confirm.CancelConversion" xml:space="preserve">
+    <value>Cancel conversion?</value>
+  </data>
+
+  <!-- Conversion Progress Messages -->
+  <data name="ConversionMessage.InitializationFailed.Heic" xml:space="preserve">
+    <value>Failed to initialize HEIC conversion library</value>
+  </data>
+  <data name="ConversionMessage.InitializationFailed.Ffmpeg" xml:space="preserve">
+    <value>Failed to initialize FFmpeg conversion library</value>
+  </data>
+  <data name="ConversionMessage.Starting" xml:space="preserve">
+    <value>Starting conversion...</value>
+  </data>
+  <data name="ConversionMessage.GeneratingJpeg" xml:space="preserve">
+    <value>Generating JPEG...</value>
+  </data>
+  <data name="ConversionMessage.GeneratingMp4" xml:space="preserve">
+    <value>Generating MP4...</value>
+  </data>
+  <data name="ConversionMessage.Completed" xml:space="preserve">
+    <value>Conversion completed</value>
+  </data>
+  <data name="ConversionMessage.Cancelled" xml:space="preserve">
+    <value>Conversion cancelled</value>
+  </data>
+  <data name="ConversionMessage.Processing" xml:space="preserve">
+    <value>Converting...</value>
+  </data>
+  <data name="ConversionMessage.Done" xml:space="preserve">
+    <value>Done</value>
+  </data>
+
+  <!-- Conversion Error Messages -->
+  <data name="ConversionError.HeicConversion" xml:space="preserve">
+    <value>HEIC conversion error: {0}</value>
+  </data>
+  <data name="ConversionError.MovConversion" xml:space="preserve">
+    <value>MOV conversion error: {0}</value>
+  </data>
+  <data name="ConversionError.FfmpegError" xml:space="preserve">
+    <value>FFmpeg conversion process error: {0}</value>
+  </data>
+  <data name="ConversionError.JavaScriptError" xml:space="preserve">
+    <value>JavaScript execution error: {0}</value>
+  </data>
+  <data name="ConversionError.ResultRetrievalFailed" xml:space="preserve">
+    <value>Failed to retrieve conversion result: {0}</value>
+  </data>
+  <data name="ConversionError.UnsupportedFileType" xml:space="preserve">
+    <value>File type {0} is not supported</value>
+  </data>
+  <data name="ConversionError.ConversionFailed" xml:space="preserve">
+    <value>Conversion failed</value>
+  </data>
+
+  <!-- JavaScript Error Messages -->
+  <data name="JSError.HeicNotInitialized" xml:space="preserve">
+    <value>libheif is not initialized</value>
+  </data>
+  <data name="JSError.ImageDataEmpty" xml:space="preserve">
+    <value>Decoded image data is empty</value>
+  </data>
+  <data name="JSError.DisplayDataFailed" xml:space="preserve">
+    <value>Failed to retrieve displayData</value>
+  </data>
+  <data name="JSError.JpegConversionFailed" xml:space="preserve">
+    <value>JPEG conversion failed</value>
+  </data>
+  <data name="JSError.FfmpegNotInitialized" xml:space="preserve">
+    <value>FFmpeg is not initialized</value>
+  </data>
+  <data name="JSError.FfmpegTimeout" xml:space="preserve">
+    <value>ffmpeg.load() timeout (120 seconds)</value>
+  </data>
+  <data name="JSError.ResultReadFailed" xml:space="preserve">
+    <value>Failed to read conversion result: {0}</value>
+  </data>
+
+  <!-- JavaScript Mock Messages -->
+  <data name="JSMock.HeicConversion" xml:space="preserve">
+    <value>HEIC→JPEG Conversion</value>
+  </data>
+  <data name="JSMock.MockImplementation" xml:space="preserve">
+    <value>(Mock Implementation)</value>
+  </data>
+  <data name="JSMock.OriginalFile" xml:space="preserve">
+    <value>Original File: {0} KB</value>
+  </data>
+  <data name="JSMock.Quality" xml:space="preserve">
+    <value>Quality: {0}%</value>
+  </data>
+</root>

@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" msdata:Ordinal="5" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Application -->
+  <data name="App.Title" xml:space="preserve">
+    <value>HEIC2JPG &amp; MOV2MP4 [中文]</value>
+  </data>
+  <data name="App.Description" xml:space="preserve">
+    <value>本地媒体转换应用 - 数据不会离开您的浏览器</value>
+  </data>
+
+  <!-- Language Selector -->
+  <data name="Language.Label" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Language.Japanese" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="Language.English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Language.ChineseSimplified" xml:space="preserve">
+    <value>简体中文</value>
+  </data>
+  <data name="Language.AriaLabel" xml:space="preserve">
+    <value>语言选择</value>
+  </data>
+
+  <!-- Drop Zone -->
+  <data name="DropZone.Title" xml:space="preserve">
+    <value>拖放或选择文件</value>
+  </data>
+  <data name="DropZone.Description" xml:space="preserve">
+    <value>将HEIC图像或MOV视频拖放到此处</value>
+  </data>
+  <data name="DropZone.ButtonSelect" xml:space="preserve">
+    <value>选择文件</value>
+  </data>
+  <data name="DropZone.FileLimits" xml:space="preserve">
+    <value>最多100个文件，每个文件2GB</value>
+  </data>
+  <data name="DropZone.AriaLabel" xml:space="preserve">
+    <value>文件选择区域：将文件拖放到此处或单击选择</value>
+  </data>
+
+  <!-- Buttons -->
+  <data name="Button.Start" xml:space="preserve">
+    <value>开始</value>
+  </data>
+  <data name="Button.Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Button.DownloadAll" xml:space="preserve">
+    <value>全部下载</value>
+  </data>
+  <data name="Button.Clear" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="Button.Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Button.Delete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="Button.Download" xml:space="preserve">
+    <value>下载</value>
+  </data>
+
+  <!-- Status -->
+  <data name="Status.Pending" xml:space="preserve">
+    <value>等待中</value>
+  </data>
+  <data name="Status.Processing" xml:space="preserve">
+    <value>处理中</value>
+  </data>
+  <data name="Status.Completed" xml:space="preserve">
+    <value>完成</value>
+  </data>
+  <data name="Status.Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="Status.Cancelled" xml:space="preserve">
+    <value>已取消</value>
+  </data>
+  <data name="Status.Unknown" xml:space="preserve">
+    <value>未知</value>
+  </data>
+
+  <!-- Network Shield -->
+  <data name="NetworkShield.LocalOnly" xml:space="preserve">
+    <value>本地模式</value>
+  </data>
+  <data name="NetworkShield.AriaLabel" xml:space="preserve">
+    <value>网络防护：{0}个外部请求</value>
+  </data>
+
+  <!-- Trust Center -->
+  <data name="TrustCenter.Title" xml:space="preserve">
+    <value>信任中心</value>
+  </data>
+  <data name="TrustCenter.TechnicalBasis" xml:space="preserve">
+    <value>技术基础</value>
+  </data>
+  <data name="TrustCenter.TechnicalBasisContent" xml:space="preserve">
+    <value>此应用程序完全在您的浏览器内处理所有数据。文件数据永远不会传输到外部服务器。</value>
+  </data>
+  <data name="TrustCenter.TechnicalDetails" xml:space="preserve">
+    <value>• CSP（内容安全策略）：仅允许自托管资源
+• COOP/COEP 标头：保证本地 SharedArrayBuffer 执行
+• Service Worker：离线缓存策略
+• WebAssembly：客户端图像和视频处理</value>
+  </data>
+  <data name="TrustCenter.VerificationMethod" xml:space="preserve">
+    <value>验证方法</value>
+  </data>
+  <data name="TrustCenter.VerificationSteps" xml:space="preserve">
+    <value>1. 打开浏览器开发者工具（F12键）
+2. 选择网络选项卡
+3. 转换文件
+4. 验证外部请求为0
+5. 在应用程序选项卡中检查 localStorage</value>
+  </data>
+  <data name="TrustCenter.OfflineVerification" xml:space="preserve">
+    <value>PWA离线验证</value>
+  </data>
+  <data name="TrustCenter.OfflineSteps" xml:space="preserve">
+    <value>1. 启用飞行模式
+2. 重新加载应用
+3. 验证转换功能是否正常工作</value>
+  </data>
+
+  <!-- No Upload Label -->
+  <data name="NoUpload.Label" xml:space="preserve">
+    <value>不上传数据</value>
+  </data>
+  <data name="NoUpload.AriaLabel" xml:space="preserve">
+    <value>安全通知：文件仅在您的设备上本地处理</value>
+  </data>
+
+  <!-- Toast Messages -->
+  <data name="Toast.OfflineReady" xml:space="preserve">
+    <value>离线已准备就绪</value>
+  </data>
+  <data name="Toast.ConversionComplete" xml:space="preserve">
+    <value>转换完成</value>
+  </data>
+  <data name="Toast.ConversionError" xml:space="preserve">
+    <value>转换过程中发生错误</value>
+  </data>
+  <data name="Toast.FilesCleared" xml:space="preserve">
+    <value>文件已清除</value>
+  </data>
+
+  <!-- Settings Panel -->
+  <data name="Settings.Title" xml:space="preserve">
+    <value>转换设置</value>
+  </data>
+  <data name="Settings.JpgQuality" xml:space="preserve">
+    <value>JPG质量</value>
+  </data>
+  <data name="Settings.PreserveExif" xml:space="preserve">
+    <value>保留EXIF数据</value>
+  </data>
+  <data name="Settings.ConversionMode" xml:space="preserve">
+    <value>转换模式</value>
+  </data>
+  <data name="Settings.ConversionMode.Auto" xml:space="preserve">
+    <value>自动</value>
+  </data>
+  <data name="Settings.ConversionMode.Fast" xml:space="preserve">
+    <value>快速</value>
+  </data>
+  <data name="Settings.ConversionMode.HighQuality" xml:space="preserve">
+    <value>高质量</value>
+  </data>
+  <data name="Settings.ParallelCount" xml:space="preserve">
+    <value>并行处理</value>
+  </data>
+
+  <!-- File Queue -->
+  <data name="FileQueue.Title" xml:space="preserve">
+    <value>转换队列</value>
+  </data>
+  <data name="FileQueue.AriaLabel" xml:space="preserve">
+    <value>转换队列：{0}个文件</value>
+  </data>
+  <data name="FileQueue.Empty" xml:space="preserve">
+    <value>未选择文件</value>
+  </data>
+
+  <!-- Error Messages -->
+  <data name="Error.FileTooLarge" xml:space="preserve">
+    <value>文件大小超过2GB</value>
+  </data>
+  <data name="Error.TooManyFiles" xml:space="preserve">
+    <value>文件数量超过100</value>
+  </data>
+  <data name="Error.UnsupportedFormat" xml:space="preserve">
+    <value>不支持的格式</value>
+  </data>
+  <data name="Error.ConversionFailed" xml:space="preserve">
+    <value>转换失败</value>
+  </data>
+
+  <!-- Confirmation -->
+  <data name="Confirm.ClearFiles" xml:space="preserve">
+    <value>清除所有文件？</value>
+  </data>
+  <data name="Confirm.CancelConversion" xml:space="preserve">
+    <value>取消转换？</value>
+  </data>
+
+  <!-- Conversion Progress Messages -->
+  <data name="ConversionMessage.InitializationFailed.Heic" xml:space="preserve">
+    <value>HEIC转换库初始化失败</value>
+  </data>
+  <data name="ConversionMessage.InitializationFailed.Ffmpeg" xml:space="preserve">
+    <value>FFmpeg转换库初始化失败</value>
+  </data>
+  <data name="ConversionMessage.Starting" xml:space="preserve">
+    <value>开始转换...</value>
+  </data>
+  <data name="ConversionMessage.GeneratingJpeg" xml:space="preserve">
+    <value>正在生成JPEG...</value>
+  </data>
+  <data name="ConversionMessage.GeneratingMp4" xml:space="preserve">
+    <value>正在生成MP4...</value>
+  </data>
+  <data name="ConversionMessage.Completed" xml:space="preserve">
+    <value>转换完成</value>
+  </data>
+  <data name="ConversionMessage.Cancelled" xml:space="preserve">
+    <value>转换已取消</value>
+  </data>
+  <data name="ConversionMessage.Processing" xml:space="preserve">
+    <value>转换中...</value>
+  </data>
+  <data name="ConversionMessage.Done" xml:space="preserve">
+    <value>完成</value>
+  </data>
+
+  <!-- Conversion Error Messages -->
+  <data name="ConversionError.HeicConversion" xml:space="preserve">
+    <value>HEIC转换错误：{0}</value>
+  </data>
+  <data name="ConversionError.MovConversion" xml:space="preserve">
+    <value>MOV转换错误：{0}</value>
+  </data>
+  <data name="ConversionError.FfmpegError" xml:space="preserve">
+    <value>FFmpeg转换处理错误：{0}</value>
+  </data>
+  <data name="ConversionError.JavaScriptError" xml:space="preserve">
+    <value>JavaScript执行错误：{0}</value>
+  </data>
+  <data name="ConversionError.ResultRetrievalFailed" xml:space="preserve">
+    <value>获取转换结果失败：{0}</value>
+  </data>
+  <data name="ConversionError.UnsupportedFileType" xml:space="preserve">
+    <value>不支持的文件类型 {0}</value>
+  </data>
+  <data name="ConversionError.ConversionFailed" xml:space="preserve">
+    <value>转换失败</value>
+  </data>
+
+  <!-- JavaScript Error Messages -->
+  <data name="JSError.HeicNotInitialized" xml:space="preserve">
+    <value>libheif未初始化</value>
+  </data>
+  <data name="JSError.ImageDataEmpty" xml:space="preserve">
+    <value>解码的图像数据为空</value>
+  </data>
+  <data name="JSError.DisplayDataFailed" xml:space="preserve">
+    <value>获取displayData失败</value>
+  </data>
+  <data name="JSError.JpegConversionFailed" xml:space="preserve">
+    <value>JPEG转换失败</value>
+  </data>
+  <data name="JSError.FfmpegNotInitialized" xml:space="preserve">
+    <value>FFmpeg未初始化</value>
+  </data>
+  <data name="JSError.FfmpegTimeout" xml:space="preserve">
+    <value>ffmpeg.load()超时（120秒）</value>
+  </data>
+  <data name="JSError.ResultReadFailed" xml:space="preserve">
+    <value>读取转换结果失败：{0}</value>
+  </data>
+
+  <!-- JavaScript Mock Messages -->
+  <data name="JSMock.HeicConversion" xml:space="preserve">
+    <value>HEIC→JPEG转换</value>
+  </data>
+  <data name="JSMock.MockImplementation" xml:space="preserve">
+    <value>（模拟实现）</value>
+  </data>
+  <data name="JSMock.OriginalFile" xml:space="preserve">
+    <value>原始文件：{0} KB</value>
+  </data>
+  <data name="JSMock.Quality" xml:space="preserve">
+    <value>质量：{0}%</value>
+  </data>
+</root>

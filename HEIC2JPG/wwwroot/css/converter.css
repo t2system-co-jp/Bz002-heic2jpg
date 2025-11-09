@@ -1,5 +1,52 @@
 /* HEIC2JPG & MOV2MP4 Converter Styles */
 
+/* App Layout */
+.app-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* App Header */
+.app-header {
+    background: #34495e;
+    color: white;
+    padding: 12px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.app-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+}
+
+.header-right {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+/* App Main */
+.app-main {
+    flex: 1;
+    background: #f5f7fa;
+}
+
 .converter-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -365,4 +412,112 @@
         justify-self: center;
         margin-top: 8px;
     }
+}
+
+/* Language Selector */
+.language-selector {
+    position: relative;
+    display: inline-block;
+}
+
+.language-selector-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #34495e;
+    color: white;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.language-selector-button:hover {
+    background: #2c3e50;
+}
+
+.language-selector-button:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.language-icon {
+    font-size: 1.1rem;
+}
+
+.language-label {
+    font-weight: 500;
+}
+
+.language-arrow {
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+}
+
+.language-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 180px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    z-index: 1000;
+    animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.language-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 16px;
+    background: white;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    font-size: 0.95rem;
+    color: #2c3e50;
+}
+
+.language-menu-item:hover {
+    background: #ecf0f1;
+}
+
+.language-menu-item.selected {
+    background: #e3f2fd;
+    font-weight: 600;
+}
+
+.language-menu-item:focus {
+    outline: none;
+    background: #d6eaf8;
+}
+
+.language-item-icon {
+    font-size: 1.2rem;
+}
+
+.language-item-name {
+    flex: 1;
+}
+
+.language-item-check {
+    color: #27ae60;
+    font-weight: bold;
 }

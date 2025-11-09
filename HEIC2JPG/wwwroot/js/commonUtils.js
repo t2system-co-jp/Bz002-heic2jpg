@@ -237,6 +237,28 @@ window.commonUtils = {
         if (element) {
             element.click();
         }
+    },
+
+    // ========== ブラウザ情報取得 ==========
+
+    /**
+     * ブラウザの優先言語リストを取得
+     * @returns {Array<string>} - 言語コードの配列
+     */
+    getBrowserLanguages() {
+        try {
+            if (navigator.languages && navigator.languages.length > 0) {
+                return Array.from(navigator.languages);
+            } else if (navigator.language) {
+                return [navigator.language];
+            } else if (navigator.userLanguage) {
+                return [navigator.userLanguage];
+            }
+            return ['ja-JP']; // デフォルト
+        } catch (error) {
+            console.error('ブラウザ言語取得エラー:', error);
+            return ['ja-JP'];
+        }
     }
 };
 

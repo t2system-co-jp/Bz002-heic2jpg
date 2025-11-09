@@ -1,0 +1,120 @@
+@using HEIC2JPG.Services
+@inject ILocalizationService Localizer
+@inject NavigationManager Navigation
+@implements IDisposable
+
+<div class="language-selector">
+    <button type="button"
+            class="language-selector-button"
+            role="combobox"
+            aria-expanded="@isOpen.ToString().ToLower()"
+            aria-haspopup="listbox"
+            aria-label="@Localizer.GetString("Language.AriaLabel")"
+            @onclick="ToggleMenu"
+            @onkeydown="HandleKeyDown">
+        <span class="language-icon">🌐</span>
+        <span class="language-label">@Localizer.GetString("Language.Label")</span>
+        <span class="language-arrow">@(isOpen ? "▲" : "▼")</span>
+    </button>
+
+    @if (isOpen)
+    {
+        <div class="language-menu"
+             role="listbox"
+             aria-label="@Localizer.GetString("Language.AriaLabel")">
+            @foreach (var lang in Localizer.SupportedLanguages)
+            {
+                var isSelected = lang.Code == Localizer.CurrentLanguage;
+                <button type="button"
+                        class="language-menu-item @(isSelected ? "selected" : "")"
+                        role="option"
+                        aria-selected="@isSelected.ToString().ToLower()"
+                        @onclick="() => SelectLanguage(lang.Code)"
+                        @onkeydown="HandleMenuItemKeyDown">
+                    <span class="language-item-icon">@lang.Icon</span>
+                    <span class="language-item-name">@lang.NativeName</span>
+                    @if (isSelected)
+                    {
+                        <span class="language-item-check">✓</span>
+                    }
+                </button>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private bool isOpen = false;
+
+    protected override void OnInitialized()
+    {
+        // 言語変更イベントを購読
+        Localizer.LanguageChanged += OnLanguageChanged;
+    }
+
+    private void ToggleMenu()
+    {
+        isOpen = !isOpen;
+    }
+
+    private async Task SelectLanguage(string languageCode)
+    {
+        isOpen = false;
+
+        if (!string.Equals(Localizer.CurrentLanguage, languageCode, StringComparison.OrdinalIgnoreCase))
+        {
+            await Localizer.SetLanguageAsync(languageCode);
+            Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+        }
+    }
+
+    private void OnLanguageChanged(object? sender, EventArgs e)
+    {
+        // 言語が変更されたらUI再描画
+        StateHasChanged();
+    }
+
+    private async Task HandleKeyDown(Microsoft.AspNetCore.Components.Web.KeyboardEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case "Enter":
+            case " ": // Space
+                isOpen = !isOpen;
+                break;
+            case "Escape":
+                isOpen = false;
+                break;
+            case "ArrowDown":
+                if (!isOpen)
+                {
+                    isOpen = true;
+                }
+                break;
+            case "ArrowUp":
+                if (!isOpen)
+                {
+                    isOpen = true;
+                }
+                break;
+        }
+
+        await Task.CompletedTask;
+    }
+
+    private async Task HandleMenuItemKeyDown(Microsoft.AspNetCore.Components.Web.KeyboardEventArgs e)
+    {
+        if (e.Key == "Escape")
+        {
+            isOpen = false;
+        }
+
+        await Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        // イベント購読解除
+        Localizer.LanguageChanged -= OnLanguageChanged;
+    }
+}

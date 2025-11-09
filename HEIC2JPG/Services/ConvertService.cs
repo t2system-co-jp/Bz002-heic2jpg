@@ -6,10 +6,12 @@ namespace HEIC2JPG.Services;
 public class ConvertService : IConvertService
 {
     private readonly IJSRuntime _jsRuntime;
+    private readonly ILocalizationService _localizer;
 
-    public ConvertService(IJSRuntime jsRuntime)
+    public ConvertService(IJSRuntime jsRuntime, ILocalizationService localizer)
     {
         _jsRuntime = jsRuntime;
+        _localizer = localizer;
     }
 
     public event EventHandler<ConversionProgressEventArgs>? ProgressChanged;
@@ -22,49 +24,49 @@ public class ConvertService : IConvertService
             var initResult = await _jsRuntime.InvokeAsync<bool>("heicConverter.initialize", cancellationToken);
             if (!initResult)
             {
-                throw new Exception("HEIC変換ライブラリの初期化に失敗しました");
+                throw new Exception(_localizer.GetString("ConversionMessage.InitializationFailed.Heic"));
             }
-            
+
             // 進捗通知：変換開始
             ProgressChanged?.Invoke(this, new ConversionProgressEventArgs
             {
                 FileId = "heic-conversion",
                 Progress = 10,
-                StatusMessage = "変換開始..."
+                StatusMessage = _localizer.GetString("ConversionMessage.Starting")
             });
-            
+
             await Task.Delay(300, cancellationToken);
-            
+
             // HEIC→JPEG変換
             var jpegBlob = await _jsRuntime.InvokeAsync<IJSObjectReference>(
-                "heicConverter.convertHeicToJpeg", 
+                "heicConverter.convertHeicToJpeg",
                 cancellationToken,
                 heicData,
                 options.JpgQuality,
                 options.KeepExif
             );
-            
+
             // 進捗通知：変換中
             ProgressChanged?.Invoke(this, new ConversionProgressEventArgs
             {
-                FileId = "heic-conversion", 
+                FileId = "heic-conversion",
                 Progress = 70,
-                StatusMessage = "JPEG生成中..."
+                StatusMessage = _localizer.GetString("ConversionMessage.GeneratingJpeg")
             });
-            
+
             await Task.Delay(300, cancellationToken);
-            
+
             // BlobからArrayBufferを取得
             var arrayBuffer = await _jsRuntime.InvokeAsync<byte[]>("getBlobArrayBuffer", cancellationToken, jpegBlob);
-            
+
             // 進捗通知：完了
             ProgressChanged?.Invoke(this, new ConversionProgressEventArgs
             {
                 FileId = "heic-conversion",
                 Progress = 100,
-                StatusMessage = "変換完了"
+                StatusMessage = _localizer.GetString("ConversionMessage.Completed")
             });
-            
+
             return new ConvertResult
             {
                 Success = true,
@@ -77,7 +79,7 @@ public class ConvertService : IConvertService
             return new ConvertResult
             {
                 Success = false,
-                ErrorMessage = "変換がキャンセルされました"
+                ErrorMessage = _localizer.GetString("ConversionMessage.Cancelled")
             };
         }
         catch (Exception ex)
@@ -85,7 +87,7 @@ public class ConvertService : IConvertService
             return new ConvertResult
             {
                 Success = false,
-                ErrorMessage = $"HEIC変換エラー: {ex.Message}"
+                ErrorMessage = _localizer.GetString("ConversionError.HeicConversion", ex.Message)
             };
         }
     }
@@ -98,32 +100,32 @@ public class ConvertService : IConvertService
             var initResult = await _jsRuntime.InvokeAsync<bool>("ffmpegConverter.initialize", cancellationToken);
             if (!initResult)
             {
-                throw new Exception("FFmpeg変換ライブラリの初期化に失敗しました");
+                throw new Exception(_localizer.GetString("ConversionMessage.InitializationFailed.Ffmpeg"));
             }
-            
+
             // 進捗通知：変換開始
             ProgressChanged?.Invoke(this, new ConversionProgressEventArgs
             {
                 FileId = "mov-conversion",
                 Progress = 10,
-                StatusMessage = "変換開始..."
+                StatusMessage = _localizer.GetString("ConversionMessage.Starting")
             });
-            
+
             await Task.Delay(500, cancellationToken);
-            
+
             // 変換オプション準備
             var jsOptions = new
             {
                 mode = options.ConversionMode,
                 quality = options.JpgQuality
             };
-            
+
             // MOV→MP4変換
             IJSObjectReference mp4Blob;
             try
             {
                 mp4Blob = await _jsRuntime.InvokeAsync<IJSObjectReference>(
-                    "ffmpegConverter.convertMovToMp4", 
+                    "ffmpegConverter.convertMovToMp4",
                     cancellationToken,
                     movData,
                     jsOptions
@@ -135,21 +137,21 @@ public class ConvertService : IConvertService
                 var errorMsg = jsEx.Message;
                 if (errorMsg.Contains("Aborted") || errorMsg.Contains("ffmpeg"))
                 {
-                    throw new Exception($"FFmpeg変換処理でエラーが発生しました: {errorMsg}");
+                    throw new Exception(_localizer.GetString("ConversionError.FfmpegError", errorMsg));
                 }
-                throw new Exception($"JavaScript実行エラー: {errorMsg}");
+                throw new Exception(_localizer.GetString("ConversionError.JavaScriptError", errorMsg));
             }
-            
+
             // 進捗通知：変換中
             ProgressChanged?.Invoke(this, new ConversionProgressEventArgs
             {
-                FileId = "mov-conversion", 
+                FileId = "mov-conversion",
                 Progress = 70,
-                StatusMessage = "MP4生成中..."
+                StatusMessage = _localizer.GetString("ConversionMessage.GeneratingMp4")
             });
-            
+
             await Task.Delay(500, cancellationToken);
-            
+
             // BlobからArrayBufferを取得
             byte[] arrayBuffer;
             try
@@ -158,15 +160,15 @@ public class ConvertService : IConvertService
             }
             catch (JSException jsEx)
             {
-                throw new Exception($"変換結果の取得に失敗しました: {jsEx.Message}");
+                throw new Exception(_localizer.GetString("ConversionError.ResultRetrievalFailed", jsEx.Message));
             }
-            
+
             // 進捗通知：完了
             ProgressChanged?.Invoke(this, new ConversionProgressEventArgs
             {
                 FileId = "mov-conversion",
                 Progress = 100,
-                StatusMessage = "変換完了"
+                StatusMessage = _localizer.GetString("ConversionMessage.Completed")
             });
 
             return new ConvertResult
@@ -181,7 +183,7 @@ public class ConvertService : IConvertService
             return new ConvertResult
             {
                 Success = false,
-                ErrorMessage = "変換がキャンセルされました"
+                ErrorMessage = _localizer.GetString("ConversionMessage.Cancelled")
             };
         }
         catch (Exception ex)
@@ -189,7 +191,7 @@ public class ConvertService : IConvertService
             return new ConvertResult
             {
                 Success = false,
-                ErrorMessage = $"MOV変換エラー: {ex.Message}"
+                ErrorMessage = _localizer.GetString("ConversionError.MovConversion", ex.Message)
             };
         }
     }
@@ -269,7 +271,7 @@ public class ConvertService : IConvertService
             }
             else
             {
-                throw new NotSupportedException($"ファイルタイプ {file.Type} はサポートされていません");
+                throw new NotSupportedException(_localizer.GetString("ConversionError.UnsupportedFileType", file.Type));
             }
 
             progressCallback(file.Id, 90);
@@ -283,7 +285,7 @@ public class ConvertService : IConvertService
             else
             {
                 file.Status = ConversionStatus.Error;
-                file.ErrorMessage = result.ErrorMessage ?? "変換に失敗しました";
+                file.ErrorMessage = result.ErrorMessage ?? _localizer.GetString("ConversionError.ConversionFailed");
                 progressCallback(file.Id, 0);
             }
         }
@@ -300,14 +302,14 @@ public class ConvertService : IConvertService
         for (int i = 0; i <= 100; i += 10)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            
+
             ProgressChanged?.Invoke(this, new ConversionProgressEventArgs
             {
                 FileId = fileId,
                 Progress = i,
-                StatusMessage = i == 100 ? "完了" : "変換中..."
+                StatusMessage = i == 100 ? _localizer.GetString("ConversionMessage.Done") : _localizer.GetString("ConversionMessage.Processing")
             });
-            
+
             await Task.Delay(200, cancellationToken);
         }
     }

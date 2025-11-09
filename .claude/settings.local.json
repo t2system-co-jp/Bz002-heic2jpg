@@ -18,7 +18,11 @@
       "WebFetch(domain:unpkg.com)",
       "WebFetch(domain:cdn.jsdelivr.net)",
       "WebFetch(domain:github.com)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(dotnet build:*)",
+      "Bash(dotnet run:*)",
+      "Bash(dotnet clean:*)",
+      "Bash(cat:*)"
     ],
     "deny": []
   },

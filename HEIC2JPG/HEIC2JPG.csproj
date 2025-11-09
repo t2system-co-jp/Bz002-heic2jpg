@@ -4,6 +4,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+    <InvariantGlobalization>false</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +15,22 @@
 
   <ItemGroup>
     <Content Remove="wwwroot/lib/ffmpeg/**" />
+  </ItemGroup>
+
+  <!-- リソースファイルサポート（Blazor WebAssembly用） -->
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Strings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LogicalName>HEIC2JPG.Resources.Strings.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Strings.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LogicalName>HEIC2JPG.Resources.Strings.en.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Strings.zh-Hans.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LogicalName>HEIC2JPG.Resources.Strings.zh-Hans.resources</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
