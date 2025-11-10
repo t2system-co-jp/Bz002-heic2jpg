@@ -109,37 +109,44 @@
         </div>
 
         <!-- 設定パネル -->
-        <div class="settings-panel">
-            <h3>⚙️ @Localizer.GetString("Settings.Title")</h3>
-
-            <div class="setting">
-                <label for="jpgQuality">@Localizer.GetString("Settings.JpgQuality"): @((settings.JpgQuality * 100).ToString("F0"))%</label>
-                <input type="range" id="jpgQuality"
-                       @bind="settings.JpgQuality"
-                       min="0.6" max="1.0" step="0.1" />
+        <div class="settings-panel @(isSettingsExpanded ? "expanded" : "collapsed")">
+            <div class="settings-header" @onclick="ToggleSettings" role="button" tabindex="0"
+                 @onkeydown="@(e => { if (e.Key == "Enter" || e.Key == " ") ToggleSettings(); })"
+                 aria-expanded="@isSettingsExpanded" aria-controls="settings-content">
+                <h3>⚙️ @Localizer.GetString("Settings.Title")</h3>
+                <span class="settings-toggle-icon">@(isSettingsExpanded ? "▼" : "▶")</span>
             </div>
 
-            <div class="setting">
-                <label>
-                    <input type="checkbox" @bind="settings.PreserveExif" />
-                    @Localizer.GetString("Settings.PreserveExif")
-                </label>
-            </div>
+            <div id="settings-content" class="settings-content" aria-hidden="@(!isSettingsExpanded)">
+                <div class="setting">
+                    <label for="jpgQuality">@Localizer.GetString("Settings.JpgQuality"): @((settings.JpgQuality * 100).ToString("F0"))%</label>
+                    <input type="range" id="jpgQuality"
+                           @bind="settings.JpgQuality"
+                           min="0.6" max="1.0" step="0.1" />
+                </div>
 
-            <div class="setting">
-                <label for="conversionMode">@Localizer.GetString("Settings.ConversionMode")</label>
-                <select id="conversionMode" @bind="settings.ConversionMode">
-                    <option value="Auto">@Localizer.GetString("Settings.ConversionMode.Auto")</option>
-                    <option value="Fast">@Localizer.GetString("Settings.ConversionMode.Fast")</option>
-                    <option value="Quality">@Localizer.GetString("Settings.ConversionMode.HighQuality")</option>
-                </select>
-            </div>
+                <div class="setting">
+                    <label>
+                        <input type="checkbox" @bind="settings.PreserveExif" />
+                        @Localizer.GetString("Settings.PreserveExif")
+                    </label>
+                </div>
 
-            <div class="setting">
-                <label for="parallelCount">@Localizer.GetString("Settings.ParallelCount"): @settings.ParallelCount</label>
-                <input type="range" id="parallelCount"
-                       @bind="settings.ParallelCount"
-                       min="1" max="4" step="1" />
+                <div class="setting">
+                    <label for="conversionMode">@Localizer.GetString("Settings.ConversionMode")</label>
+                    <select id="conversionMode" @bind="settings.ConversionMode">
+                        <option value="Auto">@Localizer.GetString("Settings.ConversionMode.Auto")</option>
+                        <option value="Fast">@Localizer.GetString("Settings.ConversionMode.Fast")</option>
+                        <option value="Quality">@Localizer.GetString("Settings.ConversionMode.HighQuality")</option>
+                    </select>
+                </div>
+
+                <div class="setting">
+                    <label for="parallelCount">@Localizer.GetString("Settings.ParallelCount"): @settings.ParallelCount</label>
+                    <input type="range" id="parallelCount"
+                           @bind="settings.ParallelCount"
+                           min="1" max="4" step="1" />
+                </div>
             </div>
         </div>
     </div>
@@ -151,6 +158,7 @@
     private ConversionSettings settings = new();
     private bool isDragActive = false;
     private bool isProcessing = false;
+    private bool isSettingsExpanded = true; // デスクトップではデフォルトで展開
 
     private async Task SelectFiles()
     {
@@ -279,6 +287,11 @@
             ConversionStatus.Cancelled => Localizer.GetString("Status.Cancelled"),
             _ => Localizer.GetString("Status.Unknown")
         };
+    }
+
+    private void ToggleSettings()
+    {
+        isSettingsExpanded = !isSettingsExpanded;
     }
 
     protected override void OnInitialized()

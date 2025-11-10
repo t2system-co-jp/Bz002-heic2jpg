@@ -1,10 +1,35 @@
 /* HEIC2JPG & MOV2MP4 Converter Styles */
 
+/* モバイル最適化: グローバル設定 */
+* {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    -webkit-touch-callout: none; /* 長押しメニュー無効化（ボタンのみ） */
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%; /* iOSでのテキストサイズ自動調整を防止 */
+}
+
+body {
+    overscroll-behavior-y: contain; /* バウンススクロールの制御 */
+}
+
+/* テキスト選択を許可する要素 */
+.file-name,
+.error-status,
+p,
+label {
+    -webkit-touch-callout: default;
+    user-select: text;
+}
+
 /* App Layout */
 .app-layout {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    min-height: 100dvh; /* 動的ビューポートハイト（モバイルブラウザのアドレスバーを考慮） */
 }
 
 /* App Header */
@@ -12,6 +37,8 @@
     background: #34495e;
     color: white;
     padding: 12px 20px;
+    padding-left: max(20px, env(safe-area-inset-left));
+    padding-right: max(20px, env(safe-area-inset-right));
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -21,11 +48,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 .header-left {
     display: flex;
     align-items: center;
+    flex: 1;
+    min-width: 0; /* テキストの切り捨てを許可 */
 }
 
 .app-title {
@@ -33,12 +64,16 @@
     font-size: 1.5rem;
     font-weight: 600;
     color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .header-right {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     align-items: center;
+    flex-shrink: 0; /* 右側の要素は縮小しない */
 }
 
 /* App Main */
@@ -51,6 +86,9 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+    padding-left: max(20px, env(safe-area-inset-left));
+    padding-right: max(20px, env(safe-area-inset-right));
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 }
 
@@ -329,16 +367,54 @@
     background: white;
     border-radius: 12px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    padding: 24px;
+    overflow: hidden;
     height: fit-content;
     position: sticky;
     top: 20px;
 }
 
-.settings-panel h3 {
-    margin: 0 0 20px;
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease;
+}
+
+.settings-header:hover {
+    background: #f8f9fa;
+}
+
+.settings-header:focus {
+    outline: 2px solid #3498db;
+    outline-offset: -2px;
+}
+
+.settings-header h3 {
+    margin: 0;
     color: #2c3e50;
     font-size: 1.3rem;
+}
+
+.settings-toggle-icon {
+    font-size: 1rem;
+    color: #7f8c8d;
+    transition: transform 0.3s ease;
+    display: none; /* デスクトップでは非表示 */
+}
+
+.settings-content {
+    padding: 0 24px 24px;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+/* デスクトップでは常に展開 */
+.settings-panel.expanded .settings-content,
+.settings-panel.collapsed .settings-content {
+    max-height: none;
+    opacity: 1;
 }
 
 .setting {
@@ -380,37 +456,332 @@
     border-color: #3498db;
 }
 
-/* レスポンシブ */
+/* モバイル最適化: タッチターゲットサイズ調整 */
+.btn,
+.btn-select,
+.btn-download,
+.btn-remove,
+.language-selector-button,
+.network-shield {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* モバイル向けボタン調整 */
+.btn {
+    padding: 12px 20px;
+    font-size: 1rem;
+}
+
+.btn-select {
+    padding: 14px 28px;
+    font-size: 1.1rem;
+}
+
+/* ファイルアクションボタンのタッチ対応 */
+.btn-download,
+.btn-remove {
+    padding: 10px;
+    font-size: 1.5rem;
+}
+
+/* タッチフィードバック */
+.btn:active,
+.btn-select:active,
+.btn-download:active,
+.btn-remove:active,
+.language-selector-button:active,
+.network-shield:active,
+.settings-header:active,
+.drop-zone:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}
+
+/* ボタン固有のタッチフィードバック */
+.btn:active,
+.btn-select:active {
+    transform: scale(0.95);
+}
+
+/* 小さいボタンのタッチフィードバック */
+.btn-download:active,
+.btn-remove:active {
+    transform: scale(0.9);
+}
+
+/* タッチデバイス向けのホバー無効化 */
+@media (hover: none) and (pointer: coarse) {
+    .btn:hover,
+    .btn-select:hover,
+    .btn-download:hover,
+    .btn-remove:hover,
+    .settings-header:hover,
+    .drop-zone:hover {
+        transform: none;
+        background: initial;
+    }
+
+    /* タッチ専用のアクティブスタイル強化 */
+    .btn:active,
+    .btn-select:active {
+        background: rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* レスポンシブ: タブレット */
+@media (max-width: 992px) {
+    .converter-layout {
+        grid-template-columns: 1fr 280px;
+        gap: 20px;
+    }
+
+    .converter-container {
+        padding: 16px;
+    }
+}
+
+/* レスポンシブ: モバイル */
 @media (max-width: 768px) {
+    /* アプリヘッダー */
+    .app-header {
+        padding: 10px 16px;
+    }
+
+    .header-content {
+        gap: 10px;
+    }
+
+    .app-title {
+        font-size: 1.2rem;
+    }
+
+    .header-right {
+        gap: 8px;
+    }
+
+    /* Network Shield モバイル調整 */
+    .network-shield {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+
+    .shield-text {
+        font-size: 0.8rem;
+    }
+
+    /* Language Selector モバイル調整 */
+    .language-selector-button {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+
+    .language-icon {
+        font-size: 1rem;
+    }
+
+    .language-label {
+        display: none; /* モバイルではラベルを非表示 */
+    }
+
+    /* レイアウト */
     .converter-layout {
         grid-template-columns: 1fr;
         gap: 20px;
     }
-    
+
+    .converter-container {
+        padding: 12px;
+    }
+
+    /* ヘッダー */
+    .converter-header h1 {
+        font-size: 1.8rem;
+    }
+
+    .converter-header p {
+        font-size: 1rem;
+    }
+
+    /* 設定パネル */
     .settings-panel {
         position: static;
+        order: -1; /* ファイルキューの上に表示 */
     }
-    
+
+    /* 設定パネルの折り畳み（モバイルのみ） */
+    .settings-toggle-icon {
+        display: inline-block; /* モバイルでは表示 */
+    }
+
+    .settings-header {
+        padding: 16px 20px;
+    }
+
+    .settings-header h3 {
+        font-size: 1.15rem;
+    }
+
+    .settings-content {
+        padding: 0 20px 20px;
+        overflow: hidden;
+    }
+
+    .settings-panel.expanded .settings-content {
+        max-height: 500px; /* 十分な高さを確保 */
+        opacity: 1;
+    }
+
+    .settings-panel.collapsed .settings-content {
+        max-height: 0;
+        opacity: 0;
+        padding: 0 20px;
+    }
+
+    /* ドロップゾーン */
     .drop-zone {
-        padding: 40px 20px;
+        padding: 40px 16px;
     }
-    
+
+    .drop-icon {
+        font-size: 3rem;
+    }
+
+    .drop-zone h3 {
+        font-size: 1.3rem;
+    }
+
+    .drop-zone p {
+        font-size: 1rem;
+    }
+
+    /* キューヘッダー */
     .queue-header {
         flex-direction: column;
-        gap: 16px;
-        text-align: center;
+        gap: 12px;
+        padding: 16px;
     }
-    
+
+    .queue-controls {
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+    }
+
+    .queue-controls .btn {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 1.05rem;
+    }
+
+    /* ファイルアイテム */
     .file-item {
         grid-template-columns: 40px 1fr;
         gap: 12px;
+        padding: 16px;
     }
-    
+
     .file-status,
     .file-actions {
         grid-column: 1 / -1;
         justify-self: center;
-        margin-top: 8px;
+        margin-top: 12px;
+    }
+
+    .file-actions {
+        display: flex;
+        gap: 16px;
+    }
+
+    .file-name {
+        font-size: 1rem;
+    }
+
+    .file-size {
+        font-size: 0.95rem;
+    }
+}
+
+/* レスポンシブ: 小型スマホ */
+@media (max-width: 480px) {
+    /* アプリヘッダー */
+    .app-header {
+        padding: 8px 12px;
+    }
+
+    .app-title {
+        font-size: 1rem;
+    }
+
+    /* Network Shield 小型スマホ調整 */
+    .network-shield {
+        padding: 5px 8px;
+        font-size: 0.75rem;
+        gap: 4px;
+    }
+
+    .shield-icon {
+        font-size: 0.8rem;
+    }
+
+    .shield-text {
+        font-size: 0.75rem;
+    }
+
+    /* Language Selector 小型スマホ調整 */
+    .language-selector-button {
+        padding: 5px 10px;
+        font-size: 0.8rem;
+    }
+
+    .language-icon {
+        font-size: 0.9rem;
+    }
+
+    /* コンバーターヘッダー */
+    .converter-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .converter-header p {
+        font-size: 0.95rem;
+    }
+
+    .drop-zone {
+        padding: 30px 12px;
+    }
+
+    .drop-icon {
+        font-size: 2.5rem;
+    }
+
+    .drop-zone h3 {
+        font-size: 1.2rem;
+    }
+
+    .drop-zone p {
+        font-size: 0.95rem;
+    }
+
+    .btn-select {
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+
+    .file-item {
+        padding: 12px;
+    }
+
+    .file-icon {
+        font-size: 1.3rem;
+    }
+
+    .file-name {
+        font-size: 0.95rem;
+    }
+
+    .file-size {
+        font-size: 0.85rem;
     }
 }
 
@@ -507,6 +878,11 @@
 .language-menu-item:focus {
     outline: none;
     background: #d6eaf8;
+}
+
+.language-menu-item:active {
+    transform: scale(0.98);
+    background: #bde0f8;
 }
 
 .language-item-icon {
@@ -647,6 +1023,11 @@
 .close-button:focus {
     outline: 2px solid #3498db;
     outline-offset: 2px;
+}
+
+.close-button:active {
+    transform: scale(0.9);
+    background: #d6d8db;
 }
 
 .trust-center-body {
