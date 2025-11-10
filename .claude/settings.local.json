@@ -23,7 +23,10 @@
       "Bash(dotnet run:*)",
       "Bash(dotnet clean:*)",
       "Bash(cat:*)",
-      "Bash(dotnet format:*)"
+      "Bash(dotnet format:*)",
+      "Bash(dir /b .claude 2)",
+      "Bash(nul)",
+      "Bash(git log:*)"
     ],
     "deny": []
   },
