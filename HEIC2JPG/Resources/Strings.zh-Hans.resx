@@ -368,4 +368,18 @@
   <data name="JSMock.Quality" xml:space="preserve">
     <value>质量：{0}%</value>
   </data>
+
+  <!-- Theme Toggle -->
+  <data name="Theme.Toggle" xml:space="preserve">
+    <value>切换主题</value>
+  </data>
+  <data name="Theme.SwitchToLight" xml:space="preserve">
+    <value>切换到浅色模式</value>
+  </data>
+  <data name="Theme.SwitchToDark" xml:space="preserve">
+    <value>切换到深色模式</value>
+  </data>
+  <data name="Theme.SwitchToAuto" xml:space="preserve">
+    <value>切换到自动模式</value>
+  </data>
 </root>

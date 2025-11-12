@@ -1,0 +1,70 @@
+@inject IJSRuntime JS
+@inject ILocalizationService Localizer
+
+<button class="theme-toggle"
+        @onclick="ToggleTheme"
+        title="@GetThemeTooltip()"
+        aria-label="@GetThemeTooltip()">
+    <span class="theme-icon">@GetThemeIcon()</span>
+</button>
+
+@code {
+    private string currentTheme = "light";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await UpdateCurrentTheme();
+        }
+    }
+
+    private async Task ToggleTheme()
+    {
+        try
+        {
+            var newTheme = await JS.InvokeAsync<string>("themeManager.toggleTheme");
+            currentTheme = newTheme;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"テーマ切り替えエラー: {ex.Message}");
+        }
+    }
+
+    private async Task UpdateCurrentTheme()
+    {
+        try
+        {
+            currentTheme = await JS.InvokeAsync<string>("themeManager.getConfiguredTheme");
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"テーマ取得エラー: {ex.Message}");
+        }
+    }
+
+    private string GetThemeIcon()
+    {
+        return currentTheme switch
+        {
+            "dark" => "☀️",  // ダークモード時は太陽（ライトに切り替える）
+            "light" => "🌙", // ライトモード時は月（ダークに切り替える）
+            "auto" => "🔄",  // 自動モード時はリサイクルアイコン（ライトに切り替える）
+            _ => "🌙"
+        };
+    }
+
+    private string GetThemeTooltip()
+    {
+        return currentTheme switch
+        {
+            "dark" => Localizer.GetString("Theme.SwitchToAuto"),
+            "light" => Localizer.GetString("Theme.SwitchToDark"),
+            "auto" => Localizer.GetString("Theme.SwitchToLight"),
+            _ => Localizer.GetString("Theme.Toggle")
+        };
+    }
+}

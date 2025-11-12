@@ -1,0 +1,246 @@
+/* HEIC2JPG Design Tokens */
+/* モダンなデザインシステムを実現するCSS変数 */
+
+:root {
+    /* ========== Colors ========== */
+    /* Primary - Indigo（信頼感・プロフェッショナル） */
+    --color-primary: #4F46E5;
+    --color-primary-dark: #4338CA;
+    --color-primary-light: #818CF8;
+    --color-primary-bg: #EEF2FF;
+
+    /* Success - Emerald（プライバシー保護・安全性） */
+    --color-success: #10B981;
+    --color-success-dark: #059669;
+    --color-success-light: #34D399;
+    --color-success-bg: #D1FAE5;
+
+    /* Warning */
+    --color-warning: #F59E0B;
+    --color-warning-dark: #D97706;
+    --color-warning-light: #FBBF24;
+    --color-warning-bg: #FEF3C7;
+
+    /* Danger */
+    --color-danger: #EF4444;
+    --color-danger-dark: #DC2626;
+    --color-danger-light: #F87171;
+    --color-danger-bg: #FEE2E2;
+
+    /* Neutral - Gray Scale */
+    --color-bg: #F9FAFB;
+    --color-bg-alt: #F3F4F6;
+    --color-surface: #FFFFFF;
+    --color-border: #E5E7EB;
+    --color-border-light: #F3F4F6;
+
+    /* Text */
+    --color-text-primary: #111827;
+    --color-text-secondary: #6B7280;
+    --color-text-tertiary: #9CA3AF;
+    --color-text-inverse: #FFFFFF;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-success: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    --gradient-header: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+
+    /* ========== Spacing ========== */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+    --space-3xl: 64px;
+
+    /* ========== Border Radius ========== */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-full: 9999px;
+
+    /* ========== Shadows ========== */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+    --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.15);
+
+    /* ========== Typography ========== */
+    /* 日本語優先のフォントスタック */
+    --font-sans: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI",
+                 "Meiryo", -apple-system, BlinkMacSystemFont, "Segoe UI",
+                 system-ui, sans-serif;
+    --font-mono: "SF Mono", "Monaco", "Inconsolata", "Fira Mono",
+                 "Droid Sans Mono", "Source Code Pro", monospace;
+
+    /* Font Sizes */
+    --text-xs: 0.75rem;      /* 12px */
+    --text-sm: 0.875rem;     /* 14px */
+    --text-base: 1rem;       /* 16px */
+    --text-lg: 1.125rem;     /* 18px */
+    --text-xl: 1.25rem;      /* 20px */
+    --text-2xl: 1.5rem;      /* 24px */
+    --text-3xl: 1.875rem;    /* 30px */
+    --text-4xl: 2.25rem;     /* 36px */
+
+    /* Font Weights */
+    --font-normal: 400;
+    --font-medium: 500;
+    --font-semibold: 600;
+    --font-bold: 700;
+
+    /* Line Heights */
+    --leading-tight: 1.25;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.75;
+
+    /* ========== Transitions ========== */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* ========== Z-Index ========== */
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal-backdrop: 1040;
+    --z-modal: 1050;
+    --z-popover: 1060;
+    --z-tooltip: 1070;
+
+    /* ========== Glassmorphism ========== */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.18);
+    --glass-blur: blur(10px);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+
+    /* ========== Touch Target Sizes ========== */
+    --touch-target-min: 44px;
+}
+
+/* ダークモード - 手動切り替え対応 */
+[data-theme="dark"] {
+    /* Background Colors */
+    --color-bg: #0F172A;
+    --color-bg-alt: #1E293B;
+    --color-surface: #1E293B;
+    --color-border: #334155;
+    --color-border-light: #475569;
+
+    /* Text Colors */
+    --color-text-primary: #F1F5F9;
+    --color-text-secondary: #CBD5E1;
+    --color-text-tertiary: #94A3B8;
+    --color-text-inverse: #0F172A;
+
+    /* Primary - Darker for dark mode */
+    --color-primary: #6366F1;
+    --color-primary-dark: #4F46E5;
+    --color-primary-light: #818CF8;
+    --color-primary-bg: #312E81;
+
+    /* Success - Brighter for dark mode */
+    --color-success: #34D399;
+    --color-success-dark: #10B981;
+    --color-success-light: #6EE7B7;
+    --color-success-bg: #064E3B;
+
+    /* Warning - Adjusted for dark mode */
+    --color-warning: #FBBF24;
+    --color-warning-dark: #F59E0B;
+    --color-warning-light: #FCD34D;
+    --color-warning-bg: #78350F;
+
+    /* Danger - Adjusted for dark mode */
+    --color-danger: #F87171;
+    --color-danger-dark: #EF4444;
+    --color-danger-light: #FCA5A5;
+    --color-danger-bg: #7F1D1D;
+
+    /* Gradients - Darker variants */
+    --gradient-primary: linear-gradient(135deg, #6366F1 0%, #7C3AED 100%);
+    --gradient-success: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+    --gradient-header: linear-gradient(135deg, #4338CA 0%, #6D28D9 100%);
+
+    /* Glassmorphism - Dark variant */
+    --glass-bg: rgba(30, 41, 59, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+
+    /* Shadows - Darker for dark mode */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
+    --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.6);
+}
+
+/* 自動モード - システム設定に従う */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]):not([data-theme="dark"]) {
+        /* Background Colors */
+        --color-bg: #0F172A;
+        --color-bg-alt: #1E293B;
+        --color-surface: #1E293B;
+        --color-border: #334155;
+        --color-border-light: #475569;
+
+        /* Text Colors */
+        --color-text-primary: #F1F5F9;
+        --color-text-secondary: #CBD5E1;
+        --color-text-tertiary: #94A3B8;
+        --color-text-inverse: #0F172A;
+
+        /* Primary - Darker for dark mode */
+        --color-primary: #6366F1;
+        --color-primary-dark: #4F46E5;
+        --color-primary-light: #818CF8;
+        --color-primary-bg: #312E81;
+
+        /* Success - Brighter for dark mode */
+        --color-success: #34D399;
+        --color-success-dark: #10B981;
+        --color-success-light: #6EE7B7;
+        --color-success-bg: #064E3B;
+
+        /* Warning - Adjusted for dark mode */
+        --color-warning: #FBBF24;
+        --color-warning-dark: #F59E0B;
+        --color-warning-light: #FCD34D;
+        --color-warning-bg: #78350F;
+
+        /* Danger - Adjusted for dark mode */
+        --color-danger: #F87171;
+        --color-danger-dark: #EF4444;
+        --color-danger-light: #FCA5A5;
+        --color-danger-bg: #7F1D1D;
+
+        /* Gradients - Darker variants */
+        --gradient-primary: linear-gradient(135deg, #6366F1 0%, #7C3AED 100%);
+        --gradient-success: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+        --gradient-header: linear-gradient(135deg, #4338CA 0%, #6D28D9 100%);
+
+        /* Glassmorphism - Dark variant */
+        --glass-bg: rgba(30, 41, 59, 0.8);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+
+        /* Shadows - Darker for dark mode */
+        --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+        --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
+        --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.6);
+    }
+}
+
+/* 明示的なライトモード */
+[data-theme="light"] {
+    /* すべてのライトモード変数を維持（デフォルト値を使用） */
+}
