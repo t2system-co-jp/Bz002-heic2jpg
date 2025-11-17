@@ -1,36 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(find:*)",
-      "Bash(ls:*)",
-      "Bash(mkdir:*)",
-      "Bash(grep:*)",
+      "Bash(dir:*)",
       "Bash(rm:*)",
-      "Bash(rg:*)",
-      "Bash(sed:*)",
-      "Bash(curl:*)",
-      "Bash(sh -c:*)",
-      "Bash(mv:*)",
-      "WebSearch",
-      "WebFetch(domain:www.npmjs.com)",
-      "WebFetch(domain:www.unpkg.com)",
-      "WebFetch(domain:app.unpkg.com)",
-      "WebFetch(domain:unpkg.com)",
-      "WebFetch(domain:cdn.jsdelivr.net)",
-      "WebFetch(domain:github.com)",
-      "Bash(cp:*)",
-      "Bash(dotnet build:*)",
-      "Bash(dotnet run:*)",
-      "Bash(dotnet clean:*)",
-      "Bash(cat:*)",
-      "Bash(dotnet format:*)",
-      "Bash(dir /b .claude 2)",
-      "Bash(nul)",
-      "Bash(git log:*)",
-      "Bash(timeout /t 3 /nobreak)",
-      "Bash(dir /b \"c:\\Users\\t_ogura.T2\\Desktop\\Develop\\CC_HEIC2JPG\\HEIC2JPG\\wwwroot\\lib\\ffmpeg\"\" 2)"
+      "Bash(dotnet build:*)"
     ],
-    "deny": []
+    "deny": [],
+    "ask": []
   },
   "hooks": {
     "PreToolUse": [

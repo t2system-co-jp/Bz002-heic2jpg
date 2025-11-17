@@ -8,6 +8,19 @@ public class ConvertService : IConvertService
     private readonly IJSRuntime _jsRuntime;
     private readonly ILocalizationService _localizer;
 
+    // 進捗値の定数
+    private const int PROGRESS_START = 10;
+    private const int PROGRESS_FILE_LOAD = 30;
+    private const int PROGRESS_CONVERTING = 70;
+    private const int PROGRESS_FINALIZE = 90;
+    private const int PROGRESS_COMPLETED = 100;
+
+    // ファイルサイズの上限
+    private const long MAX_FILE_SIZE = 2147483648; // 2GB
+
+    // タイムスタンプフォーマット
+    private const string TIMESTAMP_FORMAT = "yyyyMMdd-HHmmss";
+
     public ConvertService(IJSRuntime jsRuntime, ILocalizationService localizer)
     {
         _jsRuntime = jsRuntime;
@@ -16,25 +29,58 @@ public class ConvertService : IConvertService
 
     public event EventHandler<ConversionProgressEventArgs>? ProgressChanged;
 
+    #region 共通ヘルパーメソッド
+
+    /// <summary>
+    /// 進捗通知を送信
+    /// </summary>
+    private void NotifyProgress(string fileId, int progress, string messageKey)
+    {
+        ProgressChanged?.Invoke(this, new ConversionProgressEventArgs
+        {
+            FileId = fileId,
+            Progress = progress,
+            StatusMessage = _localizer.GetString(messageKey)
+        });
+    }
+
+    /// <summary>
+    /// コンバーターの初期化を確認
+    /// </summary>
+    private async Task EnsureConverterInitializedAsync(string converterName, string errorMessageKey, CancellationToken cancellationToken)
+    {
+        var initResult = await _jsRuntime.InvokeAsync<bool>($"{converterName}.initialize", cancellationToken);
+        if (!initResult)
+        {
+            throw new Exception(_localizer.GetString(errorMessageKey));
+        }
+    }
+
+    /// <summary>
+    /// エラー結果を生成
+    /// </summary>
+    private ConvertResult CreateErrorResult(string errorMessageKey, string? errorDetail = null)
+    {
+        return new ConvertResult
+        {
+            Success = false,
+            ErrorMessage = errorDetail != null
+                ? _localizer.GetString(errorMessageKey, errorDetail)
+                : _localizer.GetString(errorMessageKey)
+        };
+    }
+
+    #endregion
+
     public async Task<ConvertResult> ConvertHeicToJpgAsync(byte[] heicData, ConvertOptions options, CancellationToken cancellationToken = default)
     {
         try
         {
             // libheif初期化確認
-            var initResult = await _jsRuntime.InvokeAsync<bool>("heicConverter.initialize", cancellationToken);
-            if (!initResult)
-            {
-                throw new Exception(_localizer.GetString("ConversionMessage.InitializationFailed.Heic"));
-            }
+            await EnsureConverterInitializedAsync("heicConverter", "ConversionMessage.InitializationFailed.Heic", cancellationToken);
 
             // 進捗通知：変換開始
-            ProgressChanged?.Invoke(this, new ConversionProgressEventArgs
-            {
-                FileId = "heic-conversion",
-                Progress = 10,
-                StatusMessage = _localizer.GetString("ConversionMessage.Starting")
-            });
-
+            NotifyProgress("heic-conversion", PROGRESS_START, "ConversionMessage.Starting");
             await Task.Delay(300, cancellationToken);
 
             // HEIC→JPEG変換
@@ -47,25 +93,14 @@ public class ConvertService : IConvertService
             );
 
             // 進捗通知：変換中
-            ProgressChanged?.Invoke(this, new ConversionProgressEventArgs
-            {
-                FileId = "heic-conversion",
-                Progress = 70,
-                StatusMessage = _localizer.GetString("ConversionMessage.GeneratingJpeg")
-            });
-
+            NotifyProgress("heic-conversion", PROGRESS_CONVERTING, "ConversionMessage.GeneratingJpeg");
             await Task.Delay(300, cancellationToken);
 
             // BlobからArrayBufferを取得
             var arrayBuffer = await _jsRuntime.InvokeAsync<byte[]>("getBlobArrayBuffer", cancellationToken, jpegBlob);
 
             // 進捗通知：完了
-            ProgressChanged?.Invoke(this, new ConversionProgressEventArgs
-            {
-                FileId = "heic-conversion",
-                Progress = 100,
-                StatusMessage = _localizer.GetString("ConversionMessage.Completed")
-            });
+            NotifyProgress("heic-conversion", PROGRESS_COMPLETED, "ConversionMessage.Completed");
 
             return new ConvertResult
             {
@@ -76,19 +111,11 @@ public class ConvertService : IConvertService
         }
         catch (OperationCanceledException)
         {
-            return new ConvertResult
-            {
-                Success = false,
-                ErrorMessage = _localizer.GetString("ConversionMessage.Cancelled")
-            };
+            return CreateErrorResult("ConversionMessage.Cancelled");
         }
         catch (Exception ex)
         {
-            return new ConvertResult
-            {
-                Success = false,
-                ErrorMessage = _localizer.GetString("ConversionError.HeicConversion", ex.Message)
-            };
+            return CreateErrorResult("ConversionError.HeicConversion", ex.Message);
         }
     }
 
@@ -97,20 +124,10 @@ public class ConvertService : IConvertService
         try
         {
             // FFmpeg初期化確認
-            var initResult = await _jsRuntime.InvokeAsync<bool>("ffmpegConverter.initialize", cancellationToken);
-            if (!initResult)
-            {
-                throw new Exception(_localizer.GetString("ConversionMessage.InitializationFailed.Ffmpeg"));
-            }
+            await EnsureConverterInitializedAsync("ffmpegConverter", "ConversionMessage.InitializationFailed.Ffmpeg", cancellationToken);
 
             // 進捗通知：変換開始
-            ProgressChanged?.Invoke(this, new ConversionProgressEventArgs
-            {
-                FileId = "mov-conversion",
-                Progress = 10,
-                StatusMessage = _localizer.GetString("ConversionMessage.Starting")
-            });
-
+            NotifyProgress("mov-conversion", PROGRESS_START, "ConversionMessage.Starting");
             await Task.Delay(500, cancellationToken);
 
             // 変換オプション準備
@@ -143,13 +160,7 @@ public class ConvertService : IConvertService
             }
 
             // 進捗通知：変換中
-            ProgressChanged?.Invoke(this, new ConversionProgressEventArgs
-            {
-                FileId = "mov-conversion",
-                Progress = 70,
-                StatusMessage = _localizer.GetString("ConversionMessage.GeneratingMp4")
-            });
-
+            NotifyProgress("mov-conversion", PROGRESS_CONVERTING, "ConversionMessage.GeneratingMp4");
             await Task.Delay(500, cancellationToken);
 
             // BlobからArrayBufferを取得
@@ -164,12 +175,7 @@ public class ConvertService : IConvertService
             }
 
             // 進捗通知：完了
-            ProgressChanged?.Invoke(this, new ConversionProgressEventArgs
-            {
-                FileId = "mov-conversion",
-                Progress = 100,
-                StatusMessage = _localizer.GetString("ConversionMessage.Completed")
-            });
+            NotifyProgress("mov-conversion", PROGRESS_COMPLETED, "ConversionMessage.Completed");
 
             return new ConvertResult
             {
@@ -180,31 +186,23 @@ public class ConvertService : IConvertService
         }
         catch (OperationCanceledException)
         {
-            return new ConvertResult
-            {
-                Success = false,
-                ErrorMessage = _localizer.GetString("ConversionMessage.Cancelled")
-            };
+            return CreateErrorResult("ConversionMessage.Cancelled");
         }
         catch (Exception ex)
         {
-            return new ConvertResult
-            {
-                Success = false,
-                ErrorMessage = _localizer.GetString("ConversionError.MovConversion", ex.Message)
-            };
+            return CreateErrorResult("ConversionError.MovConversion", ex.Message);
         }
     }
 
     private string GenerateJpegFileName()
     {
-        var timestamp = DateTime.Now.ToString("yyyyMMdd-HHmmss");
+        var timestamp = DateTime.Now.ToString(TIMESTAMP_FORMAT);
         return $"converted_{timestamp}.jpg";
     }
 
     private string GenerateMp4FileName()
     {
-        var timestamp = DateTime.Now.ToString("yyyyMMdd-HHmmss");
+        var timestamp = DateTime.Now.ToString(TIMESTAMP_FORMAT);
         return $"converted_{timestamp}.mp4";
     }
 
@@ -241,13 +239,13 @@ public class ConvertService : IConvertService
             // ファイルデータ読み込み
             if (file.OriginalFile != null)
             {
-                using var stream = file.OriginalFile.OpenReadStream(maxAllowedSize: 2147483648); // 2GB
+                using var stream = file.OriginalFile.OpenReadStream(maxAllowedSize: MAX_FILE_SIZE);
                 using var memoryStream = new MemoryStream();
                 await stream.CopyToAsync(memoryStream);
                 file.Data = memoryStream.ToArray();
             }
 
-            progressCallback(file.Id, 30);
+            progressCallback(file.Id, PROGRESS_FILE_LOAD);
 
             // 変換実行
             ConvertResult result;
@@ -274,13 +272,13 @@ public class ConvertService : IConvertService
                 throw new NotSupportedException(_localizer.GetString("ConversionError.UnsupportedFileType", file.Type));
             }
 
-            progressCallback(file.Id, 90);
+            progressCallback(file.Id, PROGRESS_FINALIZE);
 
             if (result.Success && result.Data != null)
             {
                 file.ConvertedData = result.Data;
                 file.Status = ConversionStatus.Completed;
-                progressCallback(file.Id, 100);
+                progressCallback(file.Id, PROGRESS_COMPLETED);
             }
             else
             {
@@ -294,23 +292,6 @@ public class ConvertService : IConvertService
             file.Status = ConversionStatus.Error;
             file.ErrorMessage = ex.Message;
             progressCallback(file.Id, 0);
-        }
-    }
-
-    private async Task SimulateProgress(string fileId, CancellationToken cancellationToken)
-    {
-        for (int i = 0; i <= 100; i += 10)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            ProgressChanged?.Invoke(this, new ConversionProgressEventArgs
-            {
-                FileId = fileId,
-                Progress = i,
-                StatusMessage = i == 100 ? _localizer.GetString("ConversionMessage.Done") : _localizer.GetString("ConversionMessage.Processing")
-            });
-
-            await Task.Delay(200, cancellationToken);
         }
     }
 }

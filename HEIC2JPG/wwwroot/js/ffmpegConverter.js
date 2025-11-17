@@ -5,6 +5,14 @@ let initializationPromise = null;
 let conversionMutex = Promise.resolve(); // 変換処理の排他制御
 
 window.ffmpegConverter = {
+    // 定数定義
+    FFMPEG_CORE_VERSION: '0.12.10',
+    FFMPEG_VERSION: '0.12.15',
+    CDN_BASE_URL: 'https://cdn.jsdelivr.net/npm/@ffmpeg',
+    FFMPEG_INIT_TIMEOUT: 120000, // 2分
+    PROGRESS_LOG_INTERVAL: 5000, // 5秒
+    MOCK_CONVERSION_DELAY: 800,
+
     isInitialized: false,
     ffmpeg: null,
 
@@ -75,8 +83,8 @@ window.ffmpegConverter = {
             // CDNから動的ロード（最新の安定版を使用）
             try {
                 console.log('CDNからffmpeg-core読み込み開始...');
-                
-                const baseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/esm';
+
+                const baseURL = `${this.CDN_BASE_URL}/core@${this.FFMPEG_CORE_VERSION}/dist/esm`;
                 console.log('toBlobURL開始: ffmpeg-core.js');
                 const coreURL = await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript');
                 console.log('toBlobURL完了: ffmpeg-core.js');
@@ -86,7 +94,7 @@ window.ffmpegConverter = {
                 console.log('toBlobURL完了: ffmpeg-core.wasm');
 
                 // WorkerスクリプトはESM依存のため、絶対パスimportを行うブートストラップを生成
-                const workerBaseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.15/dist/esm';
+                const workerBaseURL = `${this.CDN_BASE_URL}/ffmpeg@${this.FFMPEG_VERSION}/dist/esm`;
                 console.log('Workerブートストラップ生成開始');
                 const workerLoaderScript = `
                     import '${workerBaseURL}/worker.js';
@@ -101,13 +109,13 @@ window.ffmpegConverter = {
                 // タイムアウト付きでload実行（CDNのため時間を延長）
                 const loadPromise = this.ffmpeg.load({ coreURL, wasmURL, classWorkerURL });
                 const timeoutPromise = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error(window.getLocalizedString('JSError.FfmpegTimeout'))), 120000)
+                    setTimeout(() => reject(new Error(window.getLocalizedString('JSError.FfmpegTimeout'))), this.FFMPEG_INIT_TIMEOUT)
                 );
-                
+
                 // 進捗表示
                 const progressInterval = setInterval(() => {
                     console.log('ffmpeg.load()処理中... (CDNからWASMダウンロード・初期化中)');
-                }, 5000);
+                }, this.PROGRESS_LOG_INTERVAL);
                 
                 try {
                     await Promise.race([loadPromise, timeoutPromise]);
@@ -239,7 +247,7 @@ window.ffmpegConverter = {
 
     async convertWithMock(movBuffer, options) {
         console.log('モック変換実行中...', movBuffer.length, 'bytes', options);
-        await new Promise(resolve => setTimeout(resolve, 800));
+        await new Promise(resolve => setTimeout(resolve, this.MOCK_CONVERSION_DELAY));
         const mockMp4Header = new Uint8Array([
             0x00, 0x00, 0x00, 0x20, 0x66, 0x74, 0x79, 0x70, 0x69, 0x73, 0x6F, 0x6D,
             0x00, 0x00, 0x02, 0x00, 0x69, 0x73, 0x6F, 0x6D, 0x69, 0x73, 0x6F, 0x32,

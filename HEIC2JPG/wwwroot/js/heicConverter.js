@@ -1,8 +1,15 @@
 // HEIC→JPEG変換用JavaScript
 window.heicConverter = {
+    // 定数定義
+    DEFAULT_QUALITY: 0.9,
+    DEFAULT_WIDTH: 400,
+    DEFAULT_HEIGHT: 300,
+    MOCK_CONVERSION_DELAY: 300,
+    PATTERN_SPACING: 40,
+
     isInitialized: false,
     libheifModule: null,
-    
+
     async initialize() {
         if (this.isInitialized) return true;
         
@@ -45,7 +52,7 @@ window.heicConverter = {
         }
     },
     
-    async convertHeicToJpeg(heicBuffer, quality = 0.9, keepExif = true) {
+    async convertHeicToJpeg(heicBuffer, quality = this.DEFAULT_QUALITY, keepExif = true) {
         if (!this.isInitialized) {
             const errorMsg = window.getLocalizedString('JSError.HeicNotInitialized');
             throw new Error(errorMsg);
@@ -124,31 +131,31 @@ window.heicConverter = {
         console.log('モック変換実行中...', heicBuffer.length, 'bytes');
         
         // 変換の遅延をシミュレート
-        await new Promise(resolve => setTimeout(resolve, 300));
-        
+        await new Promise(resolve => setTimeout(resolve, this.MOCK_CONVERSION_DELAY));
+
         return new Promise((resolve) => {
             const canvas = document.createElement('canvas');
-            canvas.width = 400;
-            canvas.height = 300;
+            canvas.width = this.DEFAULT_WIDTH;
+            canvas.height = this.DEFAULT_HEIGHT;
             
             const ctx = canvas.getContext('2d');
             
             // グラデーション背景でモック画像を作成
-            const gradient = ctx.createLinearGradient(0, 0, 400, 300);
+            const gradient = ctx.createLinearGradient(0, 0, this.DEFAULT_WIDTH, this.DEFAULT_HEIGHT);
             gradient.addColorStop(0, '#3498db');
             gradient.addColorStop(0.5, '#9b59b6');
             gradient.addColorStop(1, '#e74c3c');
-            
+
             ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, 400, 300);
-            
+            ctx.fillRect(0, 0, this.DEFAULT_WIDTH, this.DEFAULT_HEIGHT);
+
             // パターンを追加
             ctx.strokeStyle = 'rgba(255,255,255,0.3)';
             ctx.lineWidth = 2;
-            for (let i = 0; i < 400; i += 40) {
+            for (let i = 0; i < this.DEFAULT_WIDTH; i += this.PATTERN_SPACING) {
                 ctx.beginPath();
                 ctx.moveTo(i, 0);
-                ctx.lineTo(i, 300);
+                ctx.lineTo(i, this.DEFAULT_HEIGHT);
                 ctx.stroke();
             }
             

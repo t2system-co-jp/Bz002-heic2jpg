@@ -125,7 +125,7 @@
                     <label for="jpgQuality">@Localizer.GetString("Settings.JpgQuality"): @((settings.JpgQuality * 100).ToString("F0"))%</label>
                     <input type="range" id="jpgQuality"
                            @bind="settings.JpgQuality"
-                           min="0.6" max="1.0" step="0.1" />
+                           min="@MIN_JPG_QUALITY" max="@MAX_JPG_QUALITY" step="@JPG_QUALITY_STEP" />
                 </div>
 
                 <div class="setting">
@@ -148,7 +148,7 @@
                     <label for="parallelCount">@Localizer.GetString("Settings.ParallelCount"): @settings.ParallelCount</label>
                     <input type="range" id="parallelCount"
                            @bind="settings.ParallelCount"
-                           min="1" max="4" step="1" />
+                           min="@MIN_PARALLEL_COUNT" max="@MAX_PARALLEL_COUNT" step="1" />
                 </div>
             </div>
         </div>
@@ -156,6 +156,15 @@
 </div>
 
 @code {
+    // 定数定義
+    private const int MAX_FILES = 100;
+    private const double MIN_JPG_QUALITY = 0.6;
+    private const double MAX_JPG_QUALITY = 1.0;
+    private const double JPG_QUALITY_STEP = 0.1;
+    private const int MIN_PARALLEL_COUNT = 1;
+    private const int MAX_PARALLEL_COUNT = 4;
+    private const int BYTES_PER_KB = 1024;
+
     private InputFile? fileInput;
     private List<ConvertFile> files = new();
     private ConversionSettings settings = new();
@@ -183,7 +192,7 @@
 
     private void OnFilesSelected(InputFileChangeEventArgs e)
     {
-        foreach (var file in e.GetMultipleFiles(100))
+        foreach (var file in e.GetMultipleFiles(MAX_FILES))
         {
             var convertFile = new ConvertFile
             {
@@ -273,10 +282,10 @@
         string[] sizes = { "B", "KB", "MB", "GB" };
         double len = bytes;
         int order = 0;
-        while (len >= 1024 && order < sizes.Length - 1)
+        while (len >= BYTES_PER_KB && order < sizes.Length - 1)
         {
             order++;
-            len = len / 1024;
+            len = len / BYTES_PER_KB;
         }
         return $"{len:0.##} {sizes[order]}";
     }
