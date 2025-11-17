@@ -61,10 +61,10 @@
 
   <!-- Application -->
   <data name="App.Title" xml:space="preserve">
-    <value>HEIC2JPG &amp; MOV2MP4</value>
+    <value>NoTransfer HEIC&amp;MOV Converter</value>
   </data>
   <data name="App.Description" xml:space="preserve">
-    <value>ローカル完結型メディア変換アプリ - データはブラウザ外へ送信されません</value>
+    <value>データ転送なしのメディア変換 - 完全ローカル処理</value>
   </data>
 
   <!-- Language Selector -->
@@ -103,13 +103,13 @@
 
   <!-- Buttons -->
   <data name="Button.Start" xml:space="preserve">
-    <value>開始</value>
+    <value>変換を開始</value>
   </data>
   <data name="Button.Cancel" xml:space="preserve">
     <value>キャンセル</value>
   </data>
   <data name="Button.DownloadAll" xml:space="preserve">
-    <value>一括DL</value>
+    <value>すべてダウンロード</value>
   </data>
   <data name="Button.Clear" xml:space="preserve">
     <value>クリア</value>
@@ -381,5 +381,57 @@
   </data>
   <data name="Theme.SwitchToAuto" xml:space="preserve">
     <value>自動モードに切り替え</value>
+  </data>
+
+  <!-- Hero Section -->
+  <data name="Hero.Heading" xml:space="preserve">
+    <value>完全ローカル処理のメディア変換</value>
+  </data>
+  <data name="Hero.SubHeading" xml:space="preserve">
+    <value>あなたのデータは一切外部送信されません</value>
+  </data>
+  <data name="Hero.Feature1" xml:space="preserve">
+    <value>🔒 100% プライバシー保護</value>
+  </data>
+  <data name="Hero.Feature2" xml:space="preserve">
+    <value>⚡ 高速変換（ブラウザ内完結）</value>
+  </data>
+  <data name="Hero.Feature3" xml:space="preserve">
+    <value>📦 一括処理対応（最大100件）</value>
+  </data>
+  <data name="Hero.CTAStart" xml:space="preserve">
+    <value>今すぐ変換開始</value>
+  </data>
+  <data name="Hero.CTAGuide" xml:space="preserve">
+    <value>使い方を見る</value>
+  </data>
+
+  <!-- Usage Guide -->
+  <data name="Guide.Title" xml:space="preserve">
+    <value>使い方（3ステップ）</value>
+  </data>
+  <data name="Guide.Step1" xml:space="preserve">
+    <value>ファイルをドラッグ＆ドロップ</value>
+  </data>
+  <data name="Guide.Step1Detail" xml:space="preserve">
+    <value>HEIC画像やMOV動画をドロップゾーンに追加</value>
+  </data>
+  <data name="Guide.Step2" xml:space="preserve">
+    <value>設定を調整（オプション）</value>
+  </data>
+  <data name="Guide.Step2Detail" xml:space="preserve">
+    <value>品質・EXIF情報・変換方式などをカスタマイズ</value>
+  </data>
+  <data name="Guide.Step3" xml:space="preserve">
+    <value>変換してダウンロード</value>
+  </data>
+  <data name="Guide.Step3Detail" xml:space="preserve">
+    <value>変換ボタンをクリックして、完了後にダウンロード</value>
+  </data>
+  <data name="Guide.LocalBadge" xml:space="preserve">
+    <value>🔒 100% LOCAL</value>
+  </data>
+  <data name="Guide.LocalBadgeDetail" xml:space="preserve">
+    <value>すべての処理はブラウザ内で完結します</value>
   </data>
 </root>

@@ -259,6 +259,32 @@ window.commonUtils = {
             console.error('ブラウザ言語取得エラー:', error);
             return ['ja-JP'];
         }
+    },
+
+    // ========== UI操作関連 ==========
+
+    /**
+     * 要素へスクロール
+     * @param {HTMLElement} element - スクロール先の要素
+     * @param {Object} options - スクロールオプション
+     */
+    scrollToElement(element, options = {}) {
+        if (!element) {
+            console.warn('scrollToElement: 要素が見つかりません');
+            return;
+        }
+
+        try {
+            element.scrollIntoView({
+                behavior: options.behavior || 'smooth',
+                block: options.block || 'start',
+                inline: options.inline || 'nearest'
+            });
+        } catch (error) {
+            console.error('スクロールエラー:', error);
+            // フォールバック: 古いブラウザ対応
+            element.scrollIntoView();
+        }
     }
 };
 
@@ -269,5 +295,6 @@ window.createBlobFromArray = window.commonUtils.createBlobFromArray.bind(window.
 window.downloadFile = window.commonUtils.downloadSingleFile.bind(window.commonUtils);
 window.downloadFilesAsZip = window.commonUtils.downloadFilesAsZip.bind(window.commonUtils);
 window.triggerFileInput = window.commonUtils.triggerFileInput.bind(window.commonUtils);
+window.scrollToElement = window.commonUtils.scrollToElement.bind(window.commonUtils);
 
 console.log('commonUtils.js 読み込み完了');

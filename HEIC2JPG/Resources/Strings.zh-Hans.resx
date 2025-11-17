@@ -61,10 +61,10 @@
 
   <!-- Application -->
   <data name="App.Title" xml:space="preserve">
-    <value>HEIC2JPG &amp; MOV2MP4 [中文]</value>
+    <value>NoTransfer HEIC&amp;MOV Converter</value>
   </data>
   <data name="App.Description" xml:space="preserve">
-    <value>本地媒体转换应用 - 数据不会离开您的浏览器</value>
+    <value>无数据传输的媒体转换 - 完全本地处理</value>
   </data>
 
   <!-- Language Selector -->
@@ -103,7 +103,7 @@
 
   <!-- Buttons -->
   <data name="Button.Start" xml:space="preserve">
-    <value>开始</value>
+    <value>开始转换</value>
   </data>
   <data name="Button.Cancel" xml:space="preserve">
     <value>取消</value>
@@ -381,5 +381,57 @@
   </data>
   <data name="Theme.SwitchToAuto" xml:space="preserve">
     <value>切换到自动模式</value>
+  </data>
+
+  <!-- Hero Section -->
+  <data name="Hero.Heading" xml:space="preserve">
+    <value>完全本地处理的媒体转换</value>
+  </data>
+  <data name="Hero.SubHeading" xml:space="preserve">
+    <value>您的数据永不离开您的设备</value>
+  </data>
+  <data name="Hero.Feature1" xml:space="preserve">
+    <value>🔒 100% 隐私保护</value>
+  </data>
+  <data name="Hero.Feature2" xml:space="preserve">
+    <value>⚡ 快速转换（浏览器内完成）</value>
+  </data>
+  <data name="Hero.Feature3" xml:space="preserve">
+    <value>📦 批量处理（最多100个文件）</value>
+  </data>
+  <data name="Hero.CTAStart" xml:space="preserve">
+    <value>立即开始转换</value>
+  </data>
+  <data name="Hero.CTAGuide" xml:space="preserve">
+    <value>查看使用方法</value>
+  </data>
+
+  <!-- Usage Guide -->
+  <data name="Guide.Title" xml:space="preserve">
+    <value>使用方法（3步）</value>
+  </data>
+  <data name="Guide.Step1" xml:space="preserve">
+    <value>拖放文件</value>
+  </data>
+  <data name="Guide.Step1Detail" xml:space="preserve">
+    <value>将HEIC图像或MOV视频添加到拖放区</value>
+  </data>
+  <data name="Guide.Step2" xml:space="preserve">
+    <value>调整设置（可选）</value>
+  </data>
+  <data name="Guide.Step2Detail" xml:space="preserve">
+    <value>自定义质量、EXIF数据、转换模式等</value>
+  </data>
+  <data name="Guide.Step3" xml:space="preserve">
+    <value>转换并下载</value>
+  </data>
+  <data name="Guide.Step3Detail" xml:space="preserve">
+    <value>点击转换按钮，完成后下载</value>
+  </data>
+  <data name="Guide.LocalBadge" xml:space="preserve">
+    <value>🔒 100% 本地</value>
+  </data>
+  <data name="Guide.LocalBadgeDetail" xml:space="preserve">
+    <value>所有处理完全在浏览器内完成</value>
   </data>
 </root>

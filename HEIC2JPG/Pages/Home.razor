@@ -9,17 +9,17 @@
 <PageTitle>@Localizer.GetString("App.Title")</PageTitle>
 
 <div class="converter-container">
-    <!-- ヘッダー -->
-    <div class="converter-header">
-        <h1>@Localizer.GetString("App.Title")</h1>
-        <p>@Localizer.GetString("App.Description")</p>
-    </div>
+    <!-- ヒーローセクション -->
+    <HeroSection OnStartConversion="ScrollToDropZone" OnShowGuide="ToggleGuide" />
+
+    <!-- 使い方ガイド -->
+    <UsageGuide @bind-IsExpanded="isGuideExpanded" />
 
     <div class="converter-layout">
         <!-- メインエリア -->
         <div class="main-area">
             <!-- ドロップゾーン -->
-            <div class="drop-zone @(isDragActive ? "drag-active" : "")"
+            <div class="drop-zone @(isDragActive ? "drag-active" : "")" @ref="dropZoneElement"
                  @ondragover="OnDragOver"
                  @ondragover:preventDefault="true"
                  @ondrop="OnDrop"
@@ -34,7 +34,10 @@
                     <h3>@Localizer.GetString("DropZone.Title")</h3>
                     <p>@Localizer.GetString("DropZone.Description")</p>
                     <button type="button" class="btn-select">@Localizer.GetString("DropZone.ButtonSelect")</button>
-                    <small>@Localizer.GetString("DropZone.FileLimits")</small>
+                    <div class="file-limits-notice">
+                        <span class="limits-icon">ℹ️</span>
+                        <span>@Localizer.GetString("DropZone.FileLimits")</span>
+                    </div>
                 </div>
             </div>
 
@@ -79,7 +82,12 @@
                             <div class="file-status status-@file.Status.ToString().ToLower()">
                                 @if (file.Status == ConversionStatus.Processing)
                                 {
-                                    <div class="progress">@file.Progress%</div>
+                                    <div class="progress-container">
+                                        <div class="progress-bar-wrapper">
+                                            <div class="progress-bar" style="width: @file.Progress%"></div>
+                                        </div>
+                                        <span class="progress-text">@file.Progress%</span>
+                                    </div>
                                 }
                                 else
                                 {
@@ -87,7 +95,10 @@
                                 }
                                 @if (file.Status == ConversionStatus.Error && !string.IsNullOrEmpty(file.ErrorMessage))
                                 {
-                                    <span class="error-status" title="@file.ErrorMessage">⚠️</span>
+                                    <div class="error-message">
+                                        <span class="error-icon">⚠️</span>
+                                        <span class="error-text">@file.ErrorMessage</span>
+                                    </div>
                                 }
                             </div>
                             <div class="file-actions">
@@ -158,7 +169,26 @@
     private ConversionSettings settings = new();
     private bool isDragActive = false;
     private bool isProcessing = false;
-    private bool isSettingsExpanded = true; // デスクトップではデフォルトで展開
+    private bool isSettingsExpanded = false; // デフォルトで折りたたみ（初心者向けにシンプルな初期表示）
+    private bool isGuideExpanded = false; // 使い方ガイドの初期状態（初心者が必要時に展開）
+    private ElementReference dropZoneElement;
+
+    private async Task ScrollToDropZone()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("scrollToElement", dropZoneElement);
+        }
+        catch
+        {
+            // エラーは無視（古いブラウザ対応）
+        }
+    }
+
+    private void ToggleGuide()
+    {
+        isGuideExpanded = !isGuideExpanded;
+    }
 
     private async Task SelectFiles()
     {

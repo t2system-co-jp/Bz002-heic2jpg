@@ -1,0 +1,74 @@
+@using HEIC2JPG.Services
+@inject ILocalizationService Localizer
+
+<div class="usage-guide @(IsExpanded ? "expanded" : "collapsed")">
+    <div class="guide-header" @onclick="ToggleExpand" @onkeypress="OnKeyPress"
+         tabindex="0" role="button" aria-expanded="@IsExpanded"
+         aria-label="@Localizer.GetString("Guide.Title")">
+        <h3>📖 @Localizer.GetString("Guide.Title")</h3>
+        <span class="guide-toggle-icon">@(IsExpanded ? "▼" : "▶")</span>
+    </div>
+
+    @if (IsExpanded)
+    {
+        <div class="guide-content">
+            <div class="guide-steps">
+                <div class="guide-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>@Localizer.GetString("Guide.Step1")</h4>
+                        <p>@Localizer.GetString("Guide.Step1Detail")</p>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>@Localizer.GetString("Guide.Step2")</h4>
+                        <p>@Localizer.GetString("Guide.Step2Detail")</p>
+                    </div>
+                </div>
+
+                <div class="guide-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>@Localizer.GetString("Guide.Step3")</h4>
+                        <p>@Localizer.GetString("Guide.Step3Detail")</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="guide-footer">
+                <div class="privacy-badge">
+                    <span class="privacy-icon">🔒</span>
+                    <div class="privacy-text">
+                        <strong>@Localizer.GetString("Guide.LocalBadge")</strong>
+                        <small>@Localizer.GetString("Guide.LocalBadgeDetail")</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public bool IsExpanded { get; set; } = true;
+
+    [Parameter]
+    public EventCallback<bool> IsExpandedChanged { get; set; }
+
+    private async Task ToggleExpand()
+    {
+        IsExpanded = !IsExpanded;
+        await IsExpandedChanged.InvokeAsync(IsExpanded);
+    }
+
+    private async Task OnKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" || e.Key == " ")
+        {
+            await ToggleExpand();
+        }
+    }
+}

@@ -61,10 +61,10 @@
 
   <!-- Application -->
   <data name="App.Title" xml:space="preserve">
-    <value>HEIC2JPG &amp; MOV2MP4 [ENGLISH]</value>
+    <value>NoTransfer HEIC&amp;MOV Converter</value>
   </data>
   <data name="App.Description" xml:space="preserve">
-    <value>Local Media Converter - Your data never leaves your browser</value>
+    <value>Media Conversion Without Upload - Fully Local Processing</value>
   </data>
 
   <!-- Language Selector -->
@@ -103,7 +103,7 @@
 
   <!-- Buttons -->
   <data name="Button.Start" xml:space="preserve">
-    <value>Start</value>
+    <value>Start Conversion</value>
   </data>
   <data name="Button.Cancel" xml:space="preserve">
     <value>Cancel</value>
@@ -381,5 +381,57 @@
   </data>
   <data name="Theme.SwitchToAuto" xml:space="preserve">
     <value>Switch to auto mode</value>
+  </data>
+
+  <!-- Hero Section -->
+  <data name="Hero.Heading" xml:space="preserve">
+    <value>Fully Local Media Conversion</value>
+  </data>
+  <data name="Hero.SubHeading" xml:space="preserve">
+    <value>Your data never leaves your device</value>
+  </data>
+  <data name="Hero.Feature1" xml:space="preserve">
+    <value>🔒 100% Privacy Protected</value>
+  </data>
+  <data name="Hero.Feature2" xml:space="preserve">
+    <value>⚡ Fast Conversion (In-Browser)</value>
+  </data>
+  <data name="Hero.Feature3" xml:space="preserve">
+    <value>📦 Batch Processing (Up to 100 files)</value>
+  </data>
+  <data name="Hero.CTAStart" xml:space="preserve">
+    <value>Start Converting Now</value>
+  </data>
+  <data name="Hero.CTAGuide" xml:space="preserve">
+    <value>How to Use</value>
+  </data>
+
+  <!-- Usage Guide -->
+  <data name="Guide.Title" xml:space="preserve">
+    <value>How to Use (3 Steps)</value>
+  </data>
+  <data name="Guide.Step1" xml:space="preserve">
+    <value>Drag &amp; Drop Files</value>
+  </data>
+  <data name="Guide.Step1Detail" xml:space="preserve">
+    <value>Add HEIC images or MOV videos to the drop zone</value>
+  </data>
+  <data name="Guide.Step2" xml:space="preserve">
+    <value>Adjust Settings (Optional)</value>
+  </data>
+  <data name="Guide.Step2Detail" xml:space="preserve">
+    <value>Customize quality, EXIF data, conversion mode, etc.</value>
+  </data>
+  <data name="Guide.Step3" xml:space="preserve">
+    <value>Convert &amp; Download</value>
+  </data>
+  <data name="Guide.Step3Detail" xml:space="preserve">
+    <value>Click the convert button and download after completion</value>
+  </data>
+  <data name="Guide.LocalBadge" xml:space="preserve">
+    <value>🔒 100% LOCAL</value>
+  </data>
+  <data name="Guide.LocalBadgeDetail" xml:space="preserve">
+    <value>All processing is done entirely within your browser</value>
   </data>
 </root>

@@ -26,7 +26,8 @@
       "Bash(dotnet format:*)",
       "Bash(dir /b .claude 2)",
       "Bash(nul)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(timeout /t 3 /nobreak)"
     ],
     "deny": []
   },

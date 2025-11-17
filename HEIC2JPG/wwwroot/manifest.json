@@ -1,7 +1,7 @@
 {
-  "name": "HEIC2JPG & MOV2MP4 Converter",
-  "short_name": "HEIC2JPG",
-  "description": "HEICをJPGに、MOVをMP4に変換するWebアプリケーション",
+  "name": "NoTransfer HEIC&MOV Converter",
+  "short_name": "NoTransfer",
+  "description": "データ転送なしのメディア変換 - 完全ローカル処理",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

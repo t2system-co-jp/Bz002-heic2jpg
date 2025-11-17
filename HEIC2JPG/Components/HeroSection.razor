@@ -1,0 +1,53 @@
+@using HEIC2JPG.Services
+@inject ILocalizationService Localizer
+
+<div class="hero-section">
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="badge-icon">🛡️</span>
+            <span class="badge-text">@Localizer.GetString("Guide.LocalBadge")</span>
+        </div>
+
+        <h1 class="hero-heading">@Localizer.GetString("Hero.Heading")</h1>
+        <p class="hero-subheading">@Localizer.GetString("Hero.SubHeading")</p>
+
+        <div class="hero-features">
+            <div class="feature-item">
+                <span>@Localizer.GetString("Hero.Feature1")</span>
+            </div>
+            <div class="feature-item">
+                <span>@Localizer.GetString("Hero.Feature2")</span>
+            </div>
+            <div class="feature-item">
+                <span>@Localizer.GetString("Hero.Feature3")</span>
+            </div>
+        </div>
+
+        <div class="hero-cta">
+            <button class="btn-cta-primary" @onclick="OnStartClick">
+                @Localizer.GetString("Hero.CTAStart")
+            </button>
+            <button class="btn-cta-secondary" @onclick="OnGuideClick">
+                @Localizer.GetString("Hero.CTAGuide")
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnStartConversion { get; set; }
+
+    [Parameter]
+    public EventCallback OnShowGuide { get; set; }
+
+    private async Task OnStartClick()
+    {
+        await OnStartConversion.InvokeAsync();
+    }
+
+    private async Task OnGuideClick()
+    {
+        await OnShowGuide.InvokeAsync();
+    }
+}

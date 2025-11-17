@@ -3,11 +3,11 @@
 
 :root {
     /* ========== Colors ========== */
-    /* Primary - Indigo（信頼感・プロフェッショナル） */
-    --color-primary: #4F46E5;
-    --color-primary-dark: #4338CA;
-    --color-primary-light: #818CF8;
-    --color-primary-bg: #EEF2FF;
+    /* Primary - Slate Blue（落ち着いた青灰色・プロフェッショナル） */
+    --color-primary: #45596D;
+    --color-primary-dark: #3A4A5C;
+    --color-primary-light: #5C7189;
+    --color-primary-bg: #E8EDF2;
 
     /* Success - Emerald（プライバシー保護・安全性） */
     --color-success: #10B981;
@@ -40,10 +40,10 @@
     --color-text-tertiary: #9CA3AF;
     --color-text-inverse: #FFFFFF;
 
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /* Gradients - Slate Blue theme */
+    --gradient-primary: linear-gradient(135deg, #45596D 0%, #3A4A5C 100%);
     --gradient-success: linear-gradient(135deg, #10B981 0%, #059669 100%);
-    --gradient-header: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+    --gradient-header: linear-gradient(135deg, #45596D 0%, #3A4A5C 100%);
 
     /* ========== Spacing ========== */
     --space-xs: 4px;
@@ -118,30 +118,55 @@
     --glass-blur: blur(10px);
     --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
 
+    /* ========== Component-specific Colors ========== */
+    /* Drop Zone - Slate Blue theme */
+    --drop-zone-bg: rgba(69, 89, 109, 0.05);
+    --drop-zone-bg-hover: rgba(69, 89, 109, 0.1);
+    --drop-zone-bg-active: rgba(69, 89, 109, 0.15);
+    --drop-zone-shadow-active: rgba(69, 89, 109, 0.1);
+
+    /* Button Effects - Slate Blue theme */
+    --btn-ripple: rgba(255, 255, 255, 0.3);
+    --btn-ripple-dark: rgba(69, 89, 109, 0.2);
+
+    /* Hero Section */
+    --hero-overlay: rgba(255, 255, 255, 0.1);
+    --hero-badge-bg: rgba(255, 255, 255, 0.2);
+    --hero-badge-border: rgba(255, 255, 255, 0.3);
+    --hero-feature-bg: rgba(255, 255, 255, 0.15);
+    --hero-feature-border: rgba(255, 255, 255, 0.2);
+    --hero-feature-bg-hover: rgba(255, 255, 255, 0.25);
+    --hero-feature-shimmer: rgba(255, 255, 255, 0.2);
+
+    /* Interactive Elements */
+    --interactive-overlay: rgba(255, 255, 255, 0.2);
+    --interactive-overlay-hover: rgba(255, 255, 255, 0.3);
+    --touch-feedback: rgba(0, 0, 0, 0.1);
+
     /* ========== Touch Target Sizes ========== */
     --touch-target-min: 44px;
 }
 
 /* ダークモード - 手動切り替え対応 */
 [data-theme="dark"] {
-    /* Background Colors */
+    /* Background Colors - コントラスト改善 */
     --color-bg: #0F172A;
     --color-bg-alt: #1E293B;
     --color-surface: #1E293B;
-    --color-border: #334155;
-    --color-border-light: #475569;
+    --color-border: #475569;
+    --color-border-light: #334155;
 
-    /* Text Colors */
-    --color-text-primary: #F1F5F9;
-    --color-text-secondary: #CBD5E1;
-    --color-text-tertiary: #94A3B8;
+    /* Text Colors - 読みやすさ向上 */
+    --color-text-primary: #F8FAFC;
+    --color-text-secondary: #E2E8F0;
+    --color-text-tertiary: #CBD5E1;
     --color-text-inverse: #0F172A;
 
-    /* Primary - Darker for dark mode */
-    --color-primary: #6366F1;
-    --color-primary-dark: #4F46E5;
-    --color-primary-light: #818CF8;
-    --color-primary-bg: #312E81;
+    /* Primary - Slate Blue (brighter for dark mode visibility) */
+    --color-primary: #7A91AA;
+    --color-primary-dark: #5C7189;
+    --color-primary-light: #98ADBF;
+    --color-primary-bg: #2A3744;
 
     /* Success - Brighter for dark mode */
     --color-success: #34D399;
@@ -161,10 +186,10 @@
     --color-danger-light: #FCA5A5;
     --color-danger-bg: #7F1D1D;
 
-    /* Gradients - Darker variants */
-    --gradient-primary: linear-gradient(135deg, #6366F1 0%, #7C3AED 100%);
+    /* Gradients - Slate Blue (brighter for dark mode) */
+    --gradient-primary: linear-gradient(135deg, #7A91AA 0%, #98ADBF 100%);
     --gradient-success: linear-gradient(135deg, #34D399 0%, #10B981 100%);
-    --gradient-header: linear-gradient(135deg, #4338CA 0%, #6D28D9 100%);
+    --gradient-header: linear-gradient(135deg, #7A91AA 0%, #5C7189 100%);
 
     /* Glassmorphism - Dark variant */
     --glass-bg: rgba(30, 41, 59, 0.8);
@@ -178,29 +203,54 @@
     --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
     --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
     --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.6);
+
+    /* Component-specific Colors - Dark mode */
+    /* Drop Zone - Slate Blue (brighter for visibility) */
+    --drop-zone-bg: rgba(122, 145, 170, 0.12);
+    --drop-zone-bg-hover: rgba(122, 145, 170, 0.18);
+    --drop-zone-bg-active: rgba(122, 145, 170, 0.25);
+    --drop-zone-shadow-active: rgba(122, 145, 170, 0.3);
+
+    /* Button Effects - Slate Blue (adjusted for dark mode) */
+    --btn-ripple: rgba(255, 255, 255, 0.15);
+    --btn-ripple-dark: rgba(122, 145, 170, 0.3);
+
+    /* Hero Section - Darker overlays for dark mode */
+    --hero-overlay: rgba(255, 255, 255, 0.05);
+    --hero-badge-bg: rgba(255, 255, 255, 0.1);
+    --hero-badge-border: rgba(255, 255, 255, 0.15);
+    --hero-feature-bg: rgba(255, 255, 255, 0.08);
+    --hero-feature-border: rgba(255, 255, 255, 0.12);
+    --hero-feature-bg-hover: rgba(255, 255, 255, 0.15);
+    --hero-feature-shimmer: rgba(255, 255, 255, 0.1);
+
+    /* Interactive Elements - Lighter for dark mode */
+    --interactive-overlay: rgba(255, 255, 255, 0.1);
+    --interactive-overlay-hover: rgba(255, 255, 255, 0.15);
+    --touch-feedback: rgba(255, 255, 255, 0.1);
 }
 
 /* 自動モード - システム設定に従う */
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]):not([data-theme="dark"]) {
-        /* Background Colors */
+        /* Background Colors - コントラスト改善 */
         --color-bg: #0F172A;
         --color-bg-alt: #1E293B;
         --color-surface: #1E293B;
-        --color-border: #334155;
-        --color-border-light: #475569;
+        --color-border: #475569;
+        --color-border-light: #334155;
 
-        /* Text Colors */
-        --color-text-primary: #F1F5F9;
-        --color-text-secondary: #CBD5E1;
-        --color-text-tertiary: #94A3B8;
+        /* Text Colors - 読みやすさ向上 */
+        --color-text-primary: #F8FAFC;
+        --color-text-secondary: #E2E8F0;
+        --color-text-tertiary: #CBD5E1;
         --color-text-inverse: #0F172A;
 
-        /* Primary - Darker for dark mode */
-        --color-primary: #6366F1;
-        --color-primary-dark: #4F46E5;
-        --color-primary-light: #818CF8;
-        --color-primary-bg: #312E81;
+        /* Primary - Slate Blue (brighter for dark mode visibility) */
+        --color-primary: #7A91AA;
+        --color-primary-dark: #5C7189;
+        --color-primary-light: #98ADBF;
+        --color-primary-bg: #2A3744;
 
         /* Success - Brighter for dark mode */
         --color-success: #34D399;
@@ -220,10 +270,10 @@
         --color-danger-light: #FCA5A5;
         --color-danger-bg: #7F1D1D;
 
-        /* Gradients - Darker variants */
-        --gradient-primary: linear-gradient(135deg, #6366F1 0%, #7C3AED 100%);
+        /* Gradients - Slate Blue (brighter for dark mode) */
+        --gradient-primary: linear-gradient(135deg, #7A91AA 0%, #98ADBF 100%);
         --gradient-success: linear-gradient(135deg, #34D399 0%, #10B981 100%);
-        --gradient-header: linear-gradient(135deg, #4338CA 0%, #6D28D9 100%);
+        --gradient-header: linear-gradient(135deg, #7A91AA 0%, #5C7189 100%);
 
         /* Glassmorphism - Dark variant */
         --glass-bg: rgba(30, 41, 59, 0.8);
@@ -237,6 +287,31 @@
         --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
         --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
         --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.6);
+
+        /* Component-specific Colors - Dark mode */
+        /* Drop Zone - Slate Blue (brighter for visibility) */
+        --drop-zone-bg: rgba(122, 145, 170, 0.12);
+        --drop-zone-bg-hover: rgba(122, 145, 170, 0.18);
+        --drop-zone-bg-active: rgba(122, 145, 170, 0.25);
+        --drop-zone-shadow-active: rgba(122, 145, 170, 0.3);
+
+        /* Button Effects - Slate Blue (adjusted for dark mode) */
+        --btn-ripple: rgba(255, 255, 255, 0.15);
+        --btn-ripple-dark: rgba(122, 145, 170, 0.3);
+
+        /* Hero Section - Darker overlays for dark mode */
+        --hero-overlay: rgba(255, 255, 255, 0.05);
+        --hero-badge-bg: rgba(255, 255, 255, 0.1);
+        --hero-badge-border: rgba(255, 255, 255, 0.15);
+        --hero-feature-bg: rgba(255, 255, 255, 0.08);
+        --hero-feature-border: rgba(255, 255, 255, 0.12);
+        --hero-feature-bg-hover: rgba(255, 255, 255, 0.15);
+        --hero-feature-shimmer: rgba(255, 255, 255, 0.1);
+
+        /* Interactive Elements - Lighter for dark mode */
+        --interactive-overlay: rgba(255, 255, 255, 0.1);
+        --interactive-overlay-hover: rgba(255, 255, 255, 0.15);
+        --touch-feedback: rgba(255, 255, 255, 0.1);
     }
 }
 
