@@ -193,6 +193,15 @@ label {
     z-index: 1;
 }
 
+/* InputFileをドロップゾーン全体に透明配置 */
+.drop-zone-input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
 .drop-icon {
     font-size: 4rem;
     margin-bottom: var(--space-md);

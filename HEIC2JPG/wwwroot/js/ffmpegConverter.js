@@ -76,19 +76,30 @@ window.ffmpegConverter = {
             try {
                 console.log('CDNからffmpeg-core読み込み開始...');
                 
-                const baseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist';
+                const baseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.10/dist/esm';
                 console.log('toBlobURL開始: ffmpeg-core.js');
                 const coreURL = await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript');
                 console.log('toBlobURL完了: ffmpeg-core.js');
-                
+
                 console.log('toBlobURL開始: ffmpeg-core.wasm (CDNからダウンロード)');
                 const wasmURL = await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm');
                 console.log('toBlobURL完了: ffmpeg-core.wasm');
 
+                // WorkerスクリプトはESM依存のため、絶対パスimportを行うブートストラップを生成
+                const workerBaseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.15/dist/esm';
+                console.log('Workerブートストラップ生成開始');
+                const workerLoaderScript = `
+                    import '${workerBaseURL}/worker.js';
+                `;
+                const classWorkerURL = URL.createObjectURL(
+                    new Blob([workerLoaderScript], { type: 'text/javascript' })
+                );
+                console.log('Workerブートストラップ生成完了');
+
                 console.log('ffmpeg.load()開始...');
-                
+
                 // タイムアウト付きでload実行（CDNのため時間を延長）
-                const loadPromise = this.ffmpeg.load({ coreURL, wasmURL });
+                const loadPromise = this.ffmpeg.load({ coreURL, wasmURL, classWorkerURL });
                 const timeoutPromise = new Promise((_, reject) =>
                     setTimeout(() => reject(new Error(window.getLocalizedString('JSError.FfmpegTimeout'))), 120000)
                 );

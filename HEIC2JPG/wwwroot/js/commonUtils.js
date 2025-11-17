@@ -137,12 +137,20 @@ window.commonUtils = {
         if (!this.isJSZipAvailable()) {
             throw new Error('JSZipライブラリが利用できません');
         }
-        
+
         try {
             const zip = new JSZip();
-            
+
+            // デバッグ: 受け取ったデータの型を確認
+            console.log('createZipFromFiles - files type:', typeof files);
+            console.log('createZipFromFiles - files is Array:', Array.isArray(files));
+            console.log('createZipFromFiles - files:', files);
+
+            // 配列でない場合は配列に変換
+            const filesArray = Array.isArray(files) ? files : Object.values(files);
+
             // ファイルをZipに追加
-            files.forEach((file, index) => {
+            filesArray.forEach((file, index) => {
                 if (file.data && file.fileName) {
                     zip.file(file.fileName, file.data);
                 } else {
@@ -167,18 +175,23 @@ window.commonUtils = {
 
     /**
      * Zipファイルのダウンロード
-     * @param {Array} files - ファイル配列
-     * @param {string} zipFileName - Zipファイル名
-     * @param {Object} options - オプション
+     * Blazor から呼ばれる場合、配列が展開されて個別の引数として渡される
+     * @param {...Object} args - ファイルオブジェクト（可変長引数）
      */
-    async downloadFilesAsZip(files, zipFileName = null, options = {}) {
+    async downloadFilesAsZip(...args) {
         try {
+            // Blazorは配列を展開するため、可変長引数として受け取る
+            const files = args;
+
+            console.log('downloadFilesAsZip - 受信したファイル数:', files.length);
+            console.log('downloadFilesAsZip - files:', files);
+
             if (this.isJSZipAvailable()) {
                 // Zip生成・ダウンロード
-                const zipBlob = await this.createZipFromFiles(files, options);
+                const zipBlob = await this.createZipFromFiles(files, {});
                 const timestamp = new Date().toISOString().slice(0, 16).replace(/:/g, '-');
-                const fileName = zipFileName || `converted_files_${timestamp}.zip`;
-                
+                const fileName = `converted_files_${timestamp}.zip`;
+
                 await this.downloadSingleFile(zipBlob, fileName);
                 console.log('Zip一括ダウンロード完了');
             } else {
@@ -188,7 +201,7 @@ window.commonUtils = {
             }
         } catch (error) {
             console.error('Zipダウンロードエラー - 個別ダウンロードにフォールバック:', error);
-            await this.downloadFilesIndividually(files);
+            await this.downloadFilesIndividually(args);
         }
     },
 

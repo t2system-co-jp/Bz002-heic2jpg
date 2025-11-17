@@ -27,7 +27,8 @@
       "Bash(dir /b .claude 2)",
       "Bash(nul)",
       "Bash(git log:*)",
-      "Bash(timeout /t 3 /nobreak)"
+      "Bash(timeout /t 3 /nobreak)",
+      "Bash(dir /b \"c:\\Users\\t_ogura.T2\\Desktop\\Develop\\CC_HEIC2JPG\\HEIC2JPG\\wwwroot\\lib\\ffmpeg\"\" 2)"
     ],
     "deny": []
   },

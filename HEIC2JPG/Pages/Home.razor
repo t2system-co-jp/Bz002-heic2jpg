@@ -19,34 +19,26 @@
         <!-- メインエリア -->
         <div class="main-area">
             <!-- ドロップゾーン -->
-            <div class="drop-zone @(isDragActive ? "drag-active" : "")" @ref="dropZoneElement"
-                 @ondragover="OnDragOver"
-                 @ondragover:preventDefault="true"
-                 @ondrop="OnDrop"
-                 @ondrop:preventDefault="true"
-                 @ondragenter="OnDragEnter"
-                 @ondragleave="OnDragLeave"
-                 @onclick="SelectFiles"
+            <div class="drop-zone" @ref="dropZoneElement"
                  role="button"
                  aria-label="@Localizer.GetString("DropZone.AriaLabel")">
                 <div class="drop-content">
                     <div class="drop-icon">📁</div>
                     <h3>@Localizer.GetString("DropZone.Title")</h3>
                     <p>@Localizer.GetString("DropZone.Description")</p>
-                    <button type="button" class="btn-select">@Localizer.GetString("DropZone.ButtonSelect")</button>
                     <div class="file-limits-notice">
                         <span class="limits-icon">ℹ️</span>
                         <span>@Localizer.GetString("DropZone.FileLimits")</span>
                     </div>
                 </div>
-            </div>
 
-            <!-- 隠しファイル入力 -->
-            <InputFile @ref="fileInput" 
-                      OnChange="OnFilesSelected" 
-                      multiple 
-                      accept=".heic,.mov"
-                      style="display: none;" />
+                <!-- InputFileをドロップゾーン全体に透明配置 -->
+                <InputFile @ref="fileInput"
+                          OnChange="OnFilesSelected"
+                          multiple
+                          accept=".heic,.mov"
+                          class="drop-zone-input" />
+            </div>
 
             <!-- ファイルキュー -->
             @if (files.Any())
@@ -167,7 +159,6 @@
     private InputFile? fileInput;
     private List<ConvertFile> files = new();
     private ConversionSettings settings = new();
-    private bool isDragActive = false;
     private bool isProcessing = false;
     private bool isSettingsExpanded = false; // デフォルトで折りたたみ（初心者向けにシンプルな初期表示）
     private bool isGuideExpanded = false; // 使い方ガイドの初期状態（初心者が必要時に展開）
@@ -190,11 +181,6 @@
         isGuideExpanded = !isGuideExpanded;
     }
 
-    private async Task SelectFiles()
-    {
-        await JS.InvokeVoidAsync("triggerFileInput", fileInput?.Element);
-    }
-
     private void OnFilesSelected(InputFileChangeEventArgs e)
     {
         foreach (var file in e.GetMultipleFiles(100))
@@ -212,17 +198,6 @@
             files.Add(convertFile);
         }
         StateHasChanged();
-    }
-
-    private void OnDragEnter() => isDragActive = true;
-    private void OnDragLeave() => isDragActive = false;
-    private void OnDragOver() { /* preventDefault in markup */ }
-
-    private async Task OnDrop()
-    {
-        isDragActive = false;
-        // JSInteropでドロップされたファイルを処理
-        await JS.InvokeVoidAsync("handleFileDrop");
     }
 
     private async Task StartConversion()
@@ -263,10 +238,10 @@
         var completedFiles = files.Where(f => f.Status == ConversionStatus.Completed).ToList();
         if (completedFiles.Any())
         {
-            await JS.InvokeVoidAsync("downloadFilesAsZip", completedFiles.Select(f => new { 
-                data = f.ConvertedData, 
-                name = f.GetConvertedFileName() 
-            }));
+            await JS.InvokeVoidAsync("downloadFilesAsZip", completedFiles.Select(f => new {
+                data = f.ConvertedData,
+                fileName = f.GetConvertedFileName()
+            }).ToArray());
         }
     }
 
