@@ -1904,3 +1904,120 @@ label {
         font-size: var(--text-xs);
     }
 }
+
+/* ========================================
+   Toast通知スタイル
+   ======================================== */
+
+.toast {
+    min-width: 300px;
+    max-width: 500px;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.toast-header {
+    background-color: var(--toast-header-bg, #f8f9fa);
+    border-bottom: 1px solid var(--toast-border, #dee2e6);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.toast-icon {
+    margin-right: 8px;
+    font-size: 1.2rem;
+}
+
+.toast-success .toast-header {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border-bottom-color: #badbcc;
+}
+
+.toast-warning .toast-header {
+    background-color: #fff3cd;
+    color: #664d03;
+    border-bottom-color: #ffecb5;
+}
+
+.toast-error .toast-header {
+    background-color: #f8d7da;
+    color: #842029;
+    border-bottom-color: #f5c2c7;
+}
+
+.toast-info .toast-header {
+    background-color: #cfe2ff;
+    color: #084298;
+    border-bottom-color: #b6d4fe;
+}
+
+.toast-body {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    background-color: var(--toast-body-bg, #ffffff);
+}
+
+/* ダークモード対応 - 視認性の高いデザイン */
+[data-theme="dark"] .toast {
+    background-color: #1E293B !important;
+    border: 1px solid #475569 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme="dark"] .toast-body {
+    background-color: #1E293B !important;
+    color: #E2E8F0 !important;
+}
+
+[data-theme="dark"] .toast-success .toast-header {
+    background-color: #15803d !important;
+    color: #ffffff !important;
+    border-bottom-color: #16a34a !important;
+}
+
+[data-theme="dark"] .toast-warning .toast-header {
+    background-color: #ca8a04 !important;
+    color: #ffffff !important;
+    border-bottom-color: #eab308 !important;
+}
+
+[data-theme="dark"] .toast-error .toast-header {
+    background-color: #b91c1c !important;
+    color: #ffffff !important;
+    border-bottom-color: #dc2626 !important;
+}
+
+[data-theme="dark"] .toast-info .toast-header {
+    background-color: #1d4ed8 !important;
+    color: #ffffff !important;
+    border-bottom-color: #2563eb !important;
+}
+
+/* ダークモードでの閉じるボタン */
+[data-theme="dark"] .toast .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%) !important;
+    opacity: 0.8;
+}
+
+[data-theme="dark"] .toast .btn-close:hover {
+    opacity: 1;
+}
+
+/* Toast コンテナのモバイル対応 */
+@media (max-width: 576px) {
+    #toast-container {
+        left: 0.5rem !important;
+        right: 0.5rem !important;
+        top: 0.5rem !important;
+    }
+
+    .toast {
+        min-width: auto;
+        width: 100%;
+    }
+}

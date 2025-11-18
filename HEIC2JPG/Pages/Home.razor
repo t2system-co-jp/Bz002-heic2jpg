@@ -192,20 +192,55 @@
 
     private void OnFilesSelected(InputFileChangeEventArgs e)
     {
+        int skippedCount = 0;
+        var skippedFiles = new List<string>();
+
         foreach (var file in e.GetMultipleFiles(MAX_FILES))
         {
+            var fileType = GetFileType(file.Name);
+
+            // 対象外ファイルをスキップ
+            if (fileType == FileType.Unknown)
+            {
+                skippedCount++;
+                skippedFiles.Add(file.Name);
+                continue; // キューに追加しない
+            }
+
             var convertFile = new ConvertFile
             {
                 Id = Guid.NewGuid(),
                 FileName = file.Name,
                 FileSize = file.Size,
-                Type = GetFileType(file.Name),
+                Type = fileType,
                 Status = ConversionStatus.Pending,
                 OriginalFile = file
             };
 
             files.Add(convertFile);
         }
+
+        // スキップされたファイルがある場合、トースト通知
+        if (skippedCount > 0)
+        {
+            string message;
+            if (skippedCount == 1)
+            {
+                // 1ファイルのみの場合、ファイル名を含める
+                var errorMessage = Localizer.GetString("Error.UnsupportedFileSkipped", skippedFiles[0]);
+                var supportedFormats = Localizer.GetString("Error.OnlySupportedFormats");
+                message = $"{errorMessage}<br><small>{supportedFormats}</small>";
+            }
+            else
+            {
+                // 複数ファイルの場合、件数をまとめて表示
+                var errorMessage = Localizer.GetString("Error.MultipleFilesSkipped", skippedCount);
+                var supportedFormats = Localizer.GetString("Error.OnlySupportedFormats");
+                message = $"{errorMessage}<br><small>{supportedFormats}</small>";
+            }
+            JS.InvokeVoidAsync("showToast", message, "warning", 6000);
+        }
+
         StateHasChanged();
     }
 

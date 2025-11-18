@@ -268,6 +268,15 @@
   <data name="Error.UnsupportedFormat" xml:space="preserve">
     <value>サポートされていない形式です</value>
   </data>
+  <data name="Error.UnsupportedFileSkipped" xml:space="preserve">
+    <value>{0} はサポートされていない形式のためスキップされました</value>
+  </data>
+  <data name="Error.OnlySupportedFormats" xml:space="preserve">
+    <value>サポートされている形式: .heic, .mov</value>
+  </data>
+  <data name="Error.MultipleFilesSkipped" xml:space="preserve">
+    <value>{0}ファイルがスキップされました（サポートされていない形式）</value>
+  </data>
   <data name="Error.ConversionFailed" xml:space="preserve">
     <value>変換に失敗しました</value>
   </data>

@@ -298,6 +298,84 @@ window.commonUtils = {
             // フォールバック: 古いブラウザ対応
             element.scrollIntoView();
         }
+    },
+
+    // ========== Toast通知関連 ==========
+
+    /**
+     * Toast通知を表示（Blazorから呼び出し）
+     * @param {string} message - 表示するメッセージ
+     * @param {string} type - トーストタイプ (success, warning, error, info)
+     * @param {number} duration - 表示時間（ミリ秒、デフォルト5000ms）
+     */
+    showToast(message, type = 'info', duration = 5000) {
+        try {
+            // トーストコンテナが存在するか確認
+            let toastContainer = document.getElementById('toast-container');
+            if (!toastContainer) {
+                console.warn('Toast container not found');
+                return;
+            }
+
+            // トースト要素を作成
+            const toastId = `toast-${Date.now()}`;
+            const iconMap = {
+                success: '✓',
+                warning: '⚠️',
+                error: '❌',
+                info: 'ℹ️'
+            };
+            const icon = iconMap[type] || iconMap.info;
+
+            const toastHtml = `
+                <div id="${toastId}" class="toast toast-${type}" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <span class="toast-icon">${icon}</span>
+                        <strong class="me-auto">${this.getToastTitle(type)}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                </div>
+            `;
+
+            // コンテナに追加
+            toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+
+            // Bootstrap Toastを初期化して表示
+            const toastElement = document.getElementById(toastId);
+            const bsToast = new bootstrap.Toast(toastElement, {
+                autohide: true,
+                delay: duration
+            });
+
+            bsToast.show();
+
+            // 非表示後にDOM から削除
+            toastElement.addEventListener('hidden.bs.toast', () => {
+                toastElement.remove();
+            });
+
+            console.log(`Toast表示: [${type}] ${message}`);
+        } catch (error) {
+            console.error('Toast表示エラー:', error);
+        }
+    },
+
+    /**
+     * Toastタイトルを取得
+     * @param {string} type - トーストタイプ
+     * @returns {string} - タイトル文字列
+     */
+    getToastTitle(type) {
+        const titles = {
+            success: 'Success',
+            warning: 'Warning',
+            error: 'Error',
+            info: 'Info'
+        };
+        return titles[type] || titles.info;
     }
 };
 
@@ -309,5 +387,6 @@ window.downloadFile = window.commonUtils.downloadSingleFile.bind(window.commonUt
 window.downloadFilesAsZip = window.commonUtils.downloadFilesAsZip.bind(window.commonUtils);
 window.triggerFileInput = window.commonUtils.triggerFileInput.bind(window.commonUtils);
 window.scrollToElement = window.commonUtils.scrollToElement.bind(window.commonUtils);
+window.showToast = window.commonUtils.showToast.bind(window.commonUtils);
 
 console.log('commonUtils.js 読み込み完了');
