@@ -1,5 +1,5 @@
 {
-  "name": "NoTransfer HEIC&MOV Converter",
+  "name": "NoTransfer Media Converter",
   "short_name": "NoTransfer",
   "description": "データ転送なしのメディア変換 - 完全ローカル処理",
   "start_url": "/",

@@ -36,7 +36,7 @@
                 <InputFile @ref="fileInput"
                           OnChange="OnFilesSelected"
                           multiple
-                          accept=".heic,.mov"
+                          accept=".heic,.mov,.mp4,.avi,.mkv,.wmv,.flv,.webm"
                           class="drop-zone-input" />
             </div>
 
@@ -65,7 +65,7 @@
                     {
                         <div class="file-item">
                             <div class="file-icon">
-                                @(file.Type == FileType.HEIC ? "🖼️" : "🎬")
+                                @GetFileIcon(file.Type)
                             </div>
                             <div class="file-info">
                                 <div class="file-name" title="@file.FileName">@file.FileName</div>
@@ -149,6 +149,13 @@
                     <input type="range" id="parallelCount"
                            @bind="settings.ParallelCount"
                            min="@MIN_PARALLEL_COUNT" max="@MAX_PARALLEL_COUNT" step="1" />
+                </div>
+
+                <div class="setting">
+                    <label>
+                        <input type="checkbox" @bind="settings.ExtractAudioOnly" />
+                        🎵 @Localizer.GetString("Settings.ExtractAudioOnly")
+                    </label>
                 </div>
             </div>
         </div>
@@ -273,8 +280,24 @@
     {
         if (file.ConvertedData != null)
         {
-            await JS.InvokeVoidAsync("downloadFile", file.ConvertedData, file.GetConvertedFileName());
+            await JS.InvokeVoidAsync("downloadFile", file.ConvertedData, file.GetConvertedFileName(settings.ExtractAudioOnly));
         }
+    }
+
+    private bool IsVideoType(FileType type)
+    {
+        return type == FileType.MOV || type == FileType.MP4 ||
+               type == FileType.AVI || type == FileType.MKV ||
+               type == FileType.WMV || type == FileType.FLV ||
+               type == FileType.WEBM;
+    }
+
+    private string GetFileIcon(FileType type)
+    {
+        if (type == FileType.HEIC) return "🖼️";
+        if (type == FileType.MP3) return "🎵";
+        if (IsVideoType(type)) return "🎬";
+        return "📄";
     }
 
     private async Task DownloadAll()
@@ -284,7 +307,7 @@
         {
             await JS.InvokeVoidAsync("downloadFilesAsZip", completedFiles.Select(f => new {
                 data = f.ConvertedData,
-                fileName = f.GetConvertedFileName()
+                fileName = f.GetConvertedFileName(settings.ExtractAudioOnly)
             }).ToArray());
         }
     }
@@ -308,6 +331,13 @@
         {
             ".heic" => FileType.HEIC,
             ".mov" => FileType.MOV,
+            ".mp4" => FileType.MP4,
+            ".avi" => FileType.AVI,
+            ".mkv" => FileType.MKV,
+            ".wmv" => FileType.WMV,
+            ".flv" => FileType.FLV,
+            ".webm" => FileType.WEBM,
+            ".mp3" => FileType.MP3,
             _ => FileType.Unknown
         };
     }

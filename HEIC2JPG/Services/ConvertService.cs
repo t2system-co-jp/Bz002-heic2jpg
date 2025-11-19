@@ -206,11 +206,181 @@ public class ConvertService : IConvertService
         return $"converted_{timestamp}.mp4";
     }
 
+    private string GenerateMp3FileName()
+    {
+        var timestamp = DateTime.Now.ToString(TIMESTAMP_FORMAT);
+        return $"converted_{timestamp}.mp3";
+    }
+
+    /// <summary>
+    /// 動画ファイルかどうかを判定
+    /// </summary>
+    private static bool IsVideoType(FileType type)
+    {
+        return type == FileType.MOV || type == FileType.MP4 ||
+               type == FileType.AVI || type == FileType.MKV ||
+               type == FileType.WMV || type == FileType.FLV ||
+               type == FileType.WEBM;
+    }
+
+    /// <summary>
+    /// 動画から音声抽出（MP3変換）
+    /// </summary>
+    public async Task<ConvertResult> ConvertVideoToMp3Async(byte[] videoData, ConvertOptions options, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            // FFmpeg初期化確認
+            await EnsureConverterInitializedAsync("ffmpegConverter", "ConversionMessage.InitializationFailed.Ffmpeg", cancellationToken);
+
+            // 進捗通知：変換開始
+            NotifyProgress("mp3-conversion", PROGRESS_START, "ConversionMessage.Starting");
+            await Task.Delay(500, cancellationToken);
+
+            // 変換オプション準備
+            var jsOptions = new
+            {
+                quality = "2"  // 高品質（0-9、2が推奨）
+            };
+
+            // 動画→MP3変換
+            IJSObjectReference mp3Blob;
+            try
+            {
+                mp3Blob = await _jsRuntime.InvokeAsync<IJSObjectReference>(
+                    "ffmpegConverter.convertToMp3",
+                    cancellationToken,
+                    videoData,
+                    jsOptions
+                );
+            }
+            catch (JSException jsEx)
+            {
+                var errorMsg = jsEx.Message;
+                if (errorMsg.Contains("Aborted") || errorMsg.Contains("ffmpeg"))
+                {
+                    throw new Exception(_localizer.GetString("ConversionError.FfmpegError", errorMsg));
+                }
+                throw new Exception(_localizer.GetString("ConversionError.JavaScriptError", errorMsg));
+            }
+
+            // 進捗通知：変換中
+            NotifyProgress("mp3-conversion", PROGRESS_CONVERTING, "ConversionMessage.GeneratingMp3");
+            await Task.Delay(500, cancellationToken);
+
+            // BlobからArrayBufferを取得
+            byte[] arrayBuffer;
+            try
+            {
+                arrayBuffer = await _jsRuntime.InvokeAsync<byte[]>("getBlobArrayBuffer", cancellationToken, mp3Blob);
+            }
+            catch (JSException jsEx)
+            {
+                throw new Exception(_localizer.GetString("ConversionError.ResultRetrievalFailed", jsEx.Message));
+            }
+
+            // 進捗通知：完了
+            NotifyProgress("mp3-conversion", PROGRESS_COMPLETED, "ConversionMessage.Completed");
+
+            return new ConvertResult
+            {
+                Success = true,
+                Data = arrayBuffer,
+                FileName = GenerateMp3FileName()
+            };
+        }
+        catch (OperationCanceledException)
+        {
+            return CreateErrorResult("ConversionMessage.Cancelled");
+        }
+        catch (Exception ex)
+        {
+            return CreateErrorResult("ConversionError.Mp3Conversion", ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// 汎用動画変換（MP4への統一）
+    /// </summary>
+    public async Task<ConvertResult> ConvertVideoAsync(byte[] videoData, ConvertOptions options, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            // FFmpeg初期化確認
+            await EnsureConverterInitializedAsync("ffmpegConverter", "ConversionMessage.InitializationFailed.Ffmpeg", cancellationToken);
+
+            // 進捗通知：変換開始
+            NotifyProgress("video-conversion", PROGRESS_START, "ConversionMessage.Starting");
+            await Task.Delay(500, cancellationToken);
+
+            // 変換オプション準備
+            var jsOptions = new
+            {
+                mode = options.ConversionMode,
+                quality = options.JpgQuality
+            };
+
+            // 動画変換
+            IJSObjectReference mp4Blob;
+            try
+            {
+                mp4Blob = await _jsRuntime.InvokeAsync<IJSObjectReference>(
+                    "ffmpegConverter.convertVideo",
+                    cancellationToken,
+                    videoData,
+                    jsOptions
+                );
+            }
+            catch (JSException jsEx)
+            {
+                var errorMsg = jsEx.Message;
+                if (errorMsg.Contains("Aborted") || errorMsg.Contains("ffmpeg"))
+                {
+                    throw new Exception(_localizer.GetString("ConversionError.FfmpegError", errorMsg));
+                }
+                throw new Exception(_localizer.GetString("ConversionError.JavaScriptError", errorMsg));
+            }
+
+            // 進捗通知：変換中
+            NotifyProgress("video-conversion", PROGRESS_CONVERTING, "ConversionMessage.GeneratingMp4");
+            await Task.Delay(500, cancellationToken);
+
+            // BlobからArrayBufferを取得
+            byte[] arrayBuffer;
+            try
+            {
+                arrayBuffer = await _jsRuntime.InvokeAsync<byte[]>("getBlobArrayBuffer", cancellationToken, mp4Blob);
+            }
+            catch (JSException jsEx)
+            {
+                throw new Exception(_localizer.GetString("ConversionError.ResultRetrievalFailed", jsEx.Message));
+            }
+
+            // 進捗通知：完了
+            NotifyProgress("video-conversion", PROGRESS_COMPLETED, "ConversionMessage.Completed");
+
+            return new ConvertResult
+            {
+                Success = true,
+                Data = arrayBuffer,
+                FileName = GenerateMp4FileName()
+            };
+        }
+        catch (OperationCanceledException)
+        {
+            return CreateErrorResult("ConversionMessage.Cancelled");
+        }
+        catch (Exception ex)
+        {
+            return CreateErrorResult("ConversionError.VideoConversion", ex.Message);
+        }
+    }
+
     public async Task ConvertFilesAsync(List<ConvertFile> files, ConversionSettings settings, Action<Guid, int> progressCallback)
     {
-        // MOVファイルがある場合は並行数を1に制限（FFmpeg排他制御）
-        var hasMov = files.Any(f => f.Type == Models.FileType.MOV);
-        var parallelCount = hasMov ? 1 : settings.ParallelCount;
+        // 動画ファイルがある場合は並行数を1に制限（FFmpeg排他制御）
+        var hasVideo = files.Any(f => IsVideoType(f.Type));
+        var parallelCount = hasVideo ? 1 : settings.ParallelCount;
 
         var semaphore = new SemaphoreSlim(parallelCount, parallelCount);
         var tasks = files.Select(async file =>
@@ -259,13 +429,31 @@ public class ConvertService : IConvertService
                 };
                 result = await ConvertHeicToJpgAsync(file.Data, options);
             }
-            else if (file.Type == FileType.MOV)
+            else if (IsVideoType(file.Type))
             {
                 var options = new ConvertOptions
                 {
                     ConversionMode = settings.ConversionMode.ToLower()
                 };
-                result = await ConvertMovToMp4Async(file.Data, options);
+
+                // 音声抽出モードの場合はMP3に変換
+                if (settings.ExtractAudioOnly)
+                {
+                    result = await ConvertVideoToMp3Async(file.Data, options);
+                }
+                else
+                {
+                    // MOVの場合は既存のメソッドを使用（後方互換性）
+                    if (file.Type == FileType.MOV)
+                    {
+                        result = await ConvertMovToMp4Async(file.Data, options);
+                    }
+                    else
+                    {
+                        // その他の動画形式は汎用変換メソッドを使用
+                        result = await ConvertVideoAsync(file.Data, options);
+                    }
+                }
             }
             else
             {

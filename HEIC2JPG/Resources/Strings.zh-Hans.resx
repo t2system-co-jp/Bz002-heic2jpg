@@ -61,7 +61,7 @@
 
   <!-- Application -->
   <data name="App.Title" xml:space="preserve">
-    <value>NoTransfer HEIC&amp;MOV Converter</value>
+    <value>NoTransfer Media Converter</value>
   </data>
   <data name="App.Description" xml:space="preserve">
     <value>无数据传输的媒体转换 - 完全本地处理</value>
@@ -89,7 +89,7 @@
     <value>拖放或选择文件</value>
   </data>
   <data name="DropZone.Description" xml:space="preserve">
-    <value>将HEIC图像或MOV视频拖放到此处</value>
+    <value>将图像或视频文件拖放到此处（HEIC, MOV, MP4, AVI, MKV, WMV, FLV, WebM）</value>
   </data>
   <data name="DropZone.ButtonSelect" xml:space="preserve">
     <value>选择文件</value>
@@ -246,6 +246,9 @@
   <data name="Settings.ParallelCount" xml:space="preserve">
     <value>并行处理</value>
   </data>
+  <data name="Settings.ExtractAudioOnly" xml:space="preserve">
+    <value>仅提取音频（MP3）</value>
+  </data>
 
   <!-- File Queue -->
   <data name="FileQueue.Title" xml:space="preserve">
@@ -272,7 +275,7 @@
     <value>{0} 已跳过（不支持的格式）</value>
   </data>
   <data name="Error.OnlySupportedFormats" xml:space="preserve">
-    <value>支持的格式: .heic, .mov</value>
+    <value>支持的格式: .heic, .mov, .mp4, .avi, .mkv, .wmv, .flv, .webm</value>
   </data>
   <data name="Error.MultipleFilesSkipped" xml:space="preserve">
     <value>{0}个文件已跳过（不支持的格式）</value>
@@ -305,6 +308,9 @@
   <data name="ConversionMessage.GeneratingMp4" xml:space="preserve">
     <value>正在生成MP4...</value>
   </data>
+  <data name="ConversionMessage.GeneratingMp3" xml:space="preserve">
+    <value>正在生成MP3...</value>
+  </data>
   <data name="ConversionMessage.Completed" xml:space="preserve">
     <value>转换完成</value>
   </data>
@@ -324,6 +330,12 @@
   </data>
   <data name="ConversionError.MovConversion" xml:space="preserve">
     <value>MOV转换错误：{0}</value>
+  </data>
+  <data name="ConversionError.Mp3Conversion" xml:space="preserve">
+    <value>MP3转换错误：{0}</value>
+  </data>
+  <data name="ConversionError.VideoConversion" xml:space="preserve">
+    <value>视频转换错误：{0}</value>
   </data>
   <data name="ConversionError.FfmpegError" xml:space="preserve">
     <value>FFmpeg转换处理错误：{0}</value>
@@ -423,7 +435,7 @@
     <value>拖放文件</value>
   </data>
   <data name="Guide.Step1Detail" xml:space="preserve">
-    <value>将HEIC图像或MOV视频添加到拖放区</value>
+    <value>将图像或视频文件添加到拖放区（支持HEIC, MOV, MP4, AVI, MKV, WMV, FLV, WebM）</value>
   </data>
   <data name="Guide.Step2" xml:space="preserve">
     <value>调整设置（可选）</value>

@@ -61,7 +61,7 @@
 
   <!-- Application -->
   <data name="App.Title" xml:space="preserve">
-    <value>NoTransfer HEIC&amp;MOV Converter</value>
+    <value>NoTransfer Media Converter</value>
   </data>
   <data name="App.Description" xml:space="preserve">
     <value>データ転送なしのメディア変換 - 完全ローカル処理</value>
@@ -89,7 +89,7 @@
     <value>ファイルをドロップまたは選択</value>
   </data>
   <data name="DropZone.Description" xml:space="preserve">
-    <value>HEIC画像・MOV動画をここにドロップしてください</value>
+    <value>画像・動画ファイルをここにドロップしてください（HEIC, MOV, MP4, AVI, MKV, WMV, FLV, WebM）</value>
   </data>
   <data name="DropZone.ButtonSelect" xml:space="preserve">
     <value>ファイルを選択</value>
@@ -246,6 +246,9 @@
   <data name="Settings.ParallelCount" xml:space="preserve">
     <value>並列処理数</value>
   </data>
+  <data name="Settings.ExtractAudioOnly" xml:space="preserve">
+    <value>音声のみ抽出（MP3）</value>
+  </data>
 
   <!-- File Queue -->
   <data name="FileQueue.Title" xml:space="preserve">
@@ -272,7 +275,7 @@
     <value>{0} はサポートされていない形式のためスキップされました</value>
   </data>
   <data name="Error.OnlySupportedFormats" xml:space="preserve">
-    <value>サポートされている形式: .heic, .mov</value>
+    <value>サポートされている形式: .heic, .mov, .mp4, .avi, .mkv, .wmv, .flv, .webm</value>
   </data>
   <data name="Error.MultipleFilesSkipped" xml:space="preserve">
     <value>{0}ファイルがスキップされました（サポートされていない形式）</value>
@@ -305,6 +308,9 @@
   <data name="ConversionMessage.GeneratingMp4" xml:space="preserve">
     <value>MP4生成中...</value>
   </data>
+  <data name="ConversionMessage.GeneratingMp3" xml:space="preserve">
+    <value>MP3生成中...</value>
+  </data>
   <data name="ConversionMessage.Completed" xml:space="preserve">
     <value>変換完了</value>
   </data>
@@ -324,6 +330,12 @@
   </data>
   <data name="ConversionError.MovConversion" xml:space="preserve">
     <value>MOV変換エラー: {0}</value>
+  </data>
+  <data name="ConversionError.Mp3Conversion" xml:space="preserve">
+    <value>MP3変換エラー: {0}</value>
+  </data>
+  <data name="ConversionError.VideoConversion" xml:space="preserve">
+    <value>動画変換エラー: {0}</value>
   </data>
   <data name="ConversionError.FfmpegError" xml:space="preserve">
     <value>FFmpeg変換処理でエラーが発生しました: {0}</value>
@@ -423,7 +435,7 @@
     <value>ファイルをドラッグ＆ドロップ</value>
   </data>
   <data name="Guide.Step1Detail" xml:space="preserve">
-    <value>HEIC画像やMOV動画をドロップゾーンに追加</value>
+    <value>画像・動画ファイルをドロップゾーンに追加（HEIC, MOV, MP4, AVI, MKV, WMV, FLV, WebM対応）</value>
   </data>
   <data name="Guide.Step2" xml:space="preserve">
     <value>設定を調整（オプション）</value>

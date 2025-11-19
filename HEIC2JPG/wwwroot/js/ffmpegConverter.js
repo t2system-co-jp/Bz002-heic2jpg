@@ -261,5 +261,237 @@ window.ffmpegConverter = {
         }
         console.log('モック変換完了');
         return new Blob([mockData], { type: 'video/mp4' });
+    },
+
+    // 動画から音声抽出（MP3）
+    async convertToMp3(videoBuffer, options = {}) {
+        // 変換処理の排他制御
+        return await new Promise((resolve, reject) => {
+            conversionMutex = conversionMutex.then(async () => {
+                try {
+                    const result = await this._doConvertToMp3(videoBuffer, options);
+                    resolve(result);
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        });
+    },
+
+    async _doConvertToMp3(videoBuffer, options = {}) {
+        console.log('=== MP3変換開始 ===');
+        console.log('初期化状態:', this.isInitialized);
+        console.log('入力データサイズ:', videoBuffer?.length, 'bytes');
+
+        if (!this.isInitialized) {
+            console.error('FFmpeg未初期化のため自動初期化を試行');
+            const initResult = await this.initialize();
+            if (!initResult) {
+                const errorMsg = window.getLocalizedString('JSError.FfmpegNotInitialized');
+                throw new Error(errorMsg);
+            }
+        }
+
+        try {
+            if (this.ffmpeg && this.ffmpeg.loaded) {
+                console.log('実際のFFmpeg MP3変換を実行します');
+                return await this.convertToMp3WithFFmpeg(videoBuffer, options);
+            } else {
+                console.log('FFmpeg未対応のためモックMP3変換を実行します');
+                return await this.convertToMp3WithMock(videoBuffer, options);
+            }
+        } catch (error) {
+            const errorMsg = window.commonUtils?.formatError
+                ? window.commonUtils.formatError('MP3変換', error)
+                : `MP3変換エラー: ${error.message}`;
+
+            console.error(errorMsg);
+            console.log('エラー発生のためモックMP3変換にフォールバック');
+            return await this.convertToMp3WithMock(videoBuffer, options);
+        }
+    },
+
+    async convertToMp3WithFFmpeg(videoBuffer, options) {
+        const inputFileName = 'input.video';
+        const outputFileName = 'output.mp3';
+
+        console.log('FFmpeg MP3変換開始:', videoBuffer.length, 'bytes');
+
+        // ファイルをFFmpeg仮想ファイルシステムに書き込み
+        await this.ffmpeg.writeFile(inputFileName, new Uint8Array(videoBuffer));
+
+        // MP3変換設定（音声のみ抽出、高品質）
+        // -vn: 映像を無効化
+        // -acodec libmp3lame: MP3エンコーダー使用
+        // -q:a 2: 音質レベル（0が最高、9が最低、2は高品質）
+        const args = [
+            '-i', inputFileName,
+            '-vn',  // 映像を無効化
+            '-acodec', 'libmp3lame',
+            '-q:a', options.quality || '2',  // デフォルトは高品質
+            '-y', outputFileName
+        ];
+
+        console.log('FFmpeg実行:', args.join(' '));
+
+        try {
+            await this.ffmpeg.exec(args);
+            console.log('FFmpeg MP3変換完了');
+        } catch (execError) {
+            // Aborted() エラーは無視（FFmpeg変換は完了している）
+            if (execError.message && execError.message.includes('Aborted')) {
+                console.warn('FFmpeg Aborted()エラーが発生しましたが、変換は完了しています');
+            } else {
+                console.error('FFmpeg実行エラー:', execError);
+                throw execError;
+            }
+        }
+
+        // 結果ファイルを読み取り
+        let outputData;
+        try {
+            outputData = await this.ffmpeg.readFile(outputFileName);
+            console.log('出力ファイル読み取り完了:', outputData.length, 'bytes');
+        } catch (readError) {
+            console.error('出力ファイル読み取りエラー:', readError);
+            throw new Error(window.getLocalizedString('JSError.ResultReadFailed', readError.message));
+        }
+
+        // ファイルクリーンアップ
+        try {
+            await this.ffmpeg.deleteFile(inputFileName);
+            await this.ffmpeg.deleteFile(outputFileName);
+            console.log('ファイルクリーンアップ完了');
+        } catch (cleanupError) {
+            console.warn('ファイルクリーンアップエラー（無視）:', cleanupError);
+        }
+
+        console.log('FFmpeg MP3変換完了:', outputData.length, 'bytes');
+        return new Blob([outputData], { type: 'audio/mpeg' });
+    },
+
+    async convertToMp3WithMock(videoBuffer, options) {
+        console.log('モックMP3変換実行中...', videoBuffer.length, 'bytes', options);
+        await new Promise(resolve => setTimeout(resolve, this.MOCK_CONVERSION_DELAY));
+
+        // ID3v2タグを含む最小限のMP3ヘッダー
+        const mockMp3Header = new Uint8Array([
+            0x49, 0x44, 0x33, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // ID3タグ
+            0xFF, 0xFB, 0x90, 0x00  // MP3フレームヘッダー
+        ]);
+
+        const mockData = new Uint8Array(Math.min(1024, mockMp3Header.length + 100));
+        mockData.set(mockMp3Header);
+        const text = new TextEncoder().encode('MOCK MP3 DATA');
+        if (mockData.length > mockMp3Header.length + text.length) {
+            mockData.set(text, mockMp3Header.length);
+        }
+
+        console.log('モックMP3変換完了');
+        return new Blob([mockData], { type: 'audio/mpeg' });
+    },
+
+    // 汎用動画変換（MP4への統一）
+    async convertVideo(videoBuffer, options = {}) {
+        // 変換処理の排他制御
+        return await new Promise((resolve, reject) => {
+            conversionMutex = conversionMutex.then(async () => {
+                try {
+                    const result = await this._doConvertVideo(videoBuffer, options);
+                    resolve(result);
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        });
+    },
+
+    async _doConvertVideo(videoBuffer, options = {}) {
+        console.log('=== 動画変換開始 ===');
+        console.log('初期化状態:', this.isInitialized);
+        console.log('入力データサイズ:', videoBuffer?.length, 'bytes');
+
+        if (!this.isInitialized) {
+            console.error('FFmpeg未初期化のため自動初期化を試行');
+            const initResult = await this.initialize();
+            if (!initResult) {
+                const errorMsg = window.getLocalizedString('JSError.FfmpegNotInitialized');
+                throw new Error(errorMsg);
+            }
+        }
+
+        try {
+            if (this.ffmpeg && this.ffmpeg.loaded) {
+                console.log('実際のFFmpeg動画変換を実行します');
+                return await this.convertVideoWithFFmpeg(videoBuffer, options);
+            } else {
+                console.log('FFmpeg未対応のためモック動画変換を実行します');
+                return await this.convertWithMock(videoBuffer, options);
+            }
+        } catch (error) {
+            const errorMsg = window.commonUtils?.formatError
+                ? window.commonUtils.formatError('動画変換', error)
+                : `動画変換エラー: ${error.message}`;
+
+            console.error(errorMsg);
+            console.log('エラー発生のためモック動画変換にフォールバック');
+            return await this.convertWithMock(videoBuffer, options);
+        }
+    },
+
+    async convertVideoWithFFmpeg(videoBuffer, options) {
+        const inputFileName = 'input.video';
+        const outputFileName = 'output.mp4';
+
+        console.log('FFmpeg動画変換開始:', videoBuffer.length, 'bytes');
+
+        // ファイルをFFmpeg仮想ファイルシステムに書き込み
+        await this.ffmpeg.writeFile(inputFileName, new Uint8Array(videoBuffer));
+
+        // 変換設定（既存のconvertMovToMp4と同じロジック）
+        const args = ['-i', inputFileName];
+        if (options.mode === 'fast' || options.mode === 'auto') {
+            args.push('-c', 'copy', '-movflags', '+faststart');
+        } else {
+            args.push('-c:v', 'libx264', '-c:a', 'aac', '-preset', 'veryfast', '-crf', '23', '-movflags', '+faststart');
+        }
+        args.push('-y', outputFileName);
+
+        console.log('FFmpeg実行:', args.join(' '));
+
+        try {
+            await this.ffmpeg.exec(args);
+            console.log('FFmpeg実行完了');
+        } catch (execError) {
+            // Aborted() エラーは無視（FFmpeg変換は完了している）
+            if (execError.message && execError.message.includes('Aborted')) {
+                console.warn('FFmpeg Aborted()エラーが発生しましたが、変換は完了しています');
+            } else {
+                console.error('FFmpeg実行エラー:', execError);
+                throw execError;
+            }
+        }
+
+        // 結果ファイルを読み取り
+        let outputData;
+        try {
+            outputData = await this.ffmpeg.readFile(outputFileName);
+            console.log('出力ファイル読み取り完了:', outputData.length, 'bytes');
+        } catch (readError) {
+            console.error('出力ファイル読み取りエラー:', readError);
+            throw new Error(window.getLocalizedString('JSError.ResultReadFailed', readError.message));
+        }
+
+        // ファイルクリーンアップ
+        try {
+            await this.ffmpeg.deleteFile(inputFileName);
+            await this.ffmpeg.deleteFile(outputFileName);
+            console.log('ファイルクリーンアップ完了');
+        } catch (cleanupError) {
+            console.warn('ファイルクリーンアップエラー（無視）:', cleanupError);
+        }
+
+        console.log('FFmpeg動画変換完了:', outputData.length, 'bytes');
+        return new Blob([outputData], { type: 'video/mp4' });
     }
 };

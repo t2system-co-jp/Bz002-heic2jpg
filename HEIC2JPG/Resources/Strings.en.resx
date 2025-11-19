@@ -61,7 +61,7 @@
 
   <!-- Application -->
   <data name="App.Title" xml:space="preserve">
-    <value>NoTransfer HEIC&amp;MOV Converter</value>
+    <value>NoTransfer Media Converter</value>
   </data>
   <data name="App.Description" xml:space="preserve">
     <value>Media Conversion Without Upload - Fully Local Processing</value>
@@ -89,7 +89,7 @@
     <value>Drop or Select Files</value>
   </data>
   <data name="DropZone.Description" xml:space="preserve">
-    <value>Drop HEIC images or MOV videos here</value>
+    <value>Drop image or video files here (HEIC, MOV, MP4, AVI, MKV, WMV, FLV, WebM)</value>
   </data>
   <data name="DropZone.ButtonSelect" xml:space="preserve">
     <value>Select Files</value>
@@ -246,6 +246,9 @@
   <data name="Settings.ParallelCount" xml:space="preserve">
     <value>Parallel Processing</value>
   </data>
+  <data name="Settings.ExtractAudioOnly" xml:space="preserve">
+    <value>Extract Audio Only (MP3)</value>
+  </data>
 
   <!-- File Queue -->
   <data name="FileQueue.Title" xml:space="preserve">
@@ -272,7 +275,7 @@
     <value>{0} was skipped (unsupported format)</value>
   </data>
   <data name="Error.OnlySupportedFormats" xml:space="preserve">
-    <value>Supported formats: .heic, .mov</value>
+    <value>Supported formats: .heic, .mov, .mp4, .avi, .mkv, .wmv, .flv, .webm</value>
   </data>
   <data name="Error.MultipleFilesSkipped" xml:space="preserve">
     <value>{0} files were skipped (unsupported format)</value>
@@ -305,6 +308,9 @@
   <data name="ConversionMessage.GeneratingMp4" xml:space="preserve">
     <value>Generating MP4...</value>
   </data>
+  <data name="ConversionMessage.GeneratingMp3" xml:space="preserve">
+    <value>Generating MP3...</value>
+  </data>
   <data name="ConversionMessage.Completed" xml:space="preserve">
     <value>Conversion completed</value>
   </data>
@@ -324,6 +330,12 @@
   </data>
   <data name="ConversionError.MovConversion" xml:space="preserve">
     <value>MOV conversion error: {0}</value>
+  </data>
+  <data name="ConversionError.Mp3Conversion" xml:space="preserve">
+    <value>MP3 conversion error: {0}</value>
+  </data>
+  <data name="ConversionError.VideoConversion" xml:space="preserve">
+    <value>Video conversion error: {0}</value>
   </data>
   <data name="ConversionError.FfmpegError" xml:space="preserve">
     <value>FFmpeg conversion process error: {0}</value>
@@ -423,7 +435,7 @@
     <value>Drag &amp; Drop Files</value>
   </data>
   <data name="Guide.Step1Detail" xml:space="preserve">
-    <value>Add HEIC images or MOV videos to the drop zone</value>
+    <value>Add image or video files to the drop zone (supports HEIC, MOV, MP4, AVI, MKV, WMV, FLV, WebM)</value>
   </data>
   <data name="Guide.Step2" xml:space="preserve">
     <value>Adjust Settings (Optional)</value>
