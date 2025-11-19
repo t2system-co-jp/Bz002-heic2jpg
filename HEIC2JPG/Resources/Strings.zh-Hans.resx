@@ -426,6 +426,9 @@
   <data name="Hero.CTAGuide" xml:space="preserve">
     <value>查看使用方法</value>
   </data>
+  <data name="Hero.AudioExtraction" xml:space="preserve">
+    <value>视频 → MP3音频提取</value>
+  </data>
 
   <!-- Usage Guide -->
   <data name="Guide.Title" xml:space="preserve">

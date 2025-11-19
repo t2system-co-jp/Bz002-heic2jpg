@@ -2021,3 +2021,60 @@ label {
         width: 100%;
     }
 }
+
+/* ==========================================
+   ヒーローセクション - 対応フォーマット
+   ========================================== */
+
+.hero-formats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+}
+
+.format-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--hero-feature-bg);
+    border: 1px solid var(--hero-feature-border);
+    border-radius: var(--radius-full);
+    color: var(--color-text-inverse);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    transition: all var(--transition-base);
+}
+
+.format-badge:hover {
+    background: var(--hero-feature-bg-hover);
+    transform: translateY(-2px);
+}
+
+.format-icon {
+    font-size: 1.2em;
+    line-height: 1;
+}
+
+.format-text {
+    white-space: nowrap;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .hero-formats {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .format-badge {
+        justify-content: center;
+    }
+
+    .format-text {
+        white-space: normal;
+        text-align: center;
+    }
+}
