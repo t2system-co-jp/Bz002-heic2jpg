@@ -89,7 +89,7 @@
     <value>ファイルをドロップまたは選択</value>
   </data>
   <data name="DropZone.Description" xml:space="preserve">
-    <value>画像・動画ファイルをここにドロップしてください（HEIC, MOV, MP4, AVI, MKV, WMV, FLV, WebM）</value>
+    <value>画像・動画・音声ファイルをここにドロップしてください（HEIC, MOV, MP4, WAV, MP3など）</value>
   </data>
   <data name="DropZone.ButtonSelect" xml:space="preserve">
     <value>ファイルを選択</value>
@@ -275,7 +275,7 @@
     <value>{0} はサポートされていない形式のためスキップされました</value>
   </data>
   <data name="Error.OnlySupportedFormats" xml:space="preserve">
-    <value>サポートされている形式: .heic, .mov, .mp4, .avi, .mkv, .wmv, .flv, .webm</value>
+    <value>サポートされている形式: .heic, .mov, .mp4, .avi, .mkv, .wmv, .flv, .webm, .wav, .aac, .m4a, .flac, .wma, .mp3</value>
   </data>
   <data name="Error.MultipleFilesSkipped" xml:space="preserve">
     <value>{0}ファイルがスキップされました（サポートされていない形式）</value>
@@ -427,7 +427,7 @@
     <value>使い方を見る</value>
   </data>
   <data name="Hero.AudioExtraction" xml:space="preserve">
-    <value>動画 → MP3音声抽出</value>
+    <value>動画・音声 → MP3変換</value>
   </data>
 
   <!-- Usage Guide -->
@@ -438,7 +438,7 @@
     <value>ファイルをドラッグ＆ドロップ</value>
   </data>
   <data name="Guide.Step1Detail" xml:space="preserve">
-    <value>画像・動画ファイルをドロップゾーンに追加（HEIC, MOV, MP4, AVI, MKV, WMV, FLV, WebM対応）</value>
+    <value>画像・動画・音声ファイルをドロップゾーンに追加（HEIC, 動画全般, 音声全般対応）</value>
   </data>
   <data name="Guide.Step2" xml:space="preserve">
     <value>設定を調整（オプション）</value>
@@ -453,7 +453,7 @@
     <value>変換ボタンをクリックして、完了後にダウンロード</value>
   </data>
   <data name="Guide.LocalBadge" xml:space="preserve">
-    <value>🔒 100% LOCAL</value>
+    <value>100% LOCAL</value>
   </data>
   <data name="Guide.LocalBadgeDetail" xml:space="preserve">
     <value>すべての処理はブラウザ内で完結します</value>

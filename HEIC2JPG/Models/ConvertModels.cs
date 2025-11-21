@@ -19,6 +19,11 @@ public enum FileType
     WMV,
     FLV,
     WEBM,
+    WAV,
+    AAC,
+    M4A,
+    FLAC,
+    WMA,
     MP3,
     Unknown
 }
@@ -53,6 +58,10 @@ public class ConvertFile
             // 動画形式の場合はMP4に統一
             return Path.ChangeExtension(FileName, ".mp4");
         }
+        else if (IsAudioType(Type))
+        {
+            return Path.ChangeExtension(FileName, ".mp3");
+        }
         return FileName;
     }
 
@@ -62,6 +71,13 @@ public class ConvertFile
                type == FileType.AVI || type == FileType.MKV ||
                type == FileType.WMV || type == FileType.FLV ||
                type == FileType.WEBM;
+    }
+
+    private static bool IsAudioType(FileType type)
+    {
+        return type == FileType.MP3 || type == FileType.WAV ||
+               type == FileType.AAC || type == FileType.M4A ||
+               type == FileType.FLAC || type == FileType.WMA;
     }
 }
 

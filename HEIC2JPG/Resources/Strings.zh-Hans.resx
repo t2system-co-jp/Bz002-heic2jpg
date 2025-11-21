@@ -89,7 +89,7 @@
     <value>拖放或选择文件</value>
   </data>
   <data name="DropZone.Description" xml:space="preserve">
-    <value>将图像或视频文件拖放到此处（HEIC, MOV, MP4, AVI, MKV, WMV, FLV, WebM）</value>
+    <value>将图像、视频或音频文件拖放到此处（HEIC, MOV, MP4, WAV, MP3等）</value>
   </data>
   <data name="DropZone.ButtonSelect" xml:space="preserve">
     <value>选择文件</value>
@@ -275,7 +275,7 @@
     <value>{0} 已跳过（不支持的格式）</value>
   </data>
   <data name="Error.OnlySupportedFormats" xml:space="preserve">
-    <value>支持的格式: .heic, .mov, .mp4, .avi, .mkv, .wmv, .flv, .webm</value>
+    <value>支持的格式: .heic, .mov, .mp4, .avi, .mkv, .wmv, .flv, .webm, .wav, .aac, .m4a, .flac, .wma, .mp3</value>
   </data>
   <data name="Error.MultipleFilesSkipped" xml:space="preserve">
     <value>{0}个文件已跳过（不支持的格式）</value>
@@ -427,7 +427,7 @@
     <value>查看使用方法</value>
   </data>
   <data name="Hero.AudioExtraction" xml:space="preserve">
-    <value>视频 → MP3音频提取</value>
+    <value>视频/音频 → MP3转换</value>
   </data>
 
   <!-- Usage Guide -->
@@ -438,7 +438,7 @@
     <value>拖放文件</value>
   </data>
   <data name="Guide.Step1Detail" xml:space="preserve">
-    <value>将图像或视频文件添加到拖放区（支持HEIC, MOV, MP4, AVI, MKV, WMV, FLV, WebM）</value>
+    <value>将图像、视频或音频文件添加到拖放区（支持HEIC, 视频和音频格式）</value>
   </data>
   <data name="Guide.Step2" xml:space="preserve">
     <value>调整设置（可选）</value>
@@ -453,7 +453,7 @@
     <value>点击转换按钮，完成后下载</value>
   </data>
   <data name="Guide.LocalBadge" xml:space="preserve">
-    <value>🔒 100% 本地</value>
+    <value>100% 本地</value>
   </data>
   <data name="Guide.LocalBadgeDetail" xml:space="preserve">
     <value>所有处理完全在浏览器内完成</value>

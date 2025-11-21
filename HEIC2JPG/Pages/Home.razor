@@ -36,7 +36,7 @@
                 <InputFile @ref="fileInput"
                           OnChange="OnFilesSelected"
                           multiple
-                          accept=".heic,.mov,.mp4,.avi,.mkv,.wmv,.flv,.webm"
+                          accept=".heic,.mov,.mp4,.avi,.mkv,.wmv,.flv,.webm,.wav,.aac,.m4a,.flac,.wma"
                           class="drop-zone-input" />
             </div>
 
@@ -301,10 +301,17 @@
                type == FileType.WEBM;
     }
 
+    private bool IsAudioType(FileType type)
+    {
+        return type == FileType.MP3 || type == FileType.WAV ||
+               type == FileType.AAC || type == FileType.M4A ||
+               type == FileType.FLAC || type == FileType.WMA;
+    }
+
     private string GetFileIconName(FileType type)
     {
         if (type == FileType.HEIC) return "photo";
-        if (type == FileType.MP3) return "musical-note";
+        if (type == FileType.MP3 || IsAudioType(type)) return "musical-note";
         if (IsVideoType(type)) return "film";
         return "document";
     }
@@ -347,6 +354,11 @@
             ".flv" => FileType.FLV,
             ".webm" => FileType.WEBM,
             ".mp3" => FileType.MP3,
+            ".wav" => FileType.WAV,
+            ".aac" => FileType.AAC,
+            ".m4a" => FileType.M4A,
+            ".flac" => FileType.FLAC,
+            ".wma" => FileType.WMA,
             _ => FileType.Unknown
         };
     }

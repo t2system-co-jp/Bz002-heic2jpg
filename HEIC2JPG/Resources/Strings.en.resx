@@ -89,7 +89,7 @@
     <value>Drop or Select Files</value>
   </data>
   <data name="DropZone.Description" xml:space="preserve">
-    <value>Drop image or video files here (HEIC, MOV, MP4, AVI, MKV, WMV, FLV, WebM)</value>
+    <value>Drop image, video, or audio files here (HEIC, MOV, MP4, WAV, MP3, etc.)</value>
   </data>
   <data name="DropZone.ButtonSelect" xml:space="preserve">
     <value>Select Files</value>
@@ -275,7 +275,7 @@
     <value>{0} was skipped (unsupported format)</value>
   </data>
   <data name="Error.OnlySupportedFormats" xml:space="preserve">
-    <value>Supported formats: .heic, .mov, .mp4, .avi, .mkv, .wmv, .flv, .webm</value>
+    <value>Supported formats: .heic, .mov, .mp4, .avi, .mkv, .wmv, .flv, .webm, .wav, .aac, .m4a, .flac, .wma, .mp3</value>
   </data>
   <data name="Error.MultipleFilesSkipped" xml:space="preserve">
     <value>{0} files were skipped (unsupported format)</value>
@@ -427,7 +427,7 @@
     <value>How to Use</value>
   </data>
   <data name="Hero.AudioExtraction" xml:space="preserve">
-    <value>Video → MP3 Audio Extraction</value>
+    <value>Video/Audio → MP3 Conversion</value>
   </data>
 
   <!-- Usage Guide -->
@@ -438,7 +438,7 @@
     <value>Drag &amp; Drop Files</value>
   </data>
   <data name="Guide.Step1Detail" xml:space="preserve">
-    <value>Add image or video files to the drop zone (supports HEIC, MOV, MP4, AVI, MKV, WMV, FLV, WebM)</value>
+    <value>Add image, video, or audio files to the drop zone (supports HEIC, video, and audio formats)</value>
   </data>
   <data name="Guide.Step2" xml:space="preserve">
     <value>Adjust Settings (Optional)</value>
@@ -453,7 +453,7 @@
     <value>Click the convert button and download after completion</value>
   </data>
   <data name="Guide.LocalBadge" xml:space="preserve">
-    <value>🔒 100% LOCAL</value>
+    <value>100% LOCAL</value>
   </data>
   <data name="Guide.LocalBadgeDetail" xml:space="preserve">
     <value>All processing is done entirely within your browser</value>

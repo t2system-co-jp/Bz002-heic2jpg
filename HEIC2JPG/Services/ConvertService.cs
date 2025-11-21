@@ -224,6 +224,16 @@ public class ConvertService : IConvertService
     }
 
     /// <summary>
+    /// 音声ファイルかどうかを判定
+    /// </summary>
+    private static bool IsAudioType(FileType type)
+    {
+        return type == FileType.MP3 || type == FileType.WAV ||
+               type == FileType.AAC || type == FileType.M4A ||
+               type == FileType.FLAC || type == FileType.WMA;
+    }
+
+    /// <summary>
     /// 動画から音声抽出（MP3変換）
     /// </summary>
     public async Task<ConvertResult> ConvertVideoToMp3Async(byte[] videoData, ConvertOptions options, CancellationToken cancellationToken = default)
@@ -378,9 +388,9 @@ public class ConvertService : IConvertService
 
     public async Task ConvertFilesAsync(List<ConvertFile> files, ConversionSettings settings, Action<Guid, int> progressCallback)
     {
-        // 動画ファイルがある場合は並行数を1に制限（FFmpeg排他制御）
-        var hasVideo = files.Any(f => IsVideoType(f.Type));
-        var parallelCount = hasVideo ? 1 : settings.ParallelCount;
+        // 動画ファイルまたは音声ファイルがある場合は並行数を1に制限（FFmpeg排他制御）
+        var hasVideoOrAudio = files.Any(f => IsVideoType(f.Type) || IsAudioType(f.Type));
+        var parallelCount = hasVideoOrAudio ? 1 : settings.ParallelCount;
 
         var semaphore = new SemaphoreSlim(parallelCount, parallelCount);
         var tasks = files.Select(async file =>
@@ -454,6 +464,12 @@ public class ConvertService : IConvertService
                         result = await ConvertVideoAsync(file.Data, options);
                     }
                 }
+            }
+            else if (IsAudioType(file.Type))
+            {
+                var options = new ConvertOptions();
+                // 音声ファイルは常にMP3に変換（ConvertVideoToMp3Asyncを再利用）
+                result = await ConvertVideoToMp3Async(file.Data, options);
             }
             else
             {
