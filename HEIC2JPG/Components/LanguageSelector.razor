@@ -12,9 +12,18 @@
             aria-label="@Localizer.GetString("Language.AriaLabel")"
             @onclick="ToggleMenu"
             @onkeydown="HandleKeyDown">
-        <span class="language-icon">🌐</span>
+        <span class="language-icon"><HeroIcon Name="globe-alt" Class="w-5 h-5" /></span>
         <span class="language-label">@Localizer.GetString("Language.Label")</span>
-        <span class="language-arrow">@(isOpen ? "▲" : "▼")</span>
+        <span class="language-arrow">
+            @if (isOpen)
+            {
+                <HeroIcon Name="chevron-up" Class="w-4 h-4" />
+            }
+            else
+            {
+                <HeroIcon Name="chevron-down" Class="w-4 h-4" />
+            }
+        </span>
     </button>
 
     @if (isOpen)
@@ -35,7 +44,7 @@
                     <span class="language-item-name">@lang.NativeName</span>
                     @if (isSelected)
                     {
-                        <span class="language-item-check">✓</span>
+                        <span class="language-item-check"><HeroIcon Name="check" Class="w-4 h-4" /></span>
                     }
                 </button>
             }

@@ -5,8 +5,17 @@
     <div class="guide-header" @onclick="ToggleExpand" @onkeypress="OnKeyPress"
          tabindex="0" role="button" aria-expanded="@IsExpanded"
          aria-label="@Localizer.GetString("Guide.Title")">
-        <h3>📖 @Localizer.GetString("Guide.Title")</h3>
-        <span class="guide-toggle-icon">@(IsExpanded ? "▼" : "▶")</span>
+        <h3><HeroIcon Name="book-open" Class="w-6 h-6" /> @Localizer.GetString("Guide.Title")</h3>
+        <span class="guide-toggle-icon">
+            @if (IsExpanded)
+            {
+                <HeroIcon Name="chevron-down" Class="w-5 h-5" />
+            }
+            else
+            {
+                <HeroIcon Name="chevron-right" Class="w-5 h-5" />
+            }
+        </span>
     </div>
 
     @if (IsExpanded)
@@ -40,7 +49,7 @@
 
             <div class="guide-footer">
                 <div class="privacy-badge">
-                    <span class="privacy-icon">🔒</span>
+                    <span class="privacy-icon"><HeroIcon Name="lock-closed" Class="w-5 h-5" /></span>
                     <div class="privacy-text">
                         <strong>@Localizer.GetString("Guide.LocalBadge")</strong>
                         <small>@Localizer.GetString("Guide.LocalBadgeDetail")</small>

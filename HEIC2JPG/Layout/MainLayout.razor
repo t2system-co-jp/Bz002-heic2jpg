@@ -9,8 +9,10 @@
         <div class="header-content">
             <div class="header-left">
                 <div class="emoji-logo">
-                    <span class="emoji-base">☁️</span>
-                    <span class="emoji-overlay">🚫</span>
+                    <div class="relative w-10 h-10">
+                        <HeroIcon Name="cloud" Class="w-10 h-10 text-white" />
+                        <HeroIcon Name="no-symbol" Class="w-6 h-6 text-red-500 absolute -bottom-1 -right-1 bg-white rounded-full" />
+                    </div>
                 </div>
                 <h1 class="app-title">@Localizer.GetString("App.Title")</h1>
             </div>

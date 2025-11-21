@@ -9,7 +9,7 @@
      aria-label="@GetAriaLabel()"
      @onclick="OpenTrustCenter"
      @onkeydown="HandleKeyDown">
-    <span class="shield-icon">@GetStatusIcon()</span>
+    <span class="shield-icon"><HeroIcon Name="@GetStatusIcon()" Class="w-5 h-5" /></span>
     <span class="shield-text">@GetStatusText()</span>
 </div>
 
@@ -73,11 +73,11 @@
     {
         if (NetworkMonitor.RequestCount == 0)
         {
-            return Localizer.GetString("NetworkShield.Safe");
+            return "shield-check";
         }
         else
         {
-            return Localizer.GetString("NetworkShield.Warning");
+            return "exclamation-triangle";
         }
     }
 
