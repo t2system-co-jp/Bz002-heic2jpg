@@ -7,7 +7,9 @@ HEIC2JPG & MOV2MP4 Converter
 
 ### 目的
 - HEIC（iPhone画像形式）をJPGに変換
-- MOV（動画ファイル）をMP4に変換
+- 動画ファイル（MOV, MP4, AVI, MKV, WMV, FLV, WebM）をMP4に変換
+- 動画・音声ファイルからMP3音声を抽出
+- 音声ファイル（MP3, WAV, FLAC, AAC, OGG, M4A, WMA）をMP3に変換
 - **完全ローカル処理**でプライバシーを保護
 - ネットワーク送信一切なし（検証可能）
 

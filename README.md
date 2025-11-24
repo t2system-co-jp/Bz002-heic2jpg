@@ -7,6 +7,7 @@
 - **HEIC → JPG** 画像変換
 - **動画変換** MP4, MOV, AVI, MKV, WMV, FLV, WebM → MP4
 - **動画 → MP3** 音声抽出
+- **音声変換** MP3, WAV, FLAC, AAC, OGG, M4A, WMA → MP3
 - **完全オフライン動作**（データはブラウザ外へ送信されません）
 - **バッチ処理対応**（最大100件、2GB/ファイル）
 - **レスポンシブデザイン**（PC・タブレット・スマートフォン完全対応）
@@ -25,7 +26,12 @@
 | 入力フォーマット | 出力フォーマット | 特徴 |
 |:---|:---|:---|
 | `.mov` `.mp4` `.avi` `.mkv` `.wmv` `.flv` `.webm` | `.mp4` | 高速リマックスまたは高品質再エンコード |
-| `.mov` `.mp4` `.avi` `.mkv` `.wmv` `.flv` `.webm` | `.mp3` 🎵 | 動画から音声のみを抽出 |
+| `.mov` `.mp4` `.avi` `.mkv` `.wmv` `.flv` `.webm` | `.mp3` | 動画から音声のみを抽出 |
+
+### 音声変換
+| 入力フォーマット | 出力フォーマット | 特徴 |
+|:---|:---|:---|
+| `.mp3` `.wav` `.flac` `.aac` `.ogg` `.m4a` `.wma` | `.mp3` | 音声フォーマット間の変換 |
 
 ### ファイル制限
 - **最大ファイルサイズ**: 2GB/ファイル
@@ -79,6 +85,7 @@ HEIC2JPG/
 │   ├── NetworkShield.razor       # Network Shield バッジ
 │   ├── TrustCenter.razor         # Trust Center ダイアログ
 │   ├── HeroSection.razor         # ヒーローセクション
+│   ├── HeroIcon.razor            # SVGアイコンコンポーネント
 │   ├── UsageGuide.razor          # 使い方ガイド
 │   ├── ThemeToggle.razor         # テーマ切り替え
 │   └── LanguageSelector.razor    # 言語切替メニュー
@@ -271,4 +278,4 @@ WASMライブラリが正常に動作するブラウザ環境での実行が必�
 
 ## 📚 開発状況
 
-詳細な開発履歴と技術的な実装状況については、[DEVELOPMENT_LOG.md](/mnt/c/Users/t_ogura/Desktop/Develop/CC_HEIC2JPG/DEVELOPMENT_LOG.md) をご参照ください。
+詳細な開発履歴と技術的な実装状況については、[DEVELOPMENT_LOG.md](DEVELOPMENT_LOG.md) をご参照ください。

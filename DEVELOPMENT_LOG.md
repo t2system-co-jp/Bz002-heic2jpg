@@ -6,6 +6,121 @@
 
 ## 開発タイムライン
 
+### 2025-11-21: 音声ファイル入力対応
+
+**コミット**: `1d5d34b 音声ファイル対応`
+
+**実装内容**:
+
+#### 1. 音声ファイルの入力サポート
+- **ファイル**: `HEIC2JPG/Models/ConvertModels.cs`
+- **対応フォーマット**: MP3, WAV, FLAC, AAC, OGG, M4A, WMA
+- 音声ファイルをMP3に変換可能
+
+#### 2. UI の拡張
+- **ファイル**: `HEIC2JPG/Pages/Home.razor`
+- 音声ファイルのドラッグ&ドロップ対応
+- ファイル入力で音声フォーマットを受付
+
+#### 3. 変換サービスの拡張
+- **ファイル**: `HEIC2JPG/Services/ConvertService.cs`
+- 音声ファイル → MP3 変換処理を追加
+- FFmpeg による音声変換処理
+
+#### 4. 多言語リソース更新
+- **ファイル**: `HEIC2JPG/Resources/Strings.*.resx`
+- 音声関連のUI文言を3言語で追加
+
+**成果**:
+- 動画だけでなく音声ファイルも直接変換可能に
+- 音声フォーマット間の変換に対応
+
+**変更ファイル**:
+- `HEIC2JPG/Models/ConvertModels.cs`
+- `HEIC2JPG/Pages/Home.razor`
+- `HEIC2JPG/Services/ConvertService.cs`
+- `HEIC2JPG/Resources/Strings.resx`
+- `HEIC2JPG/Resources/Strings.en.resx`
+- `HEIC2JPG/Resources/Strings.zh-Hans.resx`
+
+---
+
+### 2025-11-21: アイコンのSVG化
+
+**コミット**: `0e187c3 アイコンのSVG化`
+
+**実装内容**:
+
+#### 1. HeroIcon コンポーネントの新規作成
+- **ファイル**: `HEIC2JPG/Components/HeroIcon.razor`
+- SVGベースのアイコンコンポーネント
+- 絵文字からSVGインラインアイコンへ移行
+
+#### 2. 各コンポーネントのアイコン更新
+- **HeroSection.razor**: ヒーローアイコンをSVG化
+- **LanguageSelector.razor**: 言語アイコンをSVG化
+- **NetworkShield.razor**: シールドアイコンをSVG化
+- **ThemeToggle.razor**: テーマアイコンをSVG化
+- **TrustCenter.razor**: トラストアイコンをSVG化
+- **UsageGuide.razor**: ガイドアイコンをSVG化
+
+#### 3. CSSの更新
+- **ファイル**: `HEIC2JPG/wwwroot/css/app.css`, `converter.css`
+- SVGアイコン用のスタイル定義
+- テーマカラーとの連動対応
+
+**技術的な決定**:
+- 絵文字は環境依存で表示が異なるため、SVGに統一
+- インラインSVGにより外部リソース不要
+- CSS変数でテーマカラーに連動
+
+**成果**:
+- 一貫したアイコンデザイン
+- スケーラブルで高品質な表示
+- ダークモード/ライトモードでの適切な色変化
+
+**変更ファイル**:
+- `HEIC2JPG/Components/HeroIcon.razor`（新規）
+- `HEIC2JPG/Components/HeroSection.razor`
+- `HEIC2JPG/Components/LanguageSelector.razor`
+- `HEIC2JPG/Components/NetworkShield.razor`
+- `HEIC2JPG/Components/ThemeToggle.razor`
+- `HEIC2JPG/Components/TrustCenter.razor`
+- `HEIC2JPG/Components/UsageGuide.razor`
+- `HEIC2JPG/Layout/MainLayout.razor`
+- `HEIC2JPG/Pages/Home.razor`
+- `HEIC2JPG/wwwroot/css/app.css`
+- `HEIC2JPG/wwwroot/css/converter.css`
+
+---
+
+### 2025-11-20: 複数動画フォーマット対応・ファイルチェック強化
+
+**コミット**: `6da4ab8 複数の動画フォーマットや音声のみ出力に対応`
+**コミット**: `251baae ファイルのチェックの追加`
+
+**実装内容**:
+
+#### 1. 入力フォーマットの拡張
+- **追加フォーマット**: AVI, MKV, WMV, FLV, WebM
+- MOV, MP4 に加えて幅広い動画形式をサポート
+
+#### 2. 音声のみ出力機能
+- 動画から MP3 音声を抽出する機能を追加
+- 設定パネルで「音声のみ抽出」オプションを提供
+
+#### 3. ファイル検証の強化
+- 対応フォーマットの事前チェック
+- ファイルサイズ上限の検証
+- エラー時の適切なフィードバック
+
+**成果**:
+- 幅広い動画フォーマットに対応
+- 動画から音声のみを抽出可能に
+- 不正ファイルの早期検出
+
+---
+
 ### 2025-11-10: スマートフォン対応実装
 
 **実装内容**:
@@ -431,21 +546,18 @@ Cross-Origin-Embedder-Policy: require-corp
 
 ## 今後の開発予定
 
-### Phase B: WASM 変換機能の動作検証・修正
-- libheif 実変換の動作確認
-- FFmpeg 実変換の動作確認
-- エラー時のフォールバック動作確認
-
-### Phase C: 品質チェック・最終調整
-- LINT実行（dotnet format）
-- ビルド検証（dotnet build）
-- ブラウザでの動作確認
-
 ### 今後の拡張候補
-- WebP / AVIF 対応
-- ダークモード
+- WebP / AVIF 対応（次世代画像フォーマット）
 - ドラッグ&ドロップ並べ替え
 - Web Worker による処理分離
+- 変換中のプレビュー表示
+
+### ✅ 実装完了
+- ~~ダークモード~~ → テーマ切り替え機能として実装済み（ライト/ダーク/自動）
+- ~~WASM 変換機能の動作検証~~ → Phase B 完了
+- ~~音声ファイル対応~~ → 2025-11-21 実装
+- ~~アイコンのSVG化~~ → 2025-11-21 実装
+- ~~複数動画フォーマット対応~~ → 2025-11-20 実装
 
 ---
 
