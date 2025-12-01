@@ -1,0 +1,85 @@
+@page "/licenses"
+@using HEIC2JPG.Models
+@inject HttpClient Http
+
+<PageTitle>OSS Licenses</PageTitle>
+
+<h1>OSS Licenses</h1>
+
+<div class="alert alert-info mb-4">
+    <h5 class="alert-heading">📖 Open Source Software</h5>
+    <p class="mb-2">
+        This application is open source and uses various open-source libraries.
+        In accordance with GPL/LGPL license requirements, the complete source code is available at:
+    </p>
+    <p class="mb-0">
+        <a href="https://github.com/t2system-co-jp/Bz002-heic2jpg" target="_blank" rel="noopener noreferrer" class="alert-link">
+            <strong>https://github.com/t2system-co-jp/Bz002-heic2jpg</strong>
+        </a>
+    </p>
+</div>
+
+@if (licenses == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Package</th>
+                    <th>Version</th>
+                    <th>License</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var license in licenses)
+                {
+                    <tr>
+                        <td>@license.PackageName</td>
+                        <td>@license.Version</td>
+                        <td>
+                            <a href="@license.LicenseUrl" target="_blank" rel="noopener noreferrer">
+                                @license.LicenseType
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-4">
+        <h5>License Compliance Notes</h5>
+        <ul>
+            <li>
+                <strong>GPL/LGPL Libraries:</strong> This application includes libraries licensed under GPL and LGPL.
+                The source code is provided in accordance with these license terms.
+            </li>
+            <li>
+                <strong>Modifications:</strong> Any modifications to GPL/LGPL components are also available in the source repository.
+            </li>
+            <li>
+                <strong>No Warranty:</strong> This software is provided "as is" without warranty of any kind, as specified in the respective licenses.
+            </li>
+        </ul>
+    </div>
+}
+
+@code {
+    private LicenseItem[]? licenses;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            licenses = await Http.GetFromJsonAsync<LicenseItem[]>("licenses.json");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading licenses: {ex.Message}");
+        }
+    }
+}

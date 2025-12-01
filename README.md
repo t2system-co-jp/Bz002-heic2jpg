@@ -18,20 +18,20 @@
 ## 📁 対応フォーマット
 
 ### 画像変換
-| 入力フォーマット | 出力フォーマット | 特徴 |
-|:---|:---|:---|
-| `.heic` | `.jpg` | EXIF情報保持可能、品質調整可能 |
+| 入力フォーマット | 出力フォーマット | 特徴                           |
+| :--------------- | :--------------- | :----------------------------- |
+| `.heic`          | `.jpg`           | EXIF情報保持可能、品質調整可能 |
 
 ### 動画変換
-| 入力フォーマット | 出力フォーマット | 特徴 |
-|:---|:---|:---|
-| `.mov` `.mp4` `.avi` `.mkv` `.wmv` `.flv` `.webm` | `.mp4` | 高速リマックスまたは高品質再エンコード |
-| `.mov` `.mp4` `.avi` `.mkv` `.wmv` `.flv` `.webm` | `.mp3` | 動画から音声のみを抽出 |
+| 入力フォーマット                                  | 出力フォーマット | 特徴                                   |
+| :------------------------------------------------ | :--------------- | :------------------------------------- |
+| `.mov` `.mp4` `.avi` `.mkv` `.wmv` `.flv` `.webm` | `.mp4`           | 高速リマックスまたは高品質再エンコード |
+| `.mov` `.mp4` `.avi` `.mkv` `.wmv` `.flv` `.webm` | `.mp3`           | 動画から音声のみを抽出                 |
 
 ### 音声変換
-| 入力フォーマット | 出力フォーマット | 特徴 |
-|:---|:---|:---|
-| `.mp3` `.wav` `.flac` `.aac` `.ogg` `.m4a` `.wma` | `.mp3` | 音声フォーマット間の変換 |
+| 入力フォーマット                                  | 出力フォーマット | 特徴                     |
+| :------------------------------------------------ | :--------------- | :----------------------- |
+| `.mp3` `.wav` `.flac` `.aac` `.ogg` `.m4a` `.wma` | `.mp3`           | 音声フォーマット間の変換 |
 
 ### ファイル制限
 - **最大ファイルサイズ**: 2GB/ファイル
@@ -53,9 +53,10 @@
 - **PWA対応**（オフラインインストール・スタンドアロン実行）
 - **プライバシー保護UI**（Network Shield バッジ・Trust Center）
 - **アクセシビリティ対応**（キーボード操作・WCAG AA準拠）
+- **OSSライセンス表示**（使用ライブラリのライセンス情報を自動生成・表示）
 
 ### 🔧 技術要件
-- **フロントエンド**: Blazor WebAssembly (.NET 9)
+- **フロントエンド**: Blazor WebAssembly (.NET 10)
 - **変換エンジン**:
   - HEIC: libheif-js v1.19.8 (✅ 導入済み)
   - 動画: @ffmpeg/ffmpeg v0.12.15 (✅ 導入済み)
@@ -64,13 +65,15 @@
 - **PWA**: Service Worker + Web App Manifest (✅ 導入済み)
 - **多言語**: .NET リソース（.resx）ベース
 - **プライバシー**: CSP/COOP/COEP + ネットワーク監視
+- **ライセンス管理**: 自動生成されたOSSライセンス表示ページ (✅ 導入済み)
 
 ## 📂 プロジェクト構造
 
 ```
 HEIC2JPG/
 ├── Models/
-│   └── ConvertModels.cs          # データモデル定義
+│   ├── ConvertModels.cs          # データモデル定義
+│   └── LicenseItem.cs            # ライセンス情報モデル
 ├── Services/
 │   ├── IConvertService.cs        # 変換サービスIF
 │   ├── ConvertService.cs         # 変換サービス実装
@@ -90,7 +93,8 @@ HEIC2JPG/
 │   ├── ThemeToggle.razor         # テーマ切り替え
 │   └── LanguageSelector.razor    # 言語切替メニュー
 ├── Pages/
-│   └── Home.razor                # メインUI
+│   ├── Home.razor                # メインUI
+│   └── Licenses.razor            # OSSライセンス表示ページ
 ├── Layout/
 │   └── MainLayout.razor          # レイアウト
 └── wwwroot/
@@ -121,7 +125,7 @@ HEIC2JPG/
 ## 🚀 セットアップ・実行
 
 ### 必要環境
-- .NET 9 SDK
+- .NET 10 SDK
 - 対応ブラウザ: Chrome/Edge/Brave（最新版推奨、PWA対応）
 
 ### 実行手順
@@ -254,8 +258,8 @@ wwwroot/manifest.json
 
 ## 📄 ライセンス
 
-- **アプリケーション**: [ライセンスを指定]
-- **使用OSS**: FFmpeg, libheif（各ライセンスに準拠）
+- **アプリケーション**: オープンソース（リポジトリ: [github.com/t2system-co-jp/Bz002-heic2jpg](https://github.com/t2system-co-jp/Bz002-heic2jpg)）
+- **使用OSS**: アプリ内の `/licenses` ページで一覧表示（FFmpeg, libheif など、各ライセンスに準拠）
 
 ---
 
@@ -273,9 +277,3 @@ wwwroot/manifest.json
 
 ### 実変換を有効にするには
 WASMライブラリが正常に動作するブラウザ環境での実行が必要です（Chrome/Edge推奨）。
-
----
-
-## 📚 開発状況
-
-詳細な開発履歴と技術的な実装状況については、[DEVELOPMENT_LOG.md](DEVELOPMENT_LOG.md) をご参照ください。
