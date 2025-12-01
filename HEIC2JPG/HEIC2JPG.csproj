@@ -33,7 +33,7 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <Target Name="GenerateLicenses" BeforeTargets="Build">
+  <Target Name="GenerateLicenses" BeforeTargets="Build" Condition="'$(OS)' == 'Windows_NT'">
     <Exec Command="powershell -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\GenerateLicenses.ps1&quot;" />
   </Target>
 
