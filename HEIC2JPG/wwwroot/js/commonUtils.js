@@ -5,28 +5,6 @@ window.commonUtils = {
     // ========== Blob操作関連 ==========
     
     /**
-     * BlobからArrayBufferを取得（Blazor互換形式）
-     * @param {Blob} blob - 変換するBlob
-     * @returns {Promise<Uint8Array>} - Uint8Array形式のデータ
-     */
-    async getBlobArrayBuffer(blob) {
-        try {
-            console.log('getBlobArrayBuffer呼び出し:', blob?.size, 'bytes');
-            if (!blob || typeof blob.arrayBuffer !== 'function') {
-                throw new Error('有効なBlobオブジェクトではありません');
-            }
-            
-            const arrayBuffer = await blob.arrayBuffer();
-            const uint8Array = new Uint8Array(arrayBuffer);
-            console.log('ArrayBuffer変換完了:', uint8Array.length, 'bytes');
-            return uint8Array;
-        } catch (error) {
-            console.error('Blob→ArrayBuffer変換エラー:', error);
-            throw new Error(`Blob変換エラー: ${error.message}`);
-        }
-    },
-
-    /**
      * ArrayBufferからBlobを作成
      * @param {ArrayBuffer|Uint8Array} arrayBuffer - データ
      * @param {string} mimeType - MIMEタイプ
@@ -130,21 +108,15 @@ window.commonUtils = {
     /**
      * 複数ファイルからZipを作成
      * @param {Array} files - {data, fileName}の配列
-     * @param {Object} options - 圧縮オプション
      * @returns {Promise<Blob>} - ZipのBlob
      */
-    async createZipFromFiles(files, options = {}) {
+    async createZipFromFiles(files) {
         if (!this.isJSZipAvailable()) {
             throw new Error('JSZipライブラリが利用できません');
         }
 
         try {
             const zip = new JSZip();
-
-            // デバッグ: 受け取ったデータの型を確認
-            console.log('createZipFromFiles - files type:', typeof files);
-            console.log('createZipFromFiles - files is Array:', Array.isArray(files));
-            console.log('createZipFromFiles - files:', files);
 
             // 配列でない場合は配列に変換
             const filesArray = Array.isArray(files) ? files : Object.values(files);
@@ -159,10 +131,13 @@ window.commonUtils = {
             });
             
             // Zipを生成
-            const zipBlob = await zip.generateAsync({ 
+            // streamFiles は data descriptor を使うため一部の解凍ツール
+            // （macOSのアーカイブユーティリティ等）で開けなくなる。type:'blob' では
+            // ピークメモリの削減効果もないため使用しない。
+            const zipBlob = await zip.generateAsync({
                 type: 'blob',
-                compression: 'DEFLATE',
-                compressionOptions: { level: options.compressionLevel || 6 }
+                // JPEG/MP4/MP3は既に圧縮済みなので再圧縮せず、ピークメモリを抑える。
+                compression: 'STORE'
             });
             
             console.log('Zip生成完了:', zipBlob.size, 'bytes');
@@ -184,11 +159,10 @@ window.commonUtils = {
             const files = args;
 
             console.log('downloadFilesAsZip - 受信したファイル数:', files.length);
-            console.log('downloadFilesAsZip - files:', files);
 
             if (this.isJSZipAvailable()) {
                 // Zip生成・ダウンロード
-                const zipBlob = await this.createZipFromFiles(files, {});
+                const zipBlob = await this.createZipFromFiles(files);
                 const timestamp = new Date().toISOString().slice(0, 16).replace(/:/g, '-');
                 const fileName = `converted_files_${timestamp}.zip`;
 
@@ -380,7 +354,6 @@ window.commonUtils = {
 };
 
 // グローバル関数として後方互換性を維持
-window.getBlobArrayBuffer = window.commonUtils.getBlobArrayBuffer.bind(window.commonUtils);
 window.downloadBlob = window.commonUtils.downloadSingleFile.bind(window.commonUtils);
 window.createBlobFromArray = window.commonUtils.createBlobFromArray.bind(window.commonUtils);
 window.downloadFile = window.commonUtils.downloadSingleFile.bind(window.commonUtils);

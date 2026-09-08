@@ -4,7 +4,7 @@
 @inject IConvertService ConvertService
 @inject ILocalizationService Localizer
 @inject IJSRuntime JS
-@implements IDisposable
+@implements IAsyncDisposable
 
 <PageTitle>@Localizer.GetString("App.Title")</PageTitle>
 
@@ -33,11 +33,15 @@
                 </div>
 
                 <!-- InputFileをドロップゾーン全体に透明配置 -->
-                <InputFile @ref="fileInput"
-                          OnChange="OnFilesSelected"
-                          multiple
-                          accept=".heic,.mov,.mp4,.avi,.mkv,.wmv,.flv,.webm,.wav,.aac,.m4a,.flac,.wma"
-                          class="drop-zone-input" />
+                @foreach (var inputId in inputIds)
+                {
+                    <InputFile @key="inputId"
+                              OnChange="@(e => OnFilesSelected(e, inputId))"
+                              multiple
+                              disabled="@isProcessing"
+                              accept=".heic,.mov,.mp4,.avi,.mkv,.wmv,.flv,.webm,.wav,.aac,.m4a,.flac,.wma"
+                              class="@GetInputClass(inputId)" />
+                }
             </div>
 
             <!-- ファイルキュー -->
@@ -54,7 +58,7 @@
                                    disabled="@(!files.Any(f => f.Status == ConversionStatus.Completed))">
                                 <HeroIcon Name="archive-box-arrow-down" Class="w-4 h-4 inline-block mr-1" /> @Localizer.GetString("Button.DownloadAll")
                             </button>
-                            <button class="btn btn-clear" @onclick="ClearQueue" disabled="@isProcessing">
+                            <button class="btn btn-clear" @onclick="ClearQueueAsync" disabled="@isProcessing">
                                 <HeroIcon Name="trash" Class="w-4 h-4 inline-block mr-1" /> @Localizer.GetString("Button.Clear")
                             </button>
                         </div>
@@ -187,8 +191,9 @@
     private const int MAX_PARALLEL_COUNT = 4;
     private const int BYTES_PER_KB = 1024;
 
-    private InputFile? fileInput;
     private List<ConvertFile> files = new();
+    private List<Guid> inputIds = new();
+    private Guid activeInputId;
     private ConversionSettings settings = new();
     private bool isProcessing = false;
     private bool isSettingsExpanded = false; // デフォルトで折りたたみ（初心者向けにシンプルな初期表示）
@@ -213,23 +218,34 @@
         isGuideExpanded = !isGuideExpanded;
     }
 
-    private void OnFilesSelected(InputFileChangeEventArgs e)
+    private void OnFilesSelected(InputFileChangeEventArgs e, Guid sourceInputId)
     {
-        int skippedCount = 0;
         var skippedFiles = new List<string>();
+        var supportedFiles = new List<(IBrowserFile File, FileType Type)>();
 
-        foreach (var file in e.GetMultipleFiles(MAX_FILES))
+        // 先に対象外ファイルを除外してから上限を適用する。
+        // （非対応ファイルが空き枠を消費して対応ファイルが弾かれるのを防ぐ）
+        foreach (var file in e.GetMultipleFiles(e.FileCount))
         {
             var fileType = GetFileType(file.Name);
-
-            // 対象外ファイルをスキップ
             if (fileType == FileType.Unknown)
             {
-                skippedCount++;
                 skippedFiles.Add(file.Name);
-                continue; // キューに追加しない
+                continue;
             }
 
+            supportedFiles.Add((file, fileType));
+        }
+
+        var skippedCount = skippedFiles.Count;
+        var availableSlots = Math.Max(0, MAX_FILES - files.Count);
+        if (supportedFiles.Count > availableSlots)
+        {
+            JS.InvokeVoidAsync("showToast", Localizer.GetString("Error.TooManyFiles"), "warning", 6000);
+        }
+
+        foreach (var (file, fileType) in supportedFiles.Take(availableSlots))
+        {
             var convertFile = new ConvertFile
             {
                 Id = Guid.NewGuid(),
@@ -237,7 +253,8 @@
                 FileSize = file.Size,
                 Type = fileType,
                 Status = ConversionStatus.Pending,
-                OriginalFile = file
+                OriginalFile = file,
+                SourceInputId = sourceInputId
             };
 
             files.Add(convertFile);
@@ -263,6 +280,11 @@
             }
             JS.InvokeVoidAsync("showToast", message, "warning", 6000);
         }
+
+        // InputFileの選択は累積されないため、次回選択用の入力を追加する。
+        // 今回の入力要素は、対応ファイルの読み込み完了までDOMに保持する。
+        AddNewActiveInput();
+        RemoveUnusedInputs();
 
         StateHasChanged();
     }
@@ -295,6 +317,7 @@
         finally
         {
             isProcessing = false;
+            RemoveUnusedInputs();
             StateHasChanged();
         }
     }
@@ -401,16 +424,80 @@
         }
     }
 
-    private void RemoveFile(ConvertFile file)
+    private async Task RemoveFile(ConvertFile file)
     {
+        await ReleaseFileAsync(file);
         files.Remove(file);
+        RemoveUnusedInputs();
         StateHasChanged();
     }
 
-    private void ClearQueue()
+    private async Task ClearQueueAsync()
     {
-        files.Clear();
+        await ReleaseAllFilesAsync();
+        ResetInputs();
         StateHasChanged();
+
+        await ConvertService.ReleaseResourcesAsync();
+    }
+
+    private async ValueTask ReleaseAllFilesAsync()
+    {
+        foreach (var file in files)
+        {
+            await ReleaseFileAsync(file);
+        }
+
+        files.Clear();
+    }
+
+    private static async ValueTask ReleaseFileAsync(ConvertFile file)
+    {
+        file.Data = Array.Empty<byte>();
+
+        if (file.ConvertedData is not null)
+        {
+            try
+            {
+                await file.ConvertedData.DisposeAsync();
+            }
+            catch (JSException)
+            {
+                // ページ終了時など、JS側が先に解放済みでも残りの参照を破棄する。
+            }
+        }
+
+        file.ConvertedData = null;
+        file.OriginalFile = null;
+    }
+
+    private void AddNewActiveInput()
+    {
+        activeInputId = Guid.NewGuid();
+        inputIds.Add(activeInputId);
+    }
+
+    private string GetInputClass(Guid inputId)
+    {
+        return inputId == activeInputId
+            ? "drop-zone-input"
+            : "drop-zone-input inactive-file-input";
+    }
+
+    private void ResetInputs()
+    {
+        inputIds.Clear();
+        AddNewActiveInput();
+    }
+
+    private void RemoveUnusedInputs()
+    {
+        var referencedInputIds = files
+            .Where(f => f.OriginalFile != null)
+            .Select(f => f.SourceInputId)
+            .ToHashSet();
+
+        inputIds.RemoveAll(id => id != activeInputId && !referencedInputIds.Contains(id));
     }
 
     private FileType GetFileType(string fileName)
@@ -469,6 +556,8 @@
 
     protected override void OnInitialized()
     {
+        ResetInputs();
+
         // 言語変更イベントを購読
         Localizer.LanguageChanged += OnLanguageChanged;
     }
@@ -479,9 +568,17 @@
         InvokeAsync(StateHasChanged);
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
         // イベント購読解除
         Localizer.LanguageChanged -= OnLanguageChanged;
+
+        await ReleaseAllFilesAsync();
+        inputIds.Clear();
+
+        // 変換エンジン（FFmpeg WASM / libheif）はConvertServiceが保持する共有リソースであり、
+        // 利用規約ページなどへの画面遷移でも本メソッドが呼ばれる。ここで破棄すると
+        // 復帰時にCDNからのコア再ダウンロードが発生し、変換中の遷移ではWorkerが
+        // 途中終了してしまうため、解放はClearQueueAsync（明示操作）に任せる。
     }
 }

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'heic2jpg-v2';
+const CACHE_NAME = 'heic2jpg-v3';
 const urlsToCache = [
   '/',
   '/css/app.css',

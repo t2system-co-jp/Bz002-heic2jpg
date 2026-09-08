@@ -57,6 +57,14 @@ public class ConvertService : IConvertService
     }
 
     /// <summary>
+    /// FFmpeg呼び出しで発生したJS例外を変換エラーに変換
+    /// </summary>
+    private Exception CreateFfmpegException(JSException jsEx)
+    {
+        return new Exception(_localizer.GetString("ConversionError.FfmpegError", jsEx.Message));
+    }
+
+    /// <summary>
     /// エラー結果を生成
     /// </summary>
     private ConvertResult CreateErrorResult(string errorMessageKey, string? errorDetail = null)
@@ -81,7 +89,6 @@ public class ConvertService : IConvertService
 
             // 進捗通知：変換開始
             NotifyProgress("heic-conversion", PROGRESS_START, "ConversionMessage.Starting");
-            await Task.Delay(300, cancellationToken);
 
             // HEIC→JPEG変換
             var jpegBlob = await _jsRuntime.InvokeAsync<IJSObjectReference>(
@@ -94,10 +101,6 @@ public class ConvertService : IConvertService
 
             // 進捗通知：変換中
             NotifyProgress("heic-conversion", PROGRESS_CONVERTING, "ConversionMessage.GeneratingJpeg");
-            await Task.Delay(300, cancellationToken);
-
-            // BlobからArrayBufferを取得
-            var arrayBuffer = await _jsRuntime.InvokeAsync<byte[]>("getBlobArrayBuffer", cancellationToken, jpegBlob);
 
             // 進捗通知：完了
             NotifyProgress("heic-conversion", PROGRESS_COMPLETED, "ConversionMessage.Completed");
@@ -105,7 +108,7 @@ public class ConvertService : IConvertService
             return new ConvertResult
             {
                 Success = true,
-                Data = arrayBuffer,
+                Data = jpegBlob,
                 FileName = GenerateJpegFileName()
             };
         }
@@ -128,7 +131,6 @@ public class ConvertService : IConvertService
 
             // 進捗通知：変換開始
             NotifyProgress("mov-conversion", PROGRESS_START, "ConversionMessage.Starting");
-            await Task.Delay(500, cancellationToken);
 
             // 変換オプション準備
             var jsOptions = new
@@ -150,29 +152,11 @@ public class ConvertService : IConvertService
             }
             catch (JSException jsEx)
             {
-                // JavaScript側のAborted()エラーなど、FFmpeg内部エラーを適切に処理
-                var errorMsg = jsEx.Message;
-                if (errorMsg.Contains("Aborted") || errorMsg.Contains("ffmpeg"))
-                {
-                    throw new Exception(_localizer.GetString("ConversionError.FfmpegError", errorMsg));
-                }
-                throw new Exception(_localizer.GetString("ConversionError.JavaScriptError", errorMsg));
+                throw CreateFfmpegException(jsEx);
             }
 
             // 進捗通知：変換中
             NotifyProgress("mov-conversion", PROGRESS_CONVERTING, "ConversionMessage.GeneratingMp4");
-            await Task.Delay(500, cancellationToken);
-
-            // BlobからArrayBufferを取得
-            byte[] arrayBuffer;
-            try
-            {
-                arrayBuffer = await _jsRuntime.InvokeAsync<byte[]>("getBlobArrayBuffer", cancellationToken, mp4Blob);
-            }
-            catch (JSException jsEx)
-            {
-                throw new Exception(_localizer.GetString("ConversionError.ResultRetrievalFailed", jsEx.Message));
-            }
 
             // 進捗通知：完了
             NotifyProgress("mov-conversion", PROGRESS_COMPLETED, "ConversionMessage.Completed");
@@ -180,7 +164,7 @@ public class ConvertService : IConvertService
             return new ConvertResult
             {
                 Success = true,
-                Data = arrayBuffer,
+                Data = mp4Blob,
                 FileName = GenerateMp4FileName()
             };
         }
@@ -245,7 +229,6 @@ public class ConvertService : IConvertService
 
             // 進捗通知：変換開始
             NotifyProgress("mp3-conversion", PROGRESS_START, "ConversionMessage.Starting");
-            await Task.Delay(500, cancellationToken);
 
             // 変換オプション準備
             var jsOptions = new
@@ -266,28 +249,11 @@ public class ConvertService : IConvertService
             }
             catch (JSException jsEx)
             {
-                var errorMsg = jsEx.Message;
-                if (errorMsg.Contains("Aborted") || errorMsg.Contains("ffmpeg"))
-                {
-                    throw new Exception(_localizer.GetString("ConversionError.FfmpegError", errorMsg));
-                }
-                throw new Exception(_localizer.GetString("ConversionError.JavaScriptError", errorMsg));
+                throw CreateFfmpegException(jsEx);
             }
 
             // 進捗通知：変換中
             NotifyProgress("mp3-conversion", PROGRESS_CONVERTING, "ConversionMessage.GeneratingMp3");
-            await Task.Delay(500, cancellationToken);
-
-            // BlobからArrayBufferを取得
-            byte[] arrayBuffer;
-            try
-            {
-                arrayBuffer = await _jsRuntime.InvokeAsync<byte[]>("getBlobArrayBuffer", cancellationToken, mp3Blob);
-            }
-            catch (JSException jsEx)
-            {
-                throw new Exception(_localizer.GetString("ConversionError.ResultRetrievalFailed", jsEx.Message));
-            }
 
             // 進捗通知：完了
             NotifyProgress("mp3-conversion", PROGRESS_COMPLETED, "ConversionMessage.Completed");
@@ -295,7 +261,7 @@ public class ConvertService : IConvertService
             return new ConvertResult
             {
                 Success = true,
-                Data = arrayBuffer,
+                Data = mp3Blob,
                 FileName = GenerateMp3FileName()
             };
         }
@@ -321,7 +287,6 @@ public class ConvertService : IConvertService
 
             // 進捗通知：変換開始
             NotifyProgress("video-conversion", PROGRESS_START, "ConversionMessage.Starting");
-            await Task.Delay(500, cancellationToken);
 
             // 変換オプション準備
             var jsOptions = new
@@ -343,28 +308,11 @@ public class ConvertService : IConvertService
             }
             catch (JSException jsEx)
             {
-                var errorMsg = jsEx.Message;
-                if (errorMsg.Contains("Aborted") || errorMsg.Contains("ffmpeg"))
-                {
-                    throw new Exception(_localizer.GetString("ConversionError.FfmpegError", errorMsg));
-                }
-                throw new Exception(_localizer.GetString("ConversionError.JavaScriptError", errorMsg));
+                throw CreateFfmpegException(jsEx);
             }
 
             // 進捗通知：変換中
             NotifyProgress("video-conversion", PROGRESS_CONVERTING, "ConversionMessage.GeneratingMp4");
-            await Task.Delay(500, cancellationToken);
-
-            // BlobからArrayBufferを取得
-            byte[] arrayBuffer;
-            try
-            {
-                arrayBuffer = await _jsRuntime.InvokeAsync<byte[]>("getBlobArrayBuffer", cancellationToken, mp4Blob);
-            }
-            catch (JSException jsEx)
-            {
-                throw new Exception(_localizer.GetString("ConversionError.ResultRetrievalFailed", jsEx.Message));
-            }
 
             // 進捗通知：完了
             NotifyProgress("video-conversion", PROGRESS_COMPLETED, "ConversionMessage.Completed");
@@ -372,7 +320,7 @@ public class ConvertService : IConvertService
             return new ConvertResult
             {
                 Success = true,
-                Data = arrayBuffer,
+                Data = mp4Blob,
                 FileName = GenerateMp4FileName()
             };
         }
@@ -392,7 +340,7 @@ public class ConvertService : IConvertService
         var hasVideoOrAudio = files.Any(f => IsVideoType(f.Type) || IsAudioType(f.Type));
         var parallelCount = hasVideoOrAudio ? 1 : settings.ParallelCount;
 
-        var semaphore = new SemaphoreSlim(parallelCount, parallelCount);
+        using var semaphore = new SemaphoreSlim(parallelCount, parallelCount);
         var tasks = files.Select(async file =>
         {
             await semaphore.WaitAsync();
@@ -480,6 +428,11 @@ public class ConvertService : IConvertService
 
             if (result.Success && result.Data != null)
             {
+                if (file.ConvertedData is not null)
+                {
+                    await file.ConvertedData.DisposeAsync();
+                }
+
                 file.ConvertedData = result.Data;
                 file.Status = ConversionStatus.Completed;
                 progressCallback(file.Id, PROGRESS_COMPLETED);
@@ -497,5 +450,31 @@ public class ConvertService : IConvertService
             file.ErrorMessage = ex.Message;
             progressCallback(file.Id, 0);
         }
+        finally
+        {
+            // 変換後は元ファイルを保持しない。変換結果だけをキューに残す。
+            file.Data = Array.Empty<byte>();
+            file.OriginalFile = null;
+        }
+    }
+
+    public async Task ReleaseResourcesAsync()
+    {
+        foreach (var converterName in new[] { "ffmpegConverter", "heicConverter" })
+        {
+            try
+            {
+                await _jsRuntime.InvokeVoidAsync($"{converterName}.dispose");
+            }
+            catch (JSException ex)
+            {
+                Console.WriteLine($"{converterName} resource release failed: {ex.Message}");
+            }
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await ReleaseResourcesAsync();
     }
 }

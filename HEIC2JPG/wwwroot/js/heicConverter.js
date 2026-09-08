@@ -2,17 +2,30 @@
 window.heicConverter = {
     // 定数定義
     DEFAULT_QUALITY: 0.9,
-    DEFAULT_WIDTH: 400,
-    DEFAULT_HEIGHT: 300,
-    MOCK_CONVERSION_DELAY: 300,
-    PATTERN_SPACING: 40,
 
     isInitialized: false,
     libheifModule: null,
+    initializationPromise: null,
 
     async initialize() {
         if (this.isInitialized) return true;
-        
+
+        // 並列変換時に初期化が多重実行され、libheifモジュールが複数生成されるのを防ぐ
+        if (this.initializationPromise) {
+            return await this.initializationPromise;
+        }
+
+        this.initializationPromise = this._doInitialize();
+        try {
+            return await this.initializationPromise;
+        } finally {
+            this.initializationPromise = null;
+        }
+    },
+
+    async _doInitialize() {
+        if (this.isInitialized) return true;
+
         try {
             // libheif WASMライブラリの初期化
             console.log('libheif初期化開始...');
@@ -39,16 +52,14 @@ window.heicConverter = {
                 console.log('libheif初期化完了');
                 return true;
             } else {
-                // 開発用フォールバック（libheifが未実装の場合）
-                console.warn('libheifオブジェクトが見つかりません - モック変換を使用');
-                this.isInitialized = true;
-                return true;
+                console.error('libheifオブジェクトが見つかりません');
+                return false;
             }
         } catch (error) {
             console.error('libheif初期化エラー:', error);
-            console.log('モック変換にフォールバック');
-            this.isInitialized = true;
-            return true;
+            this.libheifModule = null;
+            this.isInitialized = false;
+            return false;
         }
     },
     
@@ -63,9 +74,7 @@ window.heicConverter = {
             if (this.libheifModule) {
                 return await this.convertWithLibheif(heicBuffer, quality, keepExif);
             } else {
-                // 開発用モック実装
-                console.log('libheif未対応のためモック変換を実行します');
-                return await this.convertWithMock(heicBuffer, quality);
+                throw new Error(window.getLocalizedString('JSError.HeicNotInitialized'));
             }
         } catch (error) {
             const errorMsg = window.commonUtils?.formatError 
@@ -73,110 +82,93 @@ window.heicConverter = {
                 : `HEIC変換エラー: ${error.message}`;
             
             console.error(errorMsg);
-            console.log('エラー発生のためモック変換にフォールバック');
-            // エラー時はモック変換にフォールバック
-            return await this.convertWithMock(heicBuffer, quality);
+            throw new Error(errorMsg, { cause: error });
         }
     },
     
     async convertWithLibheif(heicBuffer, quality, keepExif) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                console.log('libheif変換開始...', heicBuffer.length, 'bytes');
+        let decoder = null;
+        let images = [];
+        let canvas = null;
 
-                const decoder = new this.libheifModule.HeifDecoder();
-                const data = decoder.decode(heicBuffer);
+        try {
+            console.log('libheif変換開始...', heicBuffer.length, 'bytes');
 
-                if (!data || data.length === 0) {
-                    return reject(new Error(window.getLocalizedString('JSError.ImageDataEmpty')));
-                }
+            decoder = new this.libheifModule.HeifDecoder();
+            images = decoder.decode(heicBuffer) || [];
 
-                const image = data[0];
-                const width = image.get_width();
-                const height = image.get_height();
-
-                console.log(`デコード成功: ${width}x${height}`);
-
-                const canvas = document.createElement('canvas');
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext('2d');
-
-                // image.displayの正しい使い方 (コールバック形式)
-                image.display(ctx.getImageData(0, 0, width, height), (displayData) => {
-                    if (!displayData) {
-                        return reject(new Error(window.getLocalizedString('JSError.DisplayDataFailed')));
-                    }
-
-                    ctx.putImageData(displayData, 0, 0);
-
-                    canvas.toBlob((blob) => {
-                        if (blob) {
-                            console.log('libheif変換完了');
-                            resolve(blob);
-                        } else {
-                            reject(new Error(window.getLocalizedString('JSError.JpegConversionFailed')));
-                        }
-                    }, 'image/jpeg', quality);
-                });
-            } catch (error) {
-                console.error('libheif変換エラー:', error);
-                reject(error);
+            if (images.length === 0) {
+                throw new Error(window.getLocalizedString('JSError.ImageDataEmpty'));
             }
-        });
-    },
-    
-    async convertWithMock(heicBuffer, quality) {
-        // 開発用モック実装 - サンプル画像を生成
-        console.log('モック変換実行中...', heicBuffer.length, 'bytes');
-        
-        // 変換の遅延をシミュレート
-        await new Promise(resolve => setTimeout(resolve, this.MOCK_CONVERSION_DELAY));
 
-        return new Promise((resolve) => {
-            const canvas = document.createElement('canvas');
-            canvas.width = this.DEFAULT_WIDTH;
-            canvas.height = this.DEFAULT_HEIGHT;
-            
+            const image = images[0];
+            const width = image.get_width();
+            const height = image.get_height();
+
+            console.log(`デコード成功: ${width}x${height}`);
+
+            canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
             const ctx = canvas.getContext('2d');
-            
-            // グラデーション背景でモック画像を作成
-            const gradient = ctx.createLinearGradient(0, 0, this.DEFAULT_WIDTH, this.DEFAULT_HEIGHT);
-            gradient.addColorStop(0, '#3498db');
-            gradient.addColorStop(0.5, '#9b59b6');
-            gradient.addColorStop(1, '#e74c3c');
-
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, this.DEFAULT_WIDTH, this.DEFAULT_HEIGHT);
-
-            // パターンを追加
-            ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-            ctx.lineWidth = 2;
-            for (let i = 0; i < this.DEFAULT_WIDTH; i += this.PATTERN_SPACING) {
-                ctx.beginPath();
-                ctx.moveTo(i, 0);
-                ctx.lineTo(i, this.DEFAULT_HEIGHT);
-                ctx.stroke();
+            if (!ctx) {
+                throw new Error(window.getLocalizedString('JSError.DisplayDataFailed'));
             }
-            
-            // "MOCK JPEG" テキストを描画
-            ctx.fillStyle = 'white';
-            ctx.font = 'bold 24px Arial';
-            ctx.textAlign = 'center';
-            ctx.shadowColor = 'rgba(0,0,0,0.5)';
-            ctx.shadowBlur = 4;
-            ctx.fillText(window.getLocalizedString('JSMock.HeicConversion'), 200, 130);
-            ctx.fillText(window.getLocalizedString('JSMock.MockImplementation'), 200, 160);
 
-            // ファイルサイズ情報
-            ctx.font = '14px Arial';
-            ctx.fillText(window.getLocalizedString('JSMock.OriginalFile', (heicBuffer.length / 1024).toFixed(1)), 200, 200);
-            ctx.fillText(window.getLocalizedString('JSMock.Quality', (quality * 100).toFixed(0)), 200, 220);
-            
-            canvas.toBlob((blob) => {
-                console.log('モック変換完了');
-                resolve(blob);
-            }, 'image/jpeg', quality);
-        });
+            const imageData = ctx.createImageData(width, height);
+            const displayData = await new Promise((resolve, reject) => {
+                image.display(imageData, (result) => {
+                    if (result) {
+                        resolve(result);
+                    } else {
+                        reject(new Error(window.getLocalizedString('JSError.DisplayDataFailed')));
+                    }
+                });
+            });
+
+            ctx.putImageData(displayData, 0, 0);
+
+            const blob = await new Promise((resolve, reject) => {
+                canvas.toBlob((result) => {
+                    if (result) {
+                        resolve(result);
+                    } else {
+                        reject(new Error(window.getLocalizedString('JSError.JpegConversionFailed')));
+                    }
+                }, 'image/jpeg', quality);
+            });
+
+            console.log('libheif変換完了');
+            return blob;
+        } finally {
+            for (const image of images) {
+                try {
+                    image.free();
+                } catch (cleanupError) {
+                    console.warn('libheif画像リソース解放エラー:', cleanupError);
+                }
+            }
+
+            try {
+                // HeifDecoder.decoder は heif_context_alloc() が返す生ポインタ（数値）なので
+                // heif_context_free() で解放する必要がある。
+                if (decoder?.decoder) {
+                    this.libheifModule?.heif_context_free(decoder.decoder);
+                    decoder.decoder = null;
+                }
+            } catch (cleanupError) {
+                console.warn('libheifデコーダー解放エラー:', cleanupError);
+            }
+
+            if (canvas) {
+                canvas.width = 0;
+                canvas.height = 0;
+            }
+        }
+    },
+
+    dispose() {
+        this.libheifModule = null;
+        this.isInitialized = false;
     }
 };

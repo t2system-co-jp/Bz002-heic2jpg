@@ -126,8 +126,7 @@ public class LocalizationService : ILocalizationService
                 foreach (System.Collections.DictionaryEntry entry in resourceSet)
                 {
                     var key = entry.Key?.ToString();
-                    if (key != null && (key.StartsWith("JSError.", StringComparison.Ordinal) ||
-                                        key.StartsWith("JSMock.", StringComparison.Ordinal)))
+                    if (key != null && key.StartsWith("JSError.", StringComparison.Ordinal))
                     {
                         result[key] = entry.Value?.ToString() ?? $"[{key}]";
                     }

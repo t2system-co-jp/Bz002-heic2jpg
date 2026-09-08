@@ -194,6 +194,10 @@ label {
     z-index: 2;
 }
 
+.drop-zone-input.inactive-file-input {
+    display: none;
+}
+
 .drop-icon {
     margin-bottom: var(--space-md);
     color: var(--color-primary);

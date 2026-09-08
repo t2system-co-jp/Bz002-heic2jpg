@@ -340,12 +340,6 @@
   <data name="ConversionError.FfmpegError" xml:space="preserve">
     <value>FFmpeg conversion process error: {0}</value>
   </data>
-  <data name="ConversionError.JavaScriptError" xml:space="preserve">
-    <value>JavaScript execution error: {0}</value>
-  </data>
-  <data name="ConversionError.ResultRetrievalFailed" xml:space="preserve">
-    <value>Failed to retrieve conversion result: {0}</value>
-  </data>
   <data name="ConversionError.UnsupportedFileType" xml:space="preserve">
     <value>File type {0} is not supported</value>
   </data>
@@ -372,23 +366,7 @@
   <data name="JSError.FfmpegTimeout" xml:space="preserve">
     <value>ffmpeg.load() timeout (120 seconds)</value>
   </data>
-  <data name="JSError.ResultReadFailed" xml:space="preserve">
-    <value>Failed to read conversion result: {0}</value>
-  </data>
 
-  <!-- JavaScript Mock Messages -->
-  <data name="JSMock.HeicConversion" xml:space="preserve">
-    <value>HEIC→JPEG Conversion</value>
-  </data>
-  <data name="JSMock.MockImplementation" xml:space="preserve">
-    <value>(Mock Implementation)</value>
-  </data>
-  <data name="JSMock.OriginalFile" xml:space="preserve">
-    <value>Original File: {0} KB</value>
-  </data>
-  <data name="JSMock.Quality" xml:space="preserve">
-    <value>Quality: {0}%</value>
-  </data>
 
   <!-- Theme Toggle -->
   <data name="Theme.Toggle" xml:space="preserve">

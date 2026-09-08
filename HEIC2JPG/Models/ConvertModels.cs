@@ -38,8 +38,9 @@ public class ConvertFile
     public ConversionStatus Status { get; set; } = ConversionStatus.Pending;
     public int Progress { get; set; }
     public string? ErrorMessage { get; set; }
-    public byte[]? ConvertedData { get; set; }
+    public Microsoft.JSInterop.IJSObjectReference? ConvertedData { get; set; }
     public Microsoft.AspNetCore.Components.Forms.IBrowserFile? OriginalFile { get; set; }
+    public Guid SourceInputId { get; set; }
     public CancellationTokenSource? CancellationToken { get; set; }
 
     public string GetConvertedFileName(bool extractAudioOnly = false)
@@ -101,7 +102,7 @@ public class ConversionSettings
 public class ConvertResult
 {
     public bool Success { get; set; }
-    public byte[]? Data { get; set; }
+    public Microsoft.JSInterop.IJSObjectReference? Data { get; set; }
     public string? FileName { get; set; }
     public string? ErrorMessage { get; set; }
 }

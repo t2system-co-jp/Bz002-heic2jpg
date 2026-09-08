@@ -340,12 +340,6 @@
   <data name="ConversionError.FfmpegError" xml:space="preserve">
     <value>FFmpeg转换处理错误：{0}</value>
   </data>
-  <data name="ConversionError.JavaScriptError" xml:space="preserve">
-    <value>JavaScript执行错误：{0}</value>
-  </data>
-  <data name="ConversionError.ResultRetrievalFailed" xml:space="preserve">
-    <value>获取转换结果失败：{0}</value>
-  </data>
   <data name="ConversionError.UnsupportedFileType" xml:space="preserve">
     <value>不支持的文件类型 {0}</value>
   </data>
@@ -372,23 +366,7 @@
   <data name="JSError.FfmpegTimeout" xml:space="preserve">
     <value>ffmpeg.load()超时（120秒）</value>
   </data>
-  <data name="JSError.ResultReadFailed" xml:space="preserve">
-    <value>读取转换结果失败：{0}</value>
-  </data>
 
-  <!-- JavaScript Mock Messages -->
-  <data name="JSMock.HeicConversion" xml:space="preserve">
-    <value>HEIC→JPEG转换</value>
-  </data>
-  <data name="JSMock.MockImplementation" xml:space="preserve">
-    <value>（模拟实现）</value>
-  </data>
-  <data name="JSMock.OriginalFile" xml:space="preserve">
-    <value>原始文件：{0} KB</value>
-  </data>
-  <data name="JSMock.Quality" xml:space="preserve">
-    <value>质量：{0}%</value>
-  </data>
 
   <!-- Theme Toggle -->
   <data name="Theme.Toggle" xml:space="preserve">
